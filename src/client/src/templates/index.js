@@ -172,6 +172,18 @@ const HomeRow = ({
       <div className="container">
         <div className="row">
           <div
+            className={`col-xs-12 col-lg-7 ${
+              imageRight ? "order-lg-1" : "order-lg-0"
+            }`}
+          >
+            <picture>
+              <source media="(min-width: 75em)" srcSet={largeDesktop} />
+              <source media="(min-width: 62em)" srcSet={desktop} />
+              <source media="(min-width: 48em)" srcSet={tablet} />
+              <img src={phone} srcSet={phone} />
+            </picture>
+          </div>
+          <div
             className={`col-xs-12 col-lg-5 ${
               imageRight ? "order-lg-0" : "order-lg-1"
             }`}
@@ -189,30 +201,6 @@ const HomeRow = ({
                 </Link>
               </div>
             )}
-          </div>
-          <div
-            className={`col-xs-12 col-lg-7 ${
-              imageRight ? "order-lg-1" : "order-lg-0"
-            }`}
-          >
-            <picture>
-              <source
-                media="(min-width: 75em)"
-                srcSet={largeDesktop}
-              />
-              <source
-                media="(min-width: 62em)"
-                srcSet={desktop}
-              />
-              <source
-                media="(min-width: 48em)"
-                srcSet={tablet}
-              />
-              <img
-                src={phone}
-                srcSet={phone}
-              />
-            </picture>
           </div>
         </div>
       </div>

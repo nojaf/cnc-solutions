@@ -135,6 +135,18 @@ const SolutionBlock = props => {
   }
 }
 
+function sortSolutionBlock(a,b){
+  if(a.alias === "solutionText") {
+    return 1
+  }
+  else if (b.alias === "solutionText"){
+    return -1;
+  }
+  else {
+    return 0;
+  }
+}
+
 const SolutionRow = ({ blocks, culture }) => {
   const color = blocks.length && blocks[0].color
   const blockColumn = ({ alias, isRight }) =>
@@ -146,7 +158,7 @@ const SolutionRow = ({ blocks, culture }) => {
     <section className={`cnc-block ${color}`}>
       <div className="container">
         <div className="row">
-          {blocks.map(b => (
+          {blocks.sort(sortSolutionBlock).map(b => (
             <div className={blockColumn(b)} key={b.umbracoId}>
               <SolutionBlock {...b} culture={culture} />
             </div>

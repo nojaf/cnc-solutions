@@ -38,7 +38,7 @@ const ProductHighlightRow = ({
           )}
         </div>
       </div>
-      <div className={`col-12 col-md-6 ${isMediaRight ? "order-first" : ""}`}>
+      <div className={`col-12 col-md-6 ${isMediaRight ? "order-md-first" : ""}`}>
         <div className="product-info">
           <h3 className="above">{aboveTitle}</h3>
           <h2>{title}</h2>
