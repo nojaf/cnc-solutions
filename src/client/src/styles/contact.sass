@@ -1,0 +1,46 @@
+@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+#contact-info
+  dl
+    display: grid
+    grid-template-columns: 30px 1fr
+    row-gap: 5px
+    dt
+      color: $primary
+    dt,dd
+      margin: 0
+
+  h2
+    font-size: 20px
+
+  address pre
+    font-family: $font-family-base
+    font-size: 1rem
+    overflow: initial
+
+#contact-form
+  h2
+    font-size: 20px
+
+  label
+    font-size: 14px
+
+  input.form-control
+    height: 25px
+  .form-control
+      border-radius: 0
+      border-color: $dark
+
+  button[type=submit]
+    background: $white
+    &:hover
+      background: $primary
+
+  .submit-container
+    text-align: center
+
+@include media-breakpoint-up(lg)
+  #contact-form
+    .submit-container
+      text-align: left

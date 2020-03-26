@@ -1,0 +1,5 @@
+group graphql
+UmbracoCms.Core
+Newtonsoft.Json
+FSharp.Core
+Thoth.Json.Net

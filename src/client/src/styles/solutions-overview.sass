@@ -1,0 +1,117 @@
+@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+header
+  min-height: 60vw
+  position: relative
+
+  picture
+    img
+      width: 100%
+
+  .edge-container
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 100%
+
+#solution-tiles
+  // overflow-y: hidden
+  margin-bottom: 1rem
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-column-gap: 10px
+  grid-row-gap: 20px
+
+.solution-tile
+  display: block
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 10px
+
+  .solution-tile-img
+    width: 100%
+    position: relative
+    picture img
+      width: 100%
+
+    img.overlay-icon
+      opacity: 0
+      transition: opacity 0.2s
+      width: 50%
+      position: absolute
+      z-index: 5
+      left: 25%
+      top: 50%
+      transform: translateY(-50%)
+
+  .solution-tile-title
+    display: flex
+    min-height: 60px
+    width: 100%
+    background-color: $primary
+    padding: 12px
+
+    h3
+      display: block
+      margin: auto
+      color: $dark
+      font-size: 12px
+      text-transform: uppercase
+      font-weight: bold
+      text-align: center
+      white-space: initial
+
+
+
+  &:hover
+    text-decoration: none
+    div
+      background-color: $dark
+      h3
+        color: $primary
+    img.overlay-icon
+      opacity: 1
+
+@include media-breakpoint-up(md)
+  header
+    min-height: 41vw
+    height: 41vw
+    overflow-y: hidden
+
+  .solution-tile
+    display: block
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 10px
+
+    h3
+      font-size: 16px
+
+    .solution-tile-img
+      img.overlay-icon
+        height: 150px
+        width: 150px
+        left: 50%
+        transform: translate(-50%,-50%)
+
+@include media-breakpoint-up(lg)
+  header
+    min-height: 30vw
+    height: 30vw
+
+  .solution-tile
+    max-height: 280px
+
+    picture img
+      height: 200px
+
+    h3
+      font-size: 24px
+
+    div
+      min-height: 80px
+
+  #solution-tiles
+    margin-bottom: 3rem
+
+@include media-breakpoint-up(xl)
+  header
+    min-height: 20vw
+    height: 20vw

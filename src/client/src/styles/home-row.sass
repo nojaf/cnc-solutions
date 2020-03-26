@@ -1,0 +1,40 @@
+@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+.home-row
+  &.dark
+    background-color: $dark
+    color: $white
+
+    .btn-outline-primary
+      .inner-corner
+        border-color: transparent transparent $dark transparent
+
+  padding: 30px 0
+  h2, h3
+    margin: auto
+    max-width: 50%
+    text-align: center
+
+  h2
+    text-transform: uppercase
+
+  .link-container
+    text-align: center
+
+  .btn-outline-primary
+    margin-top: 20px
+
+  picture img
+    width: 100%
+
+
+@include media-breakpoint-up(lg)
+  .home-row
+    h2, h3
+      max-width: initial
+      text-align: left
+      margin: auto
+
+    .link-container
+      text-align: left

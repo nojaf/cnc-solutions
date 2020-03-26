@@ -1,0 +1,123 @@
+@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+.product-image
+  img
+    width: 100%
+
+.product-info
+  padding: 2rem 0
+  h2, h3
+    text-align: center
+
+  h2
+    font-size: 30px
+    line-height: 34px
+    font-weight: bold
+    padding: 0 2rem
+
+  p
+    padding: 1rem 0.5rem 0
+
+#features
+  background-color: $dark
+  color: $white
+  padding: 40px 0
+  
+  .heading
+    text-align: center
+    padding-bottom: 20px
+
+  .body
+    display: grid
+    grid-template-columns: 80px 1fr
+    img
+      display: block
+      width: 100%
+
+    h4
+      text-transform: uppercase
+      font-size: 18px
+      line-height: 30px
+      font-weight: bold
+      margin-top: 10px
+
+
+#more-info
+  padding: 40px 0
+
+  p
+    margin: 30px 0
+
+@include media-breakpoint-up(sm)
+  .product-info
+    p
+      width: 80%
+      margin: auto
+  .product-image
+    width: 100%
+    height: 100%
+    object-fit: cover
+    img
+      width: 100%
+      height: 100%
+      object-fit: cover
+
+
+@include media-breakpoint-up(md)
+  #product-highlights
+    margin-top: 3rem
+
+  .product-info
+    text-align: left
+    .above, p
+      padding-left: 2rem
+    p
+      width: auto
+
+  #features
+    padding: 60px 0
+
+    .body
+      grid-template-columns: 1fr 1fr 1fr
+      grid-template-rows: 100px 1fr
+
+      img
+        grid-row-start: 1
+        grid-row-end: 1
+        height: 100%
+        width: auto
+        margin: auto
+
+      div
+        grid-row-start: 2
+        grid-row-end: 2
+        text-align: center
+        padding: 0 10px
+        h4
+          font-size: 16px
+
+  #more-info
+    margin: auto
+    width: 50%
+
+    p
+      text-align: left
+
+    .btn-outline-primary
+      margin-right: 20px
+
+@include media-breakpoint-up(xl)
+  #features
+    .body
+      h4
+        font-size: 20px
+
+@include media-breakpoint-up(xl)
+  #product-highlights
+    .container-fluid
+      width: 1140px
+
+  #more-info
+    p
+      text-align: center

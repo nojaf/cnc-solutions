@@ -1,0 +1,140 @@
+@import "variables"
+@import "../../node_modules/bootstrap/scss/mixins"
+
+nav.navbar
+  padding-left: $half-gutter
+  padding-right: $half-gutter
+
+  .navbar-brand
+    img
+      height: 30px
+
+.collapse.navbar-collapse.show
+  background: $primary
+  text-align: center
+  margin-left: ($navbar-padding-y - $navbar-padding-x - $navbar-padding-y)
+  margin-right: ($navbar-padding-y - $navbar-padding-x - $navbar-padding-y)
+  margin-top: $navbar-padding-y
+  margin-bottom: -$navbar-padding-y
+
+  .nav-item.dropdown.show
+    .nav-link.dropdown-toggle, .nav-link.dropdown-toggle:focus
+      color: $white
+
+  .navbar-nav
+    margin-top: $navbar-padding-y
+    margin-right: auto
+    > .nav-item
+      border-bottom: 1px solid $white
+      margin-left: $navbar-padding-x
+      margin-right: $navbar-padding-x
+
+  .nav-item .nav-link
+    text-transform: uppercase
+    font-size: 20px
+    line-height: 40px
+    padding: 5px 0
+    font-weight: 600
+
+  .nav-item.dropdown
+    .dropdown-toggle::after
+      float: right
+      width: 0
+      height: 0
+      border-style: solid
+      border-width: 10px 10px 0 10px
+      border-color: $white transparent transparent transparent
+      margin-top: 15px
+
+    &.show .dropdown-toggle::after
+      width: 0
+      height: 0
+      border-style: solid
+      border-width: 0 10px 10px 10px
+      border-color: transparent transparent $white transparent
+
+
+  .dropdown-menu
+    background: $primary
+    text-align: center
+
+    &.show
+      border: none
+      padding-top: 0
+      margin-top: 0
+
+      .dropdown-item
+        color: $white
+        font-size: 14px
+        line-height: 36px
+
+.navbar-toggler
+  border: none
+  padding: 0
+  &:focus
+    outline: $primary
+
+@include media-breakpoint-up(sm)
+  nav.navbar
+    margin: 0
+    max-width: initial
+
+@include media-breakpoint-up(lg)
+  $navbar-brand-height: 40px
+
+  .navbar-light .navbar-nav .nav-link
+    color: $dark
+    font-size: 20px
+    line-height: 30px
+
+    &:hover, &:focus
+      color: $primary
+
+  nav.navbar
+    padding-top: 20px
+    padding-bottom: 20px
+    max-width: get-breakpoints('lg')
+    margin-left: auto
+    margin-right: auto
+
+    .navbar-brand
+      img
+        height: 40px
+
+
+    .navbar-nav
+      margin-left: auto
+
+  .nav-item
+    margin-right: 20px
+
+  .nav-item.dropdown
+    .dropdown-toggle::after
+      float: right
+      width: 0
+      height: 0
+      border-style: solid
+      border-width: 13px 7.5px 0 7.5px
+      border-color: $primary transparent transparent transparent
+      margin-top: 7px
+      margin-left: 7px
+
+    &.show .dropdown-toggle::after
+      width: 0
+      height: 0
+      border-style: solid
+      border-width: 0 7.5px 13px 7.5px
+      border-color: transparent transparent $primary transparent
+
+@include media-breakpoint-up(xl)
+  nav.navbar
+    padding-top: 30px
+    padding-bottom: 30px
+    max-width: get-breakpoints('xl')
+
+    .navbar-brand
+      img
+        height: 50px
+
+  .nav-item
+    margin-right: 30px

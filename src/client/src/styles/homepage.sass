@@ -1,0 +1,240 @@
+@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+#hero
+  box-sizing: border-box
+  height: calc(50vw + 50px)
+  min-height: 280px
+  background-size: cover
+  color: $white
+  text-align: center
+  position: relative
+  display: flex
+  flex-direction: column
+
+  .hero-content
+    margin: auto
+
+    h1
+      width: 50%
+      margin: auto
+      line-height: 34px
+
+    h1, .above, .btn
+      z-index: 10
+      position: relative
+
+    .btn
+      margin-top: $spacer * .5
+
+  #mobile-stil
+    z-index: 0
+    position: absolute
+    top: 0
+    left: 0
+    height: 100%
+    width: 100%
+
+  .overlay
+    position: absolute
+    top: 0
+    left: 0
+    background-color: rgba(0, 0, 0, .5)
+    height: 100%
+    width: 100%
+
+  #hero-video
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: -10
+    overflow: hidden
+
+  .edge-container
+    bottom: 0
+    z-index: 100
+    position: absolute
+    width: 100%
+
+
+#solutions
+  text-align: center
+  padding: 40px 0
+
+  .title-container
+    display: inline-block
+    text-align: left
+    margin-bottom: 40px
+
+    img
+      height: 5px
+      width: 25px
+      display: block
+
+    h2
+      line-height: 43px
+      margin: 0
+
+
+  .carousel
+    margin: 0 $half-gutter
+    width: calc(100% - (2 * #{$half-gutter}))
+
+  .carousel-item
+    > img
+      max-width: 350px
+      margin: auto
+
+  .carousel-caption
+    display: block
+    padding-top: 0
+    height: 100%
+    top: 18px
+    text-align: center
+
+    img
+      width: 100px
+
+    h5
+      text-transform: uppercase
+      font-weight: bold
+      font-size: 16px
+      margin: -5px 0 0
+
+  .carousel-control-prev-icon
+    width: 0
+    height: 0
+    border-style: solid
+    border-width: 10px 15px 10px 0
+    border-color: transparent $white transparent transparent
+
+  .carousel-control-next-icon
+    width: 0
+    height: 0
+    border-style: solid
+    border-width: 10px 0 10px 15px
+    border-color: transparent transparent transparent $white
+
+
+#solution-links
+  display: none
+
+@include media-breakpoint-up(sm)
+  #solutions
+    .carousel-caption
+      top: 20px
+
+      img
+        width: 100px
+
+@include media-breakpoint-up(md)
+  #solutions
+    .carousel-item
+      > img
+        max-width: 500px
+        margin: auto
+      .carousel-caption
+        top: 60px
+        img
+
+@include media-breakpoint-up(lg)
+  #hero
+    position: relative
+    box-sizing: border-box
+
+    .hero-content
+      min-height: 600px
+      padding-top: 190px
+      padding-bottom: 190px
+      width: 100%
+      height: 100%
+      text-align: left
+
+      h1
+        text-align: left
+        margin: 0
+        font-size: 48px
+        line-height: 56px
+
+
+      .btn
+        margin-top: 30px
+
+  .edge-container
+    bottom: 0
+    width: 100vw
+
+  #solutions
+    .title-container
+      h2
+        font-size: 48px
+        line-height: 56px
+
+      img
+        height: 10px
+        width: 50px
+
+    #solution-links
+      text-align: left
+      padding-top: 40px
+      padding-bottom: 40px
+      display: grid
+      grid-template-columns: 1fr 1fr 1fr
+      grid-column-gap: 20px
+      grid-row-gap: 20px
+
+      a
+        clip-path: polygon(0% 0%, 100% 0, 100% 80%, 85% 100%, 0% 100%)
+        position: relative
+        display: block
+
+        &:hover
+          > .icon
+            display: none
+
+          .overlay
+            visibility: visible
+            opacity: 1
+
+        .overlay
+          transition: opacity 0.4s
+          position: absolute
+          height: 100%
+          width: 100%
+          top: 0
+          left: 0
+          z-index: 10
+          background-color: transparentize($dark, 0.5)
+          display: flex
+          visibility: hidden
+          opacity: 0
+          flex-direction: column
+          align-items: center
+          justify-content: center
+          margin: auto
+          img
+            height: 100px
+            width: 100px
+          h3
+            text-transform: uppercase
+            color: $white
+            text-align: center
+            font-size: 24px
+            font-weight: bold
+        //display: none
+
+        > img
+          position: relative
+
+        .bg
+          width: 100%
+
+        > .icon
+          position: absolute
+          width: 40%
+          z-index: 5
+          top: 15%
+          left: 30%
+

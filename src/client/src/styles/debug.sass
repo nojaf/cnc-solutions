@@ -1,0 +1,21 @@
+@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+.debug-border
+  border: 1px solid yellow
+
+@include media-breakpoint-up(sm)
+  .debug-border
+    border-color: green
+
+@include media-breakpoint-up(md)
+  .debug-border
+    border-color: red
+
+@include media-breakpoint-up(lg)
+  .debug-border
+    border-color: blue
+
+@include media-breakpoint-up(xl)
+  .debug-border
+    border-color: violet
