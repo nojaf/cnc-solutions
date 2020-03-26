@@ -133,22 +133,23 @@ const Navigation = ({ culture, currentPageId }) => {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mt-2">
           <li className="nav-item dropdown">
-            <Link
-              className="nav-link d-inline-block"
-              to={solutionsPage.url}
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {solutionsPage.navigationText}
-            </Link>
-            <span
-              className="dropdown-toggle d-inline-block"
+            <div
+              className="dropdown-toggle"
               id="solutionsDropdown"
               role="button"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
-            ></span>
+            >
+              <Link
+                className="nav-link d-inline-block"
+                to={solutionsPage.url}
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {solutionsPage.navigationText}
+              </Link>
+            </div>
             <div className="dropdown-menu" aria-labelledby="solutionsDropdown">
               {solutionItems.map(si => {
                 return (
@@ -164,22 +165,23 @@ const Navigation = ({ culture, currentPageId }) => {
             </div>
           </li>
           <li className="nav-item dropdown">
-            <Link
-              className="nav-link d-inline-block"
-              to={productsPage.url}
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {productsPage.navigationText}
-            </Link>
-            <span
-              className="dropdown-toggle d-inline-block"
+            <div
               id="productsDropdown"
               role="button"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
-            />
+              className="nav-link dropdown-toggle"
+            >
+              <Link
+                className="nav-link d-inline-block"
+                to={productsPage.url}
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {productsPage.navigationText}
+              </Link>
+            </div>
             <div className="dropdown-menu" aria-labelledby="productsDropdown">
               {productItems.map(pi => {
                 return (
