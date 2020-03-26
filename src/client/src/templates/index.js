@@ -162,6 +162,7 @@ const HomeRow = ({
   linkNode,
   imageRight,
   image,
+  altText,
 }) => {
   const underline = theme === "dark" ? underlineDark : underlineWhite
   const link = useUrl(culture, linkNode)
@@ -180,7 +181,7 @@ const HomeRow = ({
               <source media="(min-width: 75em)" srcSet={largeDesktop} />
               <source media="(min-width: 62em)" srcSet={desktop} />
               <source media="(min-width: 48em)" srcSet={tablet} />
-              <img src={phone} srcSet={phone} />
+              <img src={phone} srcSet={phone} alt={altText} />
             </picture>
           </div>
           <div
@@ -190,7 +191,7 @@ const HomeRow = ({
           >
             <h3 className="above text-lowercase">{aboveTitle}</h3>
             <h2>{title}</h2>
-            <img src={underline} className="underline-bar" />
+            <img src={underline} className="underline-bar" alt={""} />
             <div dangerouslySetInnerHTML={{ __html: lead }}></div>
             {linkText && linkNode && (
               <div className="link-container">
@@ -319,6 +320,10 @@ export const query = graphql`
             desktop
             largeDesktop
           }
+        }
+        altText {
+          nl
+          en
         }
       }
     }
