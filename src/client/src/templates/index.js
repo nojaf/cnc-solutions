@@ -4,6 +4,8 @@ import Layout from "../components/layout"
 import { pageInCulture, useUrl } from "../selectors"
 import underlineDark from "../images/underline-dark.png"
 import underlineWhite from "../images/underline-white.png"
+import HomeVideoMp4 from "../videos/home.mp4"
+import HomeVideoWebm from "../videos/home.webm"
 
 const Hero = ({
   culture,
@@ -32,11 +34,13 @@ const Hero = ({
         style={{ backgroundImage: `url(${mobilePlaceholder.mobile})` }}
         className="d-block d-sm-none"
       ></div>
-      <div
-        id="hero-video"
-        className="d-none d-sm-block"
-        data-video-id={videoId}
-      ></div>
+      <div id="hero-video">
+          <video autoPlay loop muted poster={mobilePlaceholder.mobile}>
+              <source src={HomeVideoMp4} type="video/mp4" />
+              <source src={HomeVideoWebm} type="video/webm" />
+              Your browser does not support the video tag.
+          </video>
+      </div>
       <div className="overlay"></div>
       <div className="edge-container">
         <div className="edge"></div>

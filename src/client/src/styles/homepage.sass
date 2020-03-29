@@ -34,6 +34,8 @@
     left: 0
     height: 100%
     width: 100%
+    background-size: cover
+    background-repeat: no-repeat
 
   .overlay
     position: absolute
@@ -44,16 +46,10 @@
     width: 100%
 
   #hero-video
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    z-index: -10
-    overflow: hidden
+    display: none
 
   .edge-container
-    bottom: 0
+    bottom: 0px
     z-index: 100
     position: absolute
     width: 100%
@@ -122,6 +118,27 @@
   display: none
 
 @include media-breakpoint-up(sm)
+  #hero
+    height: initial
+    max-height: calc(100vh - 80px)
+    #hero-video
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      z-index: -10
+      overflow: hidden
+      display: inline-block
+      float: left
+      clear: both
+      video
+        width: 100vw
+        overflow: hidden
+        float: left
+
+    .edge-container
+      bottom: 0px
   #solutions
     .carousel-caption
       top: 20px
@@ -130,6 +147,10 @@
         width: 100px
 
 @include media-breakpoint-up(md)
+  #hero
+    max-height: calc(100vh - 80px)
+    .edge-container
+      bottom: -25px
   #solutions
     .carousel-item
       > img
@@ -143,6 +164,9 @@
   #hero
     position: relative
     box-sizing: border-box
+    max-height: calc(100vh - 110px)
+    .edge-container
+      bottom: 0px
 
     .hero-content
       min-height: 600px
@@ -238,3 +262,7 @@
           top: 15%
           left: 30%
 
+
+@include media-breakpoint-up(x-lg)
+  #hero
+    max-height: calc(100vh - 130px)
