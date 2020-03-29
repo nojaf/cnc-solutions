@@ -134,7 +134,7 @@ const Navigation = ({ culture, currentPageId }) => {
         <ul className="navbar-nav mt-2">
           <li className="nav-item dropdown">
             <div
-              className="dropdown-toggle"
+              className="dropdown-toggle link-toggle"
               id="solutionsDropdown"
               role="button"
               data-toggle="dropdown"
@@ -166,12 +166,12 @@ const Navigation = ({ culture, currentPageId }) => {
           </li>
           <li className="nav-item dropdown">
             <div
+              className="dropdown-toggle link-toggle"
               id="productsDropdown"
               role="button"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
-              className="nav-link dropdown-toggle"
             >
               <Link
                 className="nav-link d-inline-block"
