@@ -72,7 +72,11 @@ export default ({ data, pageContext }) => {
   const rows = data.allAboutRow.edges.map(e => e.node)
 
   return (
-    <Layout culture={currentCulture} currentPageId={pageContext.umbracoId}>
+    <Layout
+      culture={currentCulture}
+      currentPageId={pageContext.umbracoId}
+      seo={pageContext.seo}
+    >
       <Header currentPage={about} />
       <PageIntroduction {...about} />
       {rows.map(r => (

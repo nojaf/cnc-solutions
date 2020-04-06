@@ -209,7 +209,11 @@ export default ({ data, pageContext }) => {
   const contact = pageInCulture(currentCulture, data.contact)
 
   return (
-    <Layout culture={currentCulture} currentPageId={pageContext.umbracoId}>
+    <Layout
+      culture={currentCulture}
+      currentPageId={pageContext.umbracoId}
+      seo={pageContext.seo}
+    >
       <Header currentPage={contact} />
       <BelowHeader {...contact} />
       <section className="container">

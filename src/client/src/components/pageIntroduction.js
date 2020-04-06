@@ -10,11 +10,7 @@ const PageIntroduction = ({ aboveTitle, title, lead }) => {
           <h2 className="above text-lowercase">{aboveTitle}</h2>
           <div className="title-container">
             <h1 className="mb-0">{title}</h1>
-            <img
-              src={underlineWhite}
-              alt={""}
-              className="underline-bar"
-            />
+            <img src={underlineWhite} alt={""} className="underline-bar" />
             <div
               className="text-left"
               id="lead"

@@ -5,7 +5,10 @@ import * as R from "ramda"
 export function pageInCulture(culture, page) {
   const mapCultureKey = k => ({ [k]: page[k][culture] })
   const allKeys = Object.keys(page)
-  const cultureKeys = allKeys.filter(k => R.is(Object, page[k]) && Object.keys(page[k]).every(pk => pk.length === 2))
+  const cultureKeys = allKeys.filter(
+    k =>
+      R.is(Object, page[k]) && Object.keys(page[k]).every(pk => pk.length === 2)
+  )
   const nonCultureKeys = R.without(cultureKeys, allKeys)
 
   const cultureKeyValues = R.map(mapCultureKey, cultureKeys)

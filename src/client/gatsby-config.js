@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `CNC Solutions`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    description: `CNC Solutions website`,
     author: `@nojaf`,
   },
   plugins: [
@@ -41,7 +41,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-facebook-pixel`,
       options: {
-        pixelId: '1289120721283216',
+        pixelId: "1289120721283216",
       },
     },
 

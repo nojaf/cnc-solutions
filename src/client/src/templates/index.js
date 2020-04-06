@@ -222,7 +222,11 @@ export default ({ data, pageContext }) => {
     pageInCulture(currentCulture, hr)
   )
   return (
-    <Layout culture={pageContext.culture} currentPageId={pageContext.umbracoId}>
+    <Layout
+      culture={pageContext.culture}
+      currentPageId={pageContext.umbracoId}
+      seo={pageContext.seo}
+    >
       <Hero culture={currentCulture} {...home} />
       <Solutions {...home} solutions={solutions} culture={currentCulture} />
       {homeRows.map(hr => (

@@ -5,13 +5,13 @@ import { pageInCulture, useUrl } from "../selectors"
 import Header from "../components/header"
 import PageIntroduction from "../components/pageIntroduction"
 import underlineWhite from "../images/underline-white.png"
-import Video from "../components/video";
+import Video from "../components/video"
 
-const ProductVideo = ({ videoId,altText }) => {
-    const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&rel=0&modestbranding=1&controls=0&showinfo=0&origin=https://cncsolutions.be&playlist=${videoId}&mute=1`
-    return (
-        <Video videoSrcURL={url} videoTitle={altText} width={640} height={360}  />
-    )
+const ProductVideo = ({ videoId, altText }) => {
+  const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&rel=0&modestbranding=1&controls=0&showinfo=0&origin=https://cncsolutions.be&playlist=${videoId}&mute=1`
+  return (
+    <Video videoSrcURL={url} videoTitle={altText} width={640} height={360} />
+  )
 }
 
 const ProductHighlightRow = ({
@@ -38,7 +38,9 @@ const ProductHighlightRow = ({
           )}
         </div>
       </div>
-      <div className={`col-12 col-md-6 ${isMediaRight ? "order-md-first" : ""}`}>
+      <div
+        className={`col-12 col-md-6 ${isMediaRight ? "order-md-first" : ""}`}
+      >
         <div className="product-info">
           <h3 className="above">{aboveTitle}</h3>
           <h2>{title}</h2>
@@ -136,7 +138,11 @@ export default ({ data, pageContext }) => {
   )
 
   return (
-    <Layout culture={pageContext.culture} currentPageId={pageContext.umbracoId}>
+    <Layout
+      culture={pageContext.culture}
+      currentPageId={pageContext.umbracoId}
+      seo={pageContext.seo}
+    >
       <Header currentPage={product} />
       <PageIntroduction {...product} />
       <section id="product-highlights">

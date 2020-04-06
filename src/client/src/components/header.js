@@ -37,9 +37,9 @@ Header.propTypes = {
       mobile: PropTypes.string,
       tablet: PropTypes.string,
       desktop: PropTypes.string,
-      "large-desktop": PropTypes.string
+      "large-desktop": PropTypes.string,
     }),
-    headerImageAlt: PropTypes.string
+    headerImageAlt: PropTypes.string,
   }),
 }
 

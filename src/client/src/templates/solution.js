@@ -181,7 +181,11 @@ export default ({ data, pageContext }) => {
   const rows = Object.keys(rowsMap).map(k => rowsMap[k])
 
   return (
-    <Layout culture={pageContext.culture} currentPageId={pageContext.umbracoId}>
+    <Layout
+      culture={pageContext.culture}
+      currentPageId={pageContext.umbracoId}
+      seo={pageContext.seo}
+    >
       <Header currentPage={solution} />
       <PageIntroduction {...solution} />
       {rows.map((r, i) => (

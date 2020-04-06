@@ -103,7 +103,11 @@ export default ({ data, pageContext }) => {
   })
 
   return (
-    <Layout culture={pageContext.culture} currentPageId={pageContext.umbracoId}>
+    <Layout
+      culture={pageContext.culture}
+      currentPageId={pageContext.umbracoId}
+      seo={pageContext.seo}
+    >
       <Header currentPage={products} />
       <PageIntroduction {...products} />
       <section>

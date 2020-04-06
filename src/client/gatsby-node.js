@@ -27,10 +27,40 @@ exports.createPages = async ({ graphql, actions }) => {
           en
           fr
         }
+        seoMetaDescription {
+          nl
+          en
+          fr
+        }
+        seoMetaKeywords {
+          nl
+          en
+          fr
+        }
+        title: navigationText {
+          nl
+          en
+          fr
+        }
       }
       about {
         umbracoId
         url {
+          nl
+          en
+          fr
+        }
+        seoMetaDescription {
+          nl
+          en
+          fr
+        }
+        seoMetaKeywords {
+          nl
+          en
+          fr
+        }
+        title: navigationText {
           nl
           en
           fr
@@ -43,10 +73,40 @@ exports.createPages = async ({ graphql, actions }) => {
           en
           fr
         }
+        seoMetaDescription {
+          nl
+          en
+          fr
+        }
+        seoMetaKeywords {
+          nl
+          en
+          fr
+        }
+        title: navigationText {
+          nl
+          en
+          fr
+        }
       }
       solutions {
         umbracoId
         url {
+          nl
+          en
+          fr
+        }
+        seoMetaDescription {
+          nl
+          en
+          fr
+        }
+        seoMetaKeywords {
+          nl
+          en
+          fr
+        }
+        title: navigationText {
           nl
           en
           fr
@@ -61,6 +121,21 @@ exports.createPages = async ({ graphql, actions }) => {
               en
               fr
             }
+            seoMetaDescription {
+              nl
+              en
+              fr
+            }
+            seoMetaKeywords {
+              nl
+              en
+              fr
+            }
+            title: navigationText {
+              nl
+              en
+              fr
+            }
           }
         }
       }
@@ -71,12 +146,42 @@ exports.createPages = async ({ graphql, actions }) => {
           en
           fr
         }
+        seoMetaDescription {
+          nl
+          en
+          fr
+        }
+        seoMetaKeywords {
+          nl
+          en
+          fr
+        }
+        title: navigationText {
+          nl
+          en
+          fr
+        }
       }
       allProduct {
         edges {
           node {
             umbracoId
             url {
+              nl
+              en
+              fr
+            }
+            seoMetaDescription {
+              nl
+              en
+              fr
+            }
+            seoMetaKeywords {
+              nl
+              en
+              fr
+            }
+            title: navigationText {
               nl
               en
               fr
@@ -105,6 +210,15 @@ exports.createPages = async ({ graphql, actions }) => {
   const productItems = allProduct.edges.map(({ node }) => node)
 
   cultures.forEach(culture => {
+    const selectSEO = page => {
+      return {
+        description: page.seoMetaDescription[culture],
+        keywords: page.seoMetaKeywords[culture],
+        title: page.title[culture],
+        lang: culture,
+      }
+    }
+
     // index
     createPage({
       path: home.url[culture],
@@ -112,6 +226,7 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         culture,
         umbracoId: home.umbracoId,
+        seo: selectSEO(home),
       },
     })
 
@@ -122,6 +237,7 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         culture,
         umbracoId: solutions.umbracoId,
+        seo: selectSEO(solutions),
       },
     })
 
@@ -133,6 +249,7 @@ exports.createPages = async ({ graphql, actions }) => {
         context: {
           culture,
           umbracoId: solution.umbracoId,
+          seo: selectSEO(solution),
         },
       })
     })
@@ -144,6 +261,7 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         culture,
         umbracoId: products.umbracoId,
+        seo: selectSEO(products),
       },
     })
 
@@ -155,6 +273,7 @@ exports.createPages = async ({ graphql, actions }) => {
         context: {
           culture,
           umbracoId: product.umbracoId,
+          seo: selectSEO(product),
         },
       })
     })
@@ -166,6 +285,7 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         culture,
         umbracoId: about.umbracoId,
+        seo: selectSEO(about),
       },
     })
 
@@ -176,6 +296,7 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         culture,
         umbracoId: contact.umbracoId,
+        seo: selectSEO(contact),
       },
     })
   })
@@ -251,12 +372,14 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
           parentUmbracoId: umbracoNode.parentId,
           name: umbracoNode.name,
           url: umbracoNode.url,
-          updateDate: umbracoNode.updateDate
+          updateDate: umbracoNode.updateDate,
         },
         umbracoNode.properties,
         {
           id: createNodeId(`UmbracoId-${umbracoNode.id}`),
-          children: umbracoNode.children.map(({id}) => createNodeId(`UmbracoId-${id}`)),
+          children: umbracoNode.children.map(({ id }) =>
+            createNodeId(`UmbracoId-${id}`)
+          ),
           parent:
             umbracoNode.parentId &&
             createNodeId(`UmbracoId-${umbracoNode.parentId}`),

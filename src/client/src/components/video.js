@@ -11,7 +11,9 @@ const Video = ({ videoSrcURL, videoTitle, width, height }) => (
       webkitallowfullscreen="true"
       mozallowfullscreen="true"
       allowFullScreen
-      onLoad={(ev) => { ev.currentTarget.height = `${ev.currentTarget.clientWidth / 16 * 9}px`; } }
+      onLoad={ev => {
+        ev.currentTarget.height = `${(ev.currentTarget.clientWidth / 16) * 9}px`
+      }}
     />
   </div>
 )
