@@ -18,7 +18,6 @@
 })(jQuery);
 
 $(document).ready(function() {
-    console.log('jquery contact', $("form").length)
     function clearValidation(){
         $(".form-control").removeClass("is-invalid");
     }

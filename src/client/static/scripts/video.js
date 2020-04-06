@@ -13,9 +13,8 @@ $(document).ready(function () {
         correctVideoContainer();
     })
 
-
     const video = document.querySelector("video")
-    console.log(`VIDOE`, video);
+
     if (video) {
         correctVideoContainer();
     } else {
