@@ -67,6 +67,8 @@ nav.navbar
         color: $white
         font-size: 14px
         line-height: 36px
+        &:hover
+          color: $primary
 
 .navbar-toggler
   border: none
@@ -76,6 +78,10 @@ nav.navbar
 
 .nav-item.dropdown .dropdown-toggle.link-toggle::after
   margin-top: 15px
+
+.navbar-collapse.collapse.show
+  .link-toggle
+    float: right
 
 @include media-breakpoint-up(sm)
   nav.navbar
