@@ -20,6 +20,7 @@ const Navigation = ({ culture, currentPageId }) => {
         url {
           nl
           en
+          fr
         }
       }
       solutions {
@@ -27,10 +28,12 @@ const Navigation = ({ culture, currentPageId }) => {
         url {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
       }
       allSolution {
@@ -40,10 +43,12 @@ const Navigation = ({ culture, currentPageId }) => {
             url {
               nl
               en
+              fr
             }
             navigationText {
               nl
               en
+              fr
             }
           }
         }
@@ -53,10 +58,12 @@ const Navigation = ({ culture, currentPageId }) => {
         url {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
       }
       allProduct {
@@ -66,10 +73,12 @@ const Navigation = ({ culture, currentPageId }) => {
             url {
               nl
               en
+              fr
             }
             navigationText {
               nl
               en
+              fr
             }
           }
         }
@@ -78,20 +87,24 @@ const Navigation = ({ culture, currentPageId }) => {
         url {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
       }
       contact {
         url {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
       }
     }

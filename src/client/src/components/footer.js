@@ -10,10 +10,12 @@ const Footer = ({ culture }) => {
         url {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
       }
       allSolution {
@@ -23,10 +25,12 @@ const Footer = ({ culture }) => {
             url {
               nl
               en
+              fr
             }
             navigationText {
               nl
               en
+              fr
             }
           }
         }
@@ -36,10 +40,12 @@ const Footer = ({ culture }) => {
         url {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
       }
       allProduct {
@@ -49,10 +55,12 @@ const Footer = ({ culture }) => {
             url {
               nl
               en
+              fr
             }
             navigationText {
               nl
               en
+              fr
             }
           }
         }
@@ -61,20 +69,24 @@ const Footer = ({ culture }) => {
         url {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
       }
       contact {
         url {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
       }
     }

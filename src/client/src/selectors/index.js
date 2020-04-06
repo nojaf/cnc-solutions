@@ -24,6 +24,7 @@ function useUmbracoUrls() {
             url {
               nl
               en
+              fr
             }
           }
         }

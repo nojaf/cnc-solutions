@@ -14,7 +14,6 @@ const Hero = ({
   mobilePlaceholder,
   primaryLink,
   primaryLinkText,
-  videoId,
 }) => {
   const primaryLinkUrl = useUrl(culture, primaryLink)
   const showLink = primaryLinkText && primaryLinkUrl
@@ -35,11 +34,11 @@ const Hero = ({
         className="d-block d-sm-none"
       ></div>
       <div id="hero-video">
-          <video autoPlay loop muted poster={mobilePlaceholder.mobile}>
-              <source src={HomeVideoMp4} type="video/mp4" />
-              <source src={HomeVideoWebm} type="video/webm" />
-              Your browser does not support the video tag.
-          </video>
+        <video autoPlay loop muted poster={mobilePlaceholder.mobile}>
+          <source src={HomeVideoMp4} type="video/mp4" />
+          <source src={HomeVideoWebm} type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
       </div>
       <div className="overlay"></div>
       <div className="edge-container">
@@ -239,6 +238,7 @@ export const query = graphql`
       url {
         nl
         en
+        fr
       }
       id
       mobilePlaceholder {
@@ -248,68 +248,86 @@ export const query = graphql`
         en {
           mobile
         }
+        fr {
+          mobile
+        }
       }
       aboveSlogan {
         nl
         en
+        fr
       }
       slogan {
         en
         nl
+        fr
       }
       solutionsTitle {
         en
         nl
+        fr
       }
       primaryLink {
         nl
         en
+        fr
       }
       primaryLinkText {
         nl
         en
+        fr
       }
       videoId {
         en
         nl
+        fr
       }
       aboveSolutions {
         nl
         en
+        fr
       }
       solutionsTitle {
         nl
         en
+        fr
       }
       childrenHomeRow {
         key: id
         theme {
           en
           nl
+          fr
         }
         aboveTitle {
           en
           nl
+          fr
         }
         title {
           en
           nl
+          fr
         }
         lead {
           nl
           en
+          fr
         }
         linkText {
           en
           nl
+          fr
         }
         linkNode {
           en
           nl
+          fr
         }
         imageRight {
           en
           nl
+          fr
         }
         image {
           en {
@@ -324,10 +342,17 @@ export const query = graphql`
             desktop
             largeDesktop
           }
+          fr {
+            phone
+            tablet
+            desktop
+            largeDesktop
+          }
         }
         altText {
           nl
           en
+          fr
         }
       }
     }
@@ -347,22 +372,32 @@ export const query = graphql`
             homepage_desktop
             homepage_large_desktop
           }
+          fr {
+            homepage_mobile
+            homepage_tablet
+            homepage_desktop
+            homepage_large_desktop
+          }
         }
         thumbnailAlt {
           nl
           en
+          fr
         }
         icon {
           nl
           en
+          fr
         }
         navigationText {
           nl
           en
+          fr
         }
         title {
           nl
           en
+          fr
         }
       }
     }

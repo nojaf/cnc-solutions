@@ -4,7 +4,7 @@ import Layout from "../components/layout"
 import Header from "../components/header"
 import underlineWhite from "../images/underline-white.png"
 import { pageInCulture, useUrl } from "../selectors"
-import PageIntroduction from "../components/pageIntroduction";
+import PageIntroduction from "../components/pageIntroduction"
 
 const AboutRowLink = ({ linkText, linkUrl, culture }) => {
   const url = useUrl(culture, linkUrl)
@@ -97,22 +97,32 @@ export const query = graphql`
           desktop
           large_desktop
         }
+        fr {
+          mobile
+          tablet
+          desktop
+          large_desktop
+        }
       }
       headerImageAlt {
         en
         nl
+        fr
       }
       aboveTitle {
         en
         nl
+        fr
       }
       title {
         en
         nl
+        fr
       }
       lead {
         en
         nl
+        fr
       }
     }
     allAboutRow {
@@ -133,34 +143,47 @@ export const query = graphql`
               small
               tablet
             }
+            fr {
+              desktop
+              medium
+              small
+              tablet
+            }
           }
           imageRight {
             en
             nl
+            fr
           }
           title {
             en
             nl
+            fr
           }
           aboveTitle {
             en
             nl
+            fr
           }
           lead {
             en
             nl
+            fr
           }
           linkText {
             en
             nl
+            fr
           }
           linkUrl {
             en
             nl
+            fr
           }
           altText {
             en
             nl
+            fr
           }
         }
       }

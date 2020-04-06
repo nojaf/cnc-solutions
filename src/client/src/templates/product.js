@@ -158,6 +158,7 @@ export const query = graphql`
       url {
         en
         nl
+        fr
       }
       headerImage {
         nl {
@@ -172,58 +173,77 @@ export const query = graphql`
           desktop
           large_desktop
         }
+        fr {
+          mobile
+          tablet
+          desktop
+          large_desktop
+        }
       }
       headerImageAlt {
         en
         nl
+        fr
       }
       aboveTitle {
         nl
         en
+        fr
       }
       title {
         nl
         en
+        fr
       }
       lead {
         nl
         en
+        fr
       }
       aboveFeature {
         nl
         en
+        fr
       }
       featureTitle {
         nl
         en
+        fr
       }
       aboveMoreInfo {
         nl
         en
+        fr
       }
       moreInfoTitle {
         nl
         en
+        fr
       }
       moreInfoLead {
         nl
         en
+        fr
       }
       fileDownloadFile {
         nl
         en
+        fr
       }
       fileDownloadText {
         nl
         en
+        fr
       }
       contactPageLink {
         nl
         en
+        fr
       }
       contactPageText {
         nl
         en
+        fr
       }
     }
     allProductRow(filter: { parentUmbracoId: { eq: $umbracoId } }) {
@@ -240,30 +260,41 @@ export const query = graphql`
             tablet
             desktop
           }
+          fr {
+            mobile
+            tablet
+            desktop
+          }
         }
         altText {
           nl
           en
+          fr
         }
         isMediaRight {
           en
           nl
+          fr
         }
         videoId {
           en
           nl
+          fr
         }
         aboveTitle {
           en
           nl
+          fr
         }
         title {
           nl
           en
+          fr
         }
         lead {
           nl
           en
+          fr
         }
       }
     }
@@ -273,14 +304,17 @@ export const query = graphql`
         icon {
           en
           nl
+          fr
         }
         title {
           en
           nl
+          fr
         }
         lead {
           en
           nl
+          fr
         }
       }
     }

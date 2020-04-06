@@ -25,6 +25,7 @@ exports.createPages = async ({ graphql, actions }) => {
         url {
           nl
           en
+          fr
         }
       }
       about {
@@ -32,6 +33,7 @@ exports.createPages = async ({ graphql, actions }) => {
         url {
           nl
           en
+          fr
         }
       }
       contact {
@@ -39,6 +41,7 @@ exports.createPages = async ({ graphql, actions }) => {
         url {
           nl
           en
+          fr
         }
       }
       solutions {
@@ -46,6 +49,7 @@ exports.createPages = async ({ graphql, actions }) => {
         url {
           nl
           en
+          fr
         }
       }
       allSolution {
@@ -55,6 +59,7 @@ exports.createPages = async ({ graphql, actions }) => {
             url {
               nl
               en
+              fr
             }
           }
         }
@@ -64,6 +69,7 @@ exports.createPages = async ({ graphql, actions }) => {
         url {
           nl
           en
+          fr
         }
       }
       allProduct {
@@ -73,6 +79,7 @@ exports.createPages = async ({ graphql, actions }) => {
             url {
               nl
               en
+              fr
             }
           }
         }

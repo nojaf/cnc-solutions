@@ -240,94 +240,122 @@ export const query = graphql`
           desktop
           large_desktop
         }
+        fr {
+          mobile
+          tablet
+          desktop
+          large_desktop
+        }
       }
       headerImageAlt {
         en
         nl
+        fr
       }
       aboveTitle {
         en
         nl
+        fr
       }
       title {
         en
         nl
+        fr
       }
       labelAddress {
         en
         nl
+        fr
       }
       labelCity {
         en
         nl
+        fr
       }
       labelCompany {
         en
         nl
+        fr
       }
       labelCountry {
         en
         nl
+        fr
       }
       labelMessage {
         en
         nl
+        fr
       }
       labelEmail {
         en
         nl
+        fr
       }
       labelName {
         en
         nl
+        fr
       }
       labelPhone {
         en
         nl
+        fr
       }
       labelZip {
         en
         nl
+        fr
       }
       aboveAddress {
         en
         nl
+        fr
       }
       address {
         en
         nl
+        fr
       }
       email {
         en
         nl
+        fr
       }
       phone {
         en
         nl
+        fr
       }
       errorText {
         nl
         en
+        fr
       }
       facebookUrl {
         en
         nl
+        fr
       }
       linkedInUrl {
         en
         nl
+        fr
       }
       sendButtonText {
         en
         nl
+        fr
       }
       successText {
         en
         nl
+        fr
       }
       errorText {
         en
         nl
+        fr
       }
     }
   }

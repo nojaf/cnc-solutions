@@ -168,6 +168,7 @@ export const query = graphql`
       url {
         nl
         en
+        fr
       }
       id
       headerImage {
@@ -183,38 +184,52 @@ export const query = graphql`
           desktop
           large_desktop
         }
+        fr {
+          mobile
+          tablet
+          desktop
+          large_desktop
+        }
       }
       headerImageAlt {
         en
         nl
+        fr
       }
       aboveTitle {
         nl
         en
+        fr
       }
       title {
         nl
         en
+        fr
       }
       lead {
         nl
         en
+        fr
       }
       productDetailType {
         nl
         en
+        fr
       }
       productDetailLinkText {
         nl
         en
+        fr
       }
       variantsLabel: variants {
         nl
         en
+        fr
       }
       applicationLabel: application {
         nl
         en
+        fr
       }
     }
     allProduct {
@@ -224,26 +239,32 @@ export const query = graphql`
           url {
             en
             nl
+            fr
           }
           type {
             nl
             en
+            fr
           }
           application {
             en
             nl
+            fr
           }
           variants {
             en
             nl
+            fr
           }
           lead {
             nl
             en
+            fr
           }
           productTitle: aboveTitle {
             en
             nl
+            fr
           }
           thumbnail {
             nl {
@@ -252,6 +273,11 @@ export const query = graphql`
               large_desktop
             }
             en {
+              mobile
+              desktop
+              large_desktop
+            }
+            fr {
               mobile
               desktop
               large_desktop

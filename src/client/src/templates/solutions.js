@@ -71,6 +71,7 @@ export const query = graphql`
       url {
         nl
         en
+        fr
       }
       id
       headerImage {
@@ -86,22 +87,32 @@ export const query = graphql`
           desktop
           large_desktop
         }
+        fr {
+          mobile
+          tablet
+          desktop
+          large_desktop
+        }
       }
       headerImageAlt {
         en
         nl
+        fr
       }
       aboveTitle {
         nl
         en
+        fr
       }
       title {
         nl
         en
+        fr
       }
       lead {
         nl
         en
+        fr
       }
     }
     allSolution {
@@ -111,10 +122,12 @@ export const query = graphql`
           url {
             en
             nl
+            fr
           }
           icon {
             nl
             en
+            fr
           }
           thumbnail {
             nl {
@@ -139,14 +152,27 @@ export const query = graphql`
               overview_tablet_landscape
               overview_tablet_portrait
             }
+            fr {
+              homepage_mobile
+              homepage_desktop
+              homepage_large_desktop
+              overview_desktop
+              homepage_tablet
+              overview_large_desktop
+              overview_mobile
+              overview_tablet_landscape
+              overview_tablet_portrait
+            }
           }
           thumbnailAlt {
             en
             nl
+            fr
           }
           title {
             en
             nl
+            fr
           }
         }
       }

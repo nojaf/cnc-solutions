@@ -135,15 +135,13 @@ const SolutionBlock = props => {
   }
 }
 
-function sortSolutionBlock(a,b){
-  if(a.alias === "solutionText") {
+function sortSolutionBlock(a, b) {
+  if (a.alias === "solutionText") {
     return 1
-  }
-  else if (b.alias === "solutionText"){
-    return -1;
-  }
-  else {
-    return 0;
+  } else if (b.alias === "solutionText") {
+    return -1
+  } else {
+    return 0
   }
 }
 
@@ -198,6 +196,7 @@ export const query = graphql`
       url {
         en
         nl
+        fr
       }
       headerImage {
         nl {
@@ -212,22 +211,32 @@ export const query = graphql`
           desktop
           large_desktop
         }
+        fr {
+          mobile
+          tablet
+          desktop
+          large_desktop
+        }
       }
       headerImageAlt {
         en
         nl
+        fr
       }
       aboveTitle {
         nl
         en
+        fr
       }
       title {
         nl
         en
+        fr
       }
       lead {
         nl
         en
+        fr
       }
       slideShows: childrenSolutionSlideshow {
         umbracoId
@@ -235,15 +244,18 @@ export const query = graphql`
         row {
           en
           nl
+          fr
         }
         isRight {
           nl
           en
+          fr
         }
         umbracoId
         color {
           en
           nl
+          fr
         }
         slides: childrenSolutionSlideshowImage {
           umbracoId
@@ -263,10 +275,18 @@ export const query = graphql`
               mobile_portrait
               tablet
             }
+            fr {
+              desktop
+              large_desktop
+              mobile_landscape
+              mobile_portrait
+              tablet
+            }
           }
           altText {
             en
             nl
+            fr
           }
         }
       }
@@ -277,26 +297,32 @@ export const query = graphql`
         aboveTitle {
           en
           nl
+          fr
         }
         color {
           en
           nl
+          fr
         }
         title {
           en
           nl
+          fr
         }
         lead {
           en
           nl
+          fr
         }
         isRight {
           en
           nl
+          fr
         }
         row {
           en
           nl
+          fr
         }
       }
       videos: childrenSolutionVideo {
@@ -306,18 +332,22 @@ export const query = graphql`
         videoId {
           en
           nl
+          fr
         }
         isRight {
           en
           nl
+          fr
         }
         row {
           en
           nl
+          fr
         }
         color {
           en
           nl
+          fr
         }
       }
     }
