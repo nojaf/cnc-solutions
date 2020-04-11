@@ -28,7 +28,8 @@
   "devDependencies": {
     "gatsby-plugin-facebook-pixel": "^1.0.3",
     "gatsby-plugin-google-analytics": "^2.2.2",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "gh-pages": "2.2.0"
   },
   "keywords": [
     "gatsby"
@@ -41,7 +42,8 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "deploy": "gh-pages -d public"
   },
   "repository": {
     "type": "git",
