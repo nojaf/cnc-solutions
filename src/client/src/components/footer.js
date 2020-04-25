@@ -1,6 +1,7 @@
 import { graphql, Link, useStaticQuery } from "gatsby"
 import React from "react"
 import { pageInCulture } from "../selectors"
+import flandersInvestment from "../images/FIT_Label_Subsidie_Liggend.jpg"
 
 const Footer = ({ culture }) => {
   const linksQueryResult = useStaticQuery(graphql`
@@ -138,6 +139,11 @@ const Footer = ({ culture }) => {
             <Link to={contactPage.url}>
               <h4>{contactPage.navigationText}</h4>
             </Link>
+            <img
+              src={flandersInvestment}
+              id={"fiLogo"}
+              alt={"Flanders Investment &amp; Trade"}
+            />
           </div>
         </div>
       </div>
