@@ -21,7 +21,7 @@ namespace CncSolutions.Export.Controllers
         }
 
         [HttpPost]
-        [EnableCors("http://localhost:9000,http://www.cncsolutions.be", "*", "POST")]
+        [EnableCors("http://localhost:8000,http://localhost:9000,http://www.cncsolutions.be,https://cncsolutions.be", "*", "POST")]
         public async Task<IHttpActionResult> Post(ContactForm model)
         {
             try

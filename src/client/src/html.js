@@ -43,7 +43,6 @@ export default function HTML(props) {
         {/*<script src="/scripts/jquery.youtubebackground.js"></script>*/}
         <script src="/scripts/video.js"></script>
         <script src="/scripts/lightbox.js"></script>
-        <script src="/scripts/contact.js"></script>
         {props.postBodyComponents}
       </body>
     </html>

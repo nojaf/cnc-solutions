@@ -25,6 +25,8 @@ const BelowHeader = ({ aboveTitle, title }) => {
   )
 }
 
+const requiredFields = ["name", "company", "email", "telephone"]
+
 const ContactForm = ({
   labelName,
   labelCompany,
@@ -40,19 +42,78 @@ const ContactForm = ({
   errorText,
   aboveForm,
 }) => {
+  const [form, setForm] = React.useState({
+    name: "",
+    company: "",
+    address: "",
+    zip: "",
+    city: "",
+    country: "",
+    email: "",
+    telephone: "",
+    message: "",
+  })
+
+  const [didSubmit, setDidSubmit] = React.useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = React.useState(false)
+  const [showErrorMessage, setShowErrorMessage] = React.useState(false)
+
+  const updateValue = key => ev => {
+    const value = ev.target.value
+    setForm(prevState => {
+      return { ...prevState, [key]: value }
+    })
+  }
+
+  const handleSubmit = ev => {
+    ev.preventDefault()
+    setDidSubmit(true)
+    setShowSuccessMessage(false)
+    setShowErrorMessage(false)
+    if (requiredFields.every(rf => !!form[rf])) {
+      fetch(
+        "https://cncsolutions-backend.azurewebsites.net/umbraco/api/contact/post",
+        {
+          method: "POST",
+          headers:{
+            'Content-Type':'application/json'
+          },
+          body: JSON.stringify(form),
+        }
+      )
+        .then(respone => {
+          console.log(`Response: ${respone.status}`)
+          setShowSuccessMessage(true)
+        })
+        .catch(err => {
+          setShowErrorMessage(true)
+        })
+    }
+  }
+
+  const formClass = key => {
+    if (requiredFields.indexOf(key) !== -1 && !form[key] && didSubmit) {
+      return `form-control is-invalid`
+    } else {
+      return `form-control`
+    }
+  }
+
   return (
     <div id="contact-form" className="col-12 col-lg-8">
       <div className="container">
         <h2>{aboveForm}</h2>
-        <form action="#" method="post">
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">{labelName}*</label>
             <input
               type="text"
               name="name"
-              className="form-control"
+              className={formClass("name")}
               id="name"
               required
+              value={form.name}
+              onChange={updateValue("name")}
             />
           </div>
           <div className="form-group">
@@ -61,8 +122,10 @@ const ContactForm = ({
               type="text"
               name="company"
               id="company"
-              className="form-control"
+              className={formClass("company")}
               required
+              value={form.company}
+              onChange={updateValue("company")}
             />
           </div>
           <div className="form-group">
@@ -71,13 +134,22 @@ const ContactForm = ({
               type="text"
               name="address"
               id="address"
-              className="form-control"
+              className={formClass("address")}
+              value={form.address}
+              onChange={updateValue("address")}
             />
           </div>
           <div className="row">
             <div className="form-group col-6">
               <label htmlFor="zip">{labelZip}</label>
-              <input type="text" name="zip" id="zip" className="form-control" />
+              <input
+                type="text"
+                name="zip"
+                id="zip"
+                className={formClass("zip")}
+                value={form.zip}
+                onChange={updateValue("zip")}
+              />
             </div>
             <div className="form-group col-6">
               <label htmlFor="city">{labelCity}</label>
@@ -85,7 +157,9 @@ const ContactForm = ({
                 type="text"
                 name="city"
                 id="city"
-                className="form-control"
+                className={formClass("city")}
+                value={form.city}
+                onChange={updateValue("city")}
               />
             </div>
           </div>
@@ -95,7 +169,9 @@ const ContactForm = ({
               type="text"
               name="country"
               id="country"
-              className="form-control"
+              className={formClass("country")}
+              value={form.country}
+              onChange={updateValue("country")}
             />
           </div>
           <div className="form-group">
@@ -104,8 +180,10 @@ const ContactForm = ({
               type="email"
               name="email"
               id="email"
-              className="form-control"
+              className={formClass("email")}
               required
+              value={form.email}
+              onChange={updateValue("email")}
             />
           </div>
           <div className="form-group">
@@ -114,8 +192,10 @@ const ContactForm = ({
               type="tel"
               name="telephone"
               id="telephone"
-              className="form-control"
+              className={formClass("telephone")}
               required
+              value={form.phone}
+              onChange={updateValue("telephone")}
             />
           </div>
           <div className="form-group">
@@ -125,8 +205,9 @@ const ContactForm = ({
               id="message"
               cols={30}
               rows={5}
-              className="form-control"
-              defaultValue={""}
+              className={formClass("message")}
+              defaultValue={form.message}
+              onChange={updateValue("message")}
             />
           </div>
           <div className="submit-container">
@@ -137,12 +218,16 @@ const ContactForm = ({
             </button>
           </div>
         </form>
-        <div id="success" className="d-none alert alert-success">
-          {successText}
-        </div>
-        <div id="error" className="d-none alert alert-danger">
-          {errorText}
-        </div>
+        {showSuccessMessage && (
+          <div id="success" className="alert alert-success">
+            {successText}
+          </div>
+        )}
+        {showErrorMessage && (
+          <div id="error" className="alert alert-danger">
+            {errorText}
+          </div>
+        )}
       </div>
     </div>
   )
