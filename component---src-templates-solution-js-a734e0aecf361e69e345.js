@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{Qx46:function(e,t,n){"use strict";n.r(t),n.d(t,"query",(function(){return c}));var u=n("q1tI"),r=n.n(u),a=n("Bl7J");t.default=function(e){var t=e.data,n=e.pageContext;return r.a.createElement(a.a,{culture:n.culture,currentPageId:n.umbracoId},r.a.createElement("h1",null,"product page ",n.culture),r.a.createElement("h2",null,t.solution.url.en))};var c="1359934031"}}]);
-//# sourceMappingURL=component---src-templates-solution-js-a734e0aecf361e69e345.js.map

@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[7],{Dltz:function(e,t,r){"use strict";r.r(t),r.d(t,"query",(function(){return c}));var u=r("q1tI"),n=r.n(u),a=r("Bl7J");t.default=function(e){var t=e.data,r=e.pageContext;return n.a.createElement(a.a,{culture:r.culture,currentPageId:r.umbracoId},n.a.createElement("h1",null,"product page ",r.culture),n.a.createElement("h2",null,t.product.url.en))};var c="3187918079"}}]);
-//# sourceMappingURL=component---src-templates-product-js-f6d9223f79375f4a86b5.js.map
