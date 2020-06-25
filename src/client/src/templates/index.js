@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
 import { pageInCulture, useUrl } from "../selectors"
@@ -17,17 +17,17 @@ const Hero = ({
 }) => {
   const primaryLinkUrl = useUrl(culture, primaryLink)
   const showLink = primaryLinkText && primaryLinkUrl
-  const videoEl = useRef(null);
-  const [videoHeight, setVideoHeight] = useState(200);
+  const videoEl = useRef(null)
+  const [videoHeight, setVideoHeight] = useState(200)
 
   useEffect(() => {
-    if(videoEl.current){
-      setVideoHeight(videoEl.current.clientHeight);
+    if (videoEl.current) {
+      setVideoHeight(videoEl.current.clientHeight)
     }
-  }, [videoEl, setVideoHeight]);
+  }, [videoEl, setVideoHeight])
 
   return (
-    <section id="hero" style={{height:videoHeight}}>
+    <section id="hero" style={{ height: videoHeight }}>
       <div className="hero-content container">
         <p className="above">{aboveSlogan}</p>
         <h1>{slogan}</h1>
@@ -42,8 +42,14 @@ const Hero = ({
         style={{ backgroundImage: `url(${mobilePlaceholder.mobile})` }}
         className="d-block d-sm-none"
       ></div>
-      <div id="hero-video" style={{height:videoHeight}}>
-        <video autoPlay loop muted poster={mobilePlaceholder.mobile} ref={videoEl}>
+      <div id="hero-video" style={{ height: videoHeight }}>
+        <video
+          autoPlay
+          loop
+          muted
+          poster={mobilePlaceholder.mobile}
+          ref={videoEl}
+        >
           <source src={HomeVideoMp4} type="video/mp4" />
           <source src={HomeVideoWebm} type="video/webm" />
           Your browser does not support the video tag.
@@ -172,6 +178,7 @@ const HomeRow = ({
   lead,
   linkText,
   linkNode,
+  fileDownloadFile,
   imageRight,
   image,
   altText,
@@ -214,6 +221,13 @@ const HomeRow = ({
                 </Link>
               </div>
             )}
+            {linkText && fileDownloadFile && (<div className="link-container">
+              <a href={fileDownloadFile} download className="btn-outline-primary">
+                {linkText}
+                <span className="corner" />
+                <span className="inner-corner" />
+              </a>
+            </div>)}
           </div>
         </div>
       </div>
@@ -333,6 +347,11 @@ export const query = graphql`
           fr
         }
         linkNode {
+          en
+          nl
+          fr
+        }
+        fileDownloadFile {
           en
           nl
           fr
