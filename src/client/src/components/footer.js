@@ -123,7 +123,9 @@ const Footer = ({ culture }) => {
             </ul>
           </div>
           <div className="col-6 col-lg-3">
-            <h4>{productsPage.navigationText}</h4>
+            <Link to={productsPage.url}>
+              <h4>{productsPage.navigationText}</h4>
+            </Link>
             <ul className="list-unstyled">
               {productItems.map((p, i) => (
                 <li key={i}>
