@@ -84,6 +84,7 @@ const SolutionSlide = ({
           alt={thumbnailAlt}
         />
       </picture>
+      <div className="cover"></div>
       <div className="carousel-caption">
         <img src={icon} alt={title} />
         <h5>{title}</h5>
