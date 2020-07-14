@@ -12,6 +12,7 @@ const Hero = ({
   aboveSlogan,
   slogan,
   mobilePlaceholder,
+  firstFrameVideo,
   primaryLink,
   primaryLinkText,
 }) => {
@@ -47,7 +48,7 @@ const Hero = ({
           autoPlay
           loop
           muted
-          poster={mobilePlaceholder.mobile}
+          poster={firstFrameVideo.scene}
           ref={videoEl}
         >
           <source src={HomeVideoMp4} type="video/mp4" />
@@ -222,13 +223,19 @@ const HomeRow = ({
                 </Link>
               </div>
             )}
-            {linkText && fileDownloadFile && (<div className="link-container">
-              <a href={fileDownloadFile} download className="btn-outline-primary">
-                {linkText}
-                <span className="corner" />
-                <span className="inner-corner" />
-              </a>
-            </div>)}
+            {linkText && fileDownloadFile && (
+              <div className="link-container">
+                <a
+                  href={fileDownloadFile}
+                  download
+                  className="btn-outline-primary"
+                >
+                  {linkText}
+                  <span className="corner" />
+                  <span className="inner-corner" />
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -278,6 +285,17 @@ export const query = graphql`
         }
         fr {
           mobile
+        }
+      }
+      firstFrameVideo {
+        nl {
+          scene
+        }
+        fr {
+          scene
+        }
+        en {
+          scene
         }
       }
       aboveSlogan {
