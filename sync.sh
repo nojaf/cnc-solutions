@@ -1,2 +1,2 @@
 git checkout . --force
-git pull
+git pull --rebase
