@@ -127,7 +127,7 @@ const MoreInfo = ({
   )
 }
 
-export default ({ data, pageContext }) => {
+const ProductPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const product = pageInCulture(currentCulture, data.product)
   const productRows = data.allProductRow.nodes.map(n =>
@@ -157,6 +157,7 @@ export default ({ data, pageContext }) => {
     </Layout>
   )
 }
+export default ProductPage;
 export const query = graphql`
   query getProduct($umbracoId: Int) {
     product(umbracoId: { eq: $umbracoId }) {

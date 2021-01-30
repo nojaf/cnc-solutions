@@ -289,7 +289,7 @@ const ContactInfo = ({
   )
 }
 
-export default ({ data, pageContext }) => {
+const ContactPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const contact = pageInCulture(currentCulture, data.contact)
 
@@ -311,6 +311,7 @@ export default ({ data, pageContext }) => {
   )
 }
 
+export default ContactPage;
 export const query = graphql`
   query {
     contact {

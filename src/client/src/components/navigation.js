@@ -83,16 +83,20 @@ const Navigation = ({ culture, currentPageId }) => {
           }
         }
       }
-      about {
-        url {
-          nl
-          en
-          fr
-        }
-        navigationText {
-          nl
-          en
-          fr
+      allAbout {
+        edges {
+          node {
+            url {
+              nl
+              en
+              fr
+            }
+            navigationText {
+              nl
+              en
+              fr
+            }
+          }
         }
       }
       contact {
@@ -112,7 +116,7 @@ const Navigation = ({ culture, currentPageId }) => {
 
   const changeLanguageUrls = useUrlsForPage(currentPageId)
   const homePage = pageInCulture(culture, linksQueryResult.home)
-  const aboutPage = pageInCulture(culture, linksQueryResult.about)
+  const aboutPages = linksQueryResult.allAbout.edges.map(({node}) => pageInCulture(culture, node));
   const contactPage = pageInCulture(culture, linksQueryResult.contact)
   const solutionsPage = pageInCulture(culture, linksQueryResult.solutions)
   const productsPage = pageInCulture(culture, linksQueryResult.products)
@@ -147,10 +151,10 @@ const Navigation = ({ culture, currentPageId }) => {
         <ul className="navbar-nav mt-2">
           <li className="nav-item dropdown">
             <Link
-                className="nav-link d-inline-block"
-                to={solutionsPage.url}
-                aria-haspopup="true"
-                aria-expanded="false"
+              className="nav-link d-inline-block"
+              to={solutionsPage.url}
+              aria-haspopup="true"
+              aria-expanded="false"
             >
               {solutionsPage.navigationText}
             </Link>
@@ -179,10 +183,10 @@ const Navigation = ({ culture, currentPageId }) => {
           </li>
           <li className="nav-item dropdown">
             <Link
-                className="nav-link d-inline-block"
-                to={productsPage.url}
-                aria-haspopup="true"
-                aria-expanded="false"
+              className="nav-link d-inline-block"
+              to={productsPage.url}
+              aria-haspopup="true"
+              aria-expanded="false"
             >
               {productsPage.navigationText}
             </Link>
@@ -209,11 +213,13 @@ const Navigation = ({ culture, currentPageId }) => {
               })}
             </div>
           </li>
-          <li className="nav-item">
-            <Link to={aboutPage.url} className="nav-link">
-              {aboutPage.navigationText}
-            </Link>
-          </li>
+          {aboutPages.map((aboutPage,i) => {
+            return (<li className="nav-item" key={`about-${i}`}>
+              <Link to={aboutPage.url} className="nav-link">
+                {aboutPage.navigationText}
+              </Link>
+            </li>);
+          })}
           <li className="nav-item">
             <Link to={contactPage.url} className="nav-link">
               {contactPage.navigationText}

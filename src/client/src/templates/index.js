@@ -243,7 +243,7 @@ const HomeRow = ({
   )
 }
 
-export default ({ data, pageContext }) => {
+const IndexPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const home = pageInCulture(currentCulture, data.home)
   const solutions = data.allSolution.nodes.map(n =>
@@ -267,6 +267,7 @@ export default ({ data, pageContext }) => {
   )
 }
 
+export default IndexPage;
 export const query = graphql`
   query {
     home {

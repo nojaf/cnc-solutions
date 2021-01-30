@@ -167,7 +167,7 @@ const SolutionRow = ({ blocks, culture }) => {
   )
 }
 
-export default ({ data, pageContext }) => {
+const SolutionPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const solution = pageInCulture(currentCulture, data.solution)
   const rowsMap = R.groupBy(
@@ -194,6 +194,8 @@ export default ({ data, pageContext }) => {
     </Layout>
   )
 }
+
+export default SolutionPage;
 export const query = graphql`
   query getSolution($umbracoId: Int) {
     solution(umbracoId: { eq: $umbracoId }) {

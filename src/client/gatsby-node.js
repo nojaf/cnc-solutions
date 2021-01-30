@@ -43,27 +43,31 @@ exports.createPages = async ({ graphql, actions }) => {
           fr
         }
       }
-      about {
-        umbracoId
-        url {
-          nl
-          en
-          fr
-        }
-        seoMetaDescription {
-          nl
-          en
-          fr
-        }
-        seoMetaKeywords {
-          nl
-          en
-          fr
-        }
-        title: navigationText {
-          nl
-          en
-          fr
+      allAbout {
+        edges {
+          node {
+            umbracoId
+            url {
+              nl
+              en
+              fr
+            }
+            seoMetaDescription {
+              nl
+              en
+              fr
+            }
+            seoMetaKeywords {
+              nl
+              en
+              fr
+            }
+            title: navigationText {
+              nl
+              en
+              fr
+            }
+          }
         }
       }
       contact {
@@ -194,13 +198,13 @@ exports.createPages = async ({ graphql, actions }) => {
 
   const {
     home,
-    about,
+    allAbout,
     contact,
     solutions,
     products,
     allCulture,
     allSolution,
-    allProduct,
+    allProduct
   } = result.data
   const cultures = R.map(
     R.pipe(R.prop("node"), R.prop("value")),
@@ -208,6 +212,7 @@ exports.createPages = async ({ graphql, actions }) => {
   )
   const solutionItems = allSolution.edges.map(({ node }) => node)
   const productItems = allProduct.edges.map(({ node }) => node)
+  const aboutPages = allAbout.edges.map(({ node }) => node)
 
   cultures.forEach(culture => {
     const selectSEO = page => {
@@ -278,15 +283,17 @@ exports.createPages = async ({ graphql, actions }) => {
       })
     })
 
-    // about
-    createPage({
-      path: about.url[culture],
-      component: path.resolve(`./src/templates/about.js`),
-      context: {
-        culture,
-        umbracoId: about.umbracoId,
-        seo: selectSEO(about),
-      },
+    // about pages
+    aboutPages.forEach(about => {
+      createPage({
+        path: about.url[culture],
+        component: path.resolve(`./src/templates/about.js`),
+        context: {
+          culture,
+          umbracoId: about.umbracoId,
+          seo: selectSEO(about),
+        },
+      })
     })
 
     // contact

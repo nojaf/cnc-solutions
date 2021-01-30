@@ -95,7 +95,7 @@ const Product = ({
   )
 }
 
-export default ({ data, pageContext }) => {
+const ProductPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const products = pageInCulture(currentCulture, data.products)
   const productItems = data.allProduct.edges.map(({ node }) => {
@@ -166,6 +166,8 @@ export default ({ data, pageContext }) => {
     </Layout>
   )
 }
+
+export default ProductPage;
 export const query = graphql`
   query {
     products {

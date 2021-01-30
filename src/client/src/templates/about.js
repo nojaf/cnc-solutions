@@ -66,7 +66,7 @@ const AboutRow = ({ culture, page }) => {
   )
 }
 
-export default ({ data, pageContext }) => {
+const AboutPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const about = pageInCulture(currentCulture, data.about)
   const rows = data.allAboutRow.edges.map(e => e.node)
@@ -85,9 +85,12 @@ export default ({ data, pageContext }) => {
     </Layout>
   )
 }
+export default AboutPage;
+
+
 export const query = graphql`
-  query {
-    about {
+  query getAboutPage($umbracoId: Int){
+    about(umbracoId: { eq: $umbracoId }) {
       headerImage {
         nl {
           mobile
@@ -129,7 +132,7 @@ export const query = graphql`
         fr
       }
     }
-    allAboutRow {
+    allAboutRow(filter: { parentUmbracoId: { eq: $umbracoId } }) {
       edges {
         node {
           key: id

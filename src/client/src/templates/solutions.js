@@ -39,7 +39,7 @@ const Solution = ({ thumbnail, thumbnailAlt, title, url, icon }) => {
   )
 }
 
-export default ({ data, pageContext }) => {
+const SolutionPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const solutions = pageInCulture(currentCulture, data.solutions)
   const solutionItems = data.allSolution.edges.map(({ node }) => {
@@ -69,6 +69,8 @@ export default ({ data, pageContext }) => {
     </Layout>
   )
 }
+
+export default SolutionPage;
 export const query = graphql`
   query {
     solutions {
