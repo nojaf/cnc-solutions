@@ -368,6 +368,21 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
     })
   })
 
+  // Gatsby cannot infer the GraphQL type when all props are null
+  // Return empty string instead for Umbraco.MediaPicker
+  const sanitizeUmbracoProperties = (props) => {
+      const sanitizeProp = p => {
+         if(p.type === "Umbraco.MediaPicker" && !p.en && !p.fr && !p.nl){
+             return { type:p.type, en:"", fr:"", nl:""}
+         }
+         else {
+             return p;
+         }
+      }
+
+      return Object.assign({}, ...Object.keys(props).map(k => ({[k]:sanitizeProp(props[k])})));
+  }
+
   const resolveUmbracoNode = id => {
     const url = id
       ? `https://cncsolutions-backend.azurewebsites.net/umbraco/api/graph/byid/${id}`
@@ -381,7 +396,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
           url: umbracoNode.url,
           updateDate: umbracoNode.updateDate,
         },
-        umbracoNode.properties,
+        sanitizeUmbracoProperties(umbracoNode.properties),
         {
           id: createNodeId(`UmbracoId-${umbracoNode.id}`),
           children: umbracoNode.children.map(({ id }) =>
