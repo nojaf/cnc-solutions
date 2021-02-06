@@ -33,7 +33,7 @@ const Hero = ({
         <p className="above">{aboveSlogan}</p>
         <h1>{slogan}</h1>
         {showLink && (
-          <Link to={primaryLinkUrl} className="btn btn-outline-primary">
+          <Link to={primaryLinkUrl} className="btn btn-cnc">
             {primaryLinkText}
           </Link>
         )}
@@ -216,7 +216,7 @@ const HomeRow = ({
             <div dangerouslySetInnerHTML={{ __html: lead }}></div>
             {linkText && linkNode && (
               <div className="link-container">
-                <Link to={link} className="btn-outline-primary">
+                <Link to={link} className={`btn-cnc ${theme}`}>
                   {linkText}
                   <span className="corner" />
                   <span className="inner-corner" />
@@ -228,7 +228,9 @@ const HomeRow = ({
                 <a
                   href={fileDownloadFile}
                   download
-                  className="btn-outline-primary"
+                  className="btn-cnc"
+                  rel="noreferrer"
+                  target="_blank"
                 >
                   {linkText}
                   <span className="corner" />
@@ -367,11 +369,6 @@ export const query = graphql`
           fr
         }
         linkNode {
-          en
-          nl
-          fr
-        }
-        fileDownloadFile {
           en
           nl
           fr

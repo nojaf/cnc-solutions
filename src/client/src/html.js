@@ -40,8 +40,6 @@ export default function HTML(props) {
           crossOrigin="anonymous"
         ></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
-        {/*<script src="/scripts/jquery.youtubebackground.js"></script>*/}
-        <script src="/scripts/video.js"></script>
         <script src="/scripts/lightbox.js"></script>
         {props.postBodyComponents}
       </body>

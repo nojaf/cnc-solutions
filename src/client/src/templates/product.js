@@ -106,7 +106,7 @@ const MoreInfo = ({
           <a
             href={fileDownloadFile}
             download
-            className="btn-outline-primary"
+            className="btn-cnc"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -116,7 +116,7 @@ const MoreInfo = ({
           </a>
         )}
         {showContact && (
-          <Link to={contactLink} className="btn-outline-primary">
+          <Link to={contactLink} className="btn-cnc">
             {contactPageText}
             <span className="corner" />
             <span className="inner-corner" />

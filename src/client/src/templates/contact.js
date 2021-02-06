@@ -211,7 +211,7 @@ const ContactForm = ({
             />
           </div>
           <div className="submit-container">
-            <button type="submit" className="btn-outline-primary">
+            <button type="submit" className="btn-cnc">
               {sendButtonText}
               <span className="corner" />
               <span className="inner-corner" />

@@ -10,7 +10,7 @@ const AboutRowLink = ({ linkText, linkUrl, culture }) => {
   const url = useUrl(culture, linkUrl)
 
   return (
-    <Link to={url} className="btn-outline-primary">
+    <Link to={url} className="btn-cnc">
       {linkText}
       <span className="corner" />
       <span className="inner-corner" />
