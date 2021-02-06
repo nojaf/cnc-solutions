@@ -2,6 +2,7 @@ const path = require(`path`)
 const fetch = require("node-fetch")
 const R = require("ramda")
 const signalR = require("signalr-client")
+const { createRemoteFileNode } = require("gatsby-source-filesystem")
 
 // Helper function to fetch data
 const fetchData = async (url, options = {}) => {
@@ -452,4 +453,29 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   const rootUmbracoNodePromise = resolveUmbracoNode(null)
 
   return Promise.all([urlNodePromise, rootUmbracoNodePromise])
+}
+
+exports.onCreateNode = async ({
+  node,
+  actions: { createNode },
+  store,
+  cache,
+  createNodeId,
+}) => {
+    if(node.umbracoId === 1081 && node.mobilePlaceholder){
+        console.log(`created ${node.internal.type} ${node.umbracoId}`);
+        let fileNode = await createRemoteFileNode({
+            url: node.mobilePlaceholder.nl.mobile, // string that points to the URL of the image
+            parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
+            createNode, // helper function in gatsby-node to generate the node
+            createNodeId, // helper function in gatsby-node to generate the node id
+            cache, // Gatsby's cache
+            store, // Gatsby's Redux store
+        })
+
+       // if the file was created, attach the new node to the parent node
+        if (fileNode) {
+            node.mobilePlaceholder.nl.mobileImage___NODE = fileNode.id
+        }
+    }
 }
