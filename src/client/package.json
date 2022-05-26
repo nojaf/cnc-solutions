@@ -6,7 +6,7 @@
   "author": "Florian Verdonck <florian.verdonck@outlook.com>",
   "dependencies": {
     "bootstrap": "4.6.0",
-    "eventsource": "1.0.7",
+    "eventsource": "2.0.2",
     "gatsby": "2.31.1",
     "gatsby-image": "2.10.0",
     "gatsby-plugin-manifest": "2.11.0",
