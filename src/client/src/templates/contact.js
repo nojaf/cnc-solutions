@@ -58,40 +58,40 @@ const ContactForm = ({
   const [showSuccessMessage, setShowSuccessMessage] = React.useState(false)
   const [showErrorMessage, setShowErrorMessage] = React.useState(false)
 
-  const updateValue = key => ev => {
+  const updateValue = (key) => (ev) => {
     const value = ev.target.value
-    setForm(prevState => {
+    setForm((prevState) => {
       return { ...prevState, [key]: value }
     })
   }
 
-  const handleSubmit = ev => {
+  const handleSubmit = (ev) => {
     ev.preventDefault()
     setDidSubmit(true)
     setShowSuccessMessage(false)
     setShowErrorMessage(false)
-    if (requiredFields.every(rf => !!form[rf])) {
+    if (requiredFields.every((rf) => !!form[rf])) {
       fetch(
         "https://cncsolutions-backend.azurewebsites.net/umbraco/api/contact/post",
         {
           method: "POST",
-          headers:{
-            'Content-Type':'application/json'
+          headers: {
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(form),
         }
       )
-        .then(respone => {
+        .then((respone) => {
           console.log(`Response: ${respone.status}`)
           setShowSuccessMessage(true)
         })
-        .catch(err => {
+        .catch((err) => {
           setShowErrorMessage(true)
         })
     }
   }
 
-  const formClass = key => {
+  const formClass = (key) => {
     if (requiredFields.indexOf(key) !== -1 && !form[key] && didSubmit) {
       return `form-control is-invalid`
     } else {
@@ -311,7 +311,7 @@ const ContactPage = ({ data, pageContext }) => {
   )
 }
 
-export default ContactPage;
+export default ContactPage
 export const query = graphql`
   query {
     contact {

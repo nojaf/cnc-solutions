@@ -66,6 +66,19 @@ const Footer = ({ culture }) => {
           }
         }
       }
+      cases {
+        umbracoId
+        url {
+          nl
+          en
+          fr
+        }
+        navigationText {
+          nl
+          en
+          fr
+        }
+      }
       about {
         url {
           nl
@@ -97,6 +110,7 @@ const Footer = ({ culture }) => {
   const contactPage = pageInCulture(culture, linksQueryResult.contact)
   const solutionsPage = pageInCulture(culture, linksQueryResult.solutions)
   const productsPage = pageInCulture(culture, linksQueryResult.products)
+  const casesPage = pageInCulture(culture, linksQueryResult.cases)
   const solutionItems = linksQueryResult.allSolution.edges.map(({ node }) => {
     return pageInCulture(culture, node)
   })
@@ -133,6 +147,9 @@ const Footer = ({ culture }) => {
                 </li>
               ))}
             </ul>
+            <Link to={casesPage.url}>
+              <h4>{casesPage.navigationText}</h4>
+            </Link>
           </div>
           <div className="col-6 col-lg-3">
             <Link to={aboutPage.url}>

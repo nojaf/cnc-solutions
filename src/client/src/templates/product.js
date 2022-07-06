@@ -73,7 +73,7 @@ const Features = ({ features, aboveFeature, featureTitle }) => {
           <h2>{featureTitle}</h2>
         </div>
         <div className="body">
-          {features.map(f => (
+          {features.map((f) => (
             <Feature key={f.umbracoId} {...f} />
           ))}
         </div>
@@ -130,10 +130,10 @@ const MoreInfo = ({
 const ProductPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const product = pageInCulture(currentCulture, data.product)
-  const productRows = data.allProductRow.nodes.map(n =>
+  const productRows = data.allProductRow.nodes.map((n) =>
     pageInCulture(currentCulture, n)
   )
-  const productFeatures = data.allProductFeature.nodes.map(n =>
+  const productFeatures = data.allProductFeature.nodes.map((n) =>
     pageInCulture(currentCulture, n)
   )
 
@@ -147,7 +147,7 @@ const ProductPage = ({ data, pageContext }) => {
       <PageIntroduction {...product} />
       <section id="product-highlights">
         <div className="container-fluid px-0">
-          {productRows.map(pr => (
+          {productRows.map((pr) => (
             <ProductHighlightRow {...pr} key={pr.umbracoId} />
           ))}
         </div>
@@ -157,7 +157,7 @@ const ProductPage = ({ data, pageContext }) => {
     </Layout>
   )
 }
-export default ProductPage;
+export default ProductPage
 export const query = graphql`
   query getProduct($umbracoId: Int) {
     product(umbracoId: { eq: $umbracoId }) {

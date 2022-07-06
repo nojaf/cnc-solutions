@@ -46,7 +46,7 @@ const SlideShowSlide = ({ image, isActive, altText, parentUmbracoId }) => {
 }
 
 const SolutionSlideShow = ({ culture, umbracoId, slides }) => {
-  const slideShowSlides = wrapIfSingleton(slides).map(s =>
+  const slideShowSlides = wrapIfSingleton(slides).map((s) =>
     pageInCulture(culture, s)
   )
   return (
@@ -122,7 +122,7 @@ const SolutionVideo = ({ videoId }) => {
   )
 }
 
-const SolutionBlock = props => {
+const SolutionBlock = (props) => {
   switch (props.alias) {
     case "solutionSlideshow":
       return <SolutionSlideShow {...props} />
@@ -156,7 +156,7 @@ const SolutionRow = ({ blocks, culture }) => {
     <section className={`cnc-block ${color}`}>
       <div className="container">
         <div className="row">
-          {blocks.sort(sortSolutionBlock).map(b => (
+          {blocks.sort(sortSolutionBlock).map((b) => (
             <div className={blockColumn(b)} key={b.umbracoId}>
               <SolutionBlock {...b} culture={culture} />
             </div>
@@ -171,14 +171,14 @@ const SolutionPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const solution = pageInCulture(currentCulture, data.solution)
   const rowsMap = R.groupBy(
-    b => b.row,
+    (b) => b.row,
     [
       ...wrapIfSingleton(data.solution.slideShows),
       ...wrapIfSingleton(data.solution.texts),
       ...wrapIfSingleton(data.solution.videos),
-    ].map(r => pageInCulture(currentCulture, r))
+    ].map((r) => pageInCulture(currentCulture, r))
   )
-  const rows = Object.keys(rowsMap).map(k => rowsMap[k])
+  const rows = Object.keys(rowsMap).map((k) => rowsMap[k])
 
   return (
     <Layout
@@ -195,7 +195,7 @@ const SolutionPage = ({ data, pageContext }) => {
   )
 }
 
-export default SolutionPage;
+export default SolutionPage
 export const query = graphql`
   query getSolution($umbracoId: Int) {
     solution(umbracoId: { eq: $umbracoId }) {

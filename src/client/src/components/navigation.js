@@ -83,6 +83,36 @@ const Navigation = ({ culture, currentPageId }) => {
           }
         }
       }
+      cases {
+        umbracoId
+        url {
+          nl
+          en
+          fr
+        }
+        navigationText {
+          nl
+          en
+          fr
+        }
+      }
+      allCase {
+        edges {
+          node {
+            umbracoId
+            url {
+              nl
+              en
+              fr
+            }
+            navigationText {
+              nl
+              en
+              fr
+            }
+          }
+        }
+      }
       allAbout {
         edges {
           node {
@@ -116,10 +146,13 @@ const Navigation = ({ culture, currentPageId }) => {
 
   const changeLanguageUrls = useUrlsForPage(currentPageId)
   const homePage = pageInCulture(culture, linksQueryResult.home)
-  const aboutPages = linksQueryResult.allAbout.edges.map(({node}) => pageInCulture(culture, node));
+  const aboutPages = linksQueryResult.allAbout.edges.map(({ node }) =>
+    pageInCulture(culture, node)
+  )
   const contactPage = pageInCulture(culture, linksQueryResult.contact)
   const solutionsPage = pageInCulture(culture, linksQueryResult.solutions)
   const productsPage = pageInCulture(culture, linksQueryResult.products)
+  const casesPage = pageInCulture(culture, linksQueryResult.cases)
   const cultures = R.map(
     R.pipe(R.prop("node"), R.prop("value")),
     linksQueryResult.allCulture.edges
@@ -128,6 +161,9 @@ const Navigation = ({ culture, currentPageId }) => {
     return pageInCulture(culture, node)
   })
   const productItems = linksQueryResult.allProduct.edges.map(({ node }) => {
+    return pageInCulture(culture, node)
+  })
+  const caseItems = linksQueryResult.allCase.edges.map(({ node }) => {
     return pageInCulture(culture, node)
   })
 
@@ -165,10 +201,9 @@ const Navigation = ({ culture, currentPageId }) => {
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
-            >
-            </div>
+            ></div>
             <div className="dropdown-menu" aria-labelledby="solutionsDropdown">
-              {solutionItems.map(si => {
+              {solutionItems.map((si) => {
                 return (
                   <Link
                     to={si.url}
@@ -197,10 +232,9 @@ const Navigation = ({ culture, currentPageId }) => {
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
-            >
-            </div>
+            ></div>
             <div className="dropdown-menu" aria-labelledby="productsDropdown">
-              {productItems.map(pi => {
+              {productItems.map((pi) => {
                 return (
                   <Link
                     to={pi.url}
@@ -213,12 +247,45 @@ const Navigation = ({ culture, currentPageId }) => {
               })}
             </div>
           </li>
-          {aboutPages.map((aboutPage,i) => {
-            return (<li className="nav-item" key={`about-${i}`}>
-              <Link to={aboutPage.url} className="nav-link">
-                {aboutPage.navigationText}
-              </Link>
-            </li>);
+          <li className="nav-item dropdown">
+            <Link
+              className="nav-link d-inline-block"
+              to={casesPage.url}
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {casesPage.navigationText}
+            </Link>
+            <div
+              className="dropdown-toggle d-inline-block link-toggle"
+              id="casesDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            ></div>
+            <div className="dropdown-menu" aria-labelledby="casesDropdown">
+              {caseItems.map((c) => {
+                return (
+                  <Link
+                    to={c.url}
+                    key={c.umbracoId}
+                    className={"dropdown-item"}
+                  >
+                    {c.navigationText}
+                  </Link>
+                )
+              })}
+            </div>
+          </li>
+          {aboutPages.map((aboutPage, i) => {
+            return (
+              <li className="nav-item" key={`about-${i}`}>
+                <Link to={aboutPage.url} className="nav-link">
+                  {aboutPage.navigationText}
+                </Link>
+              </li>
+            )
           })}
           <li className="nav-item">
             <Link to={contactPage.url} className="nav-link">
@@ -237,7 +304,7 @@ const Navigation = ({ culture, currentPageId }) => {
               {culture}
             </div>
             <div className="dropdown-menu" aria-labelledby="languageDropdown">
-              {cultures.map(culture => {
+              {cultures.map((culture) => {
                 return (
                   <Link
                     to={changeLanguageUrls[culture]}

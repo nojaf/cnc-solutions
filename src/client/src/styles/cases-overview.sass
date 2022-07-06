@@ -1,0 +1,82 @@
+﻿@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+#case-tiles
+  // overflow-y: hidden
+  margin-bottom: 1rem
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-column-gap: 10px
+  grid-row-gap: 20px
+
+.case-tile
+  display: block
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 10px
+
+  .case-tile-img
+    width: 100%
+    position: relative
+    picture img
+      width: 100%
+
+  .case-tile-title
+    display: flex
+    min-height: 60px
+    width: 100%
+    background-color: $dark
+    padding: 12px
+
+    h3
+      display: block
+      margin: auto
+      color: $primary
+      font-size: 12px
+      text-transform: uppercase
+      font-weight: bold
+      text-align: center
+      white-space: initial
+
+  &:hover
+    text-decoration: none
+    div
+      background-color: $primary
+      h3
+        color: $dark
+
+@include media-breakpoint-up(md)
+  header
+    min-height: 41vw
+    height: 41vw
+    overflow-y: hidden
+
+  .case-tile
+    display: block
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 10px
+
+    h3
+      font-size: 16px
+
+@include media-breakpoint-up(lg)
+  header
+    min-height: 30vw
+    height: 30vw
+
+  .case-tile
+    max-height: 280px
+
+    picture img
+      height: 200px
+
+    h3
+      font-size: 24px
+
+    div
+      min-height: 80px
+
+  #case-tiles
+    margin-bottom: 3rem
+
+@include media-breakpoint-up(xl)
+  header
+    min-height: 20vw
+    height: 20vw

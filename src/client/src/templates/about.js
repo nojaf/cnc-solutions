@@ -69,7 +69,7 @@ const AboutRow = ({ culture, page }) => {
 const AboutPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const about = pageInCulture(currentCulture, data.about)
-  const rows = data.allAboutRow.edges.map(e => e.node)
+  const rows = data.allAboutRow.edges.map((e) => e.node)
 
   return (
     <Layout
@@ -79,17 +79,16 @@ const AboutPage = ({ data, pageContext }) => {
     >
       <Header currentPage={about} />
       <PageIntroduction {...about} />
-      {rows.map(r => (
+      {rows.map((r) => (
         <AboutRow page={r} culture={currentCulture} key={r.key} />
       ))}
     </Layout>
   )
 }
-export default AboutPage;
-
+export default AboutPage
 
 export const query = graphql`
-  query getAboutPage($umbracoId: Int){
+  query getAboutPage($umbracoId: Int) {
     about(umbracoId: { eq: $umbracoId }) {
       headerImage {
         nl {

@@ -8,26 +8,26 @@ const client = new signalR.client(
 )
 
 client.serviceHandlers = {
-  bindingError: err => {
+  bindingError: (err) => {
     console.log(`err`, err)
   },
-  onerror: err => {
+  onerror: (err) => {
     console.log(`err`, err)
   },
-  connectFailed: err => {
+  connectFailed: (err) => {
     console.log(`err`, err)
   },
   disconnected: () => {
     console.log(`disconnected`)
   },
-  connectionLost: err => {
+  connectionLost: (err) => {
     console.log(`err`, err)
   },
-  connected: function(connection) {
+  connected: function (connection) {
     console.log("Websocket connected")
   },
 }
 
-client.on("GatsbyHub", "nodePublished", e => {
+client.on("GatsbyHub", "nodePublished", (e) => {
   console.log(`recevied`, e)
 })

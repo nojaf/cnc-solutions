@@ -44,13 +44,7 @@ const Hero = ({
         className="d-block d-sm-none"
       ></div>
       <div id="hero-video" style={{ height: videoHeight }}>
-        <video
-          autoPlay
-          loop
-          muted
-          poster={firstFrameVideo.scene}
-          ref={videoEl}
-        >
+        <video autoPlay loop muted poster={firstFrameVideo.scene} ref={videoEl}>
           <source src={HomeVideoMp4} type="video/mp4" />
           <source src={HomeVideoWebm} type="video/webm" />
           Your browser does not support the video tag.
@@ -164,7 +158,7 @@ const Solutions = ({ aboveSolutions, solutionsTitle, solutions, culture }) => {
         </a>
       </div>
       <div className="container" id="solution-links">
-        {solutions.map(s => (
+        {solutions.map((s) => (
           <SolutionTile culture={culture} key={s.umbracoId} {...s} />
         ))}
       </div>
@@ -248,10 +242,10 @@ const HomeRow = ({
 const IndexPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const home = pageInCulture(currentCulture, data.home)
-  const solutions = data.allSolution.nodes.map(n =>
+  const solutions = data.allSolution.nodes.map((n) =>
     pageInCulture(currentCulture, n)
   )
-  const homeRows = data.home.childrenHomeRow.map(hr =>
+  const homeRows = data.home.childrenHomeRow.map((hr) =>
     pageInCulture(currentCulture, hr)
   )
   return (
@@ -262,14 +256,14 @@ const IndexPage = ({ data, pageContext }) => {
     >
       <Hero culture={currentCulture} {...home} />
       <Solutions {...home} solutions={solutions} culture={currentCulture} />
-      {homeRows.map(hr => (
+      {homeRows.map((hr) => (
         <HomeRow culture={currentCulture} {...hr} />
       ))}
     </Layout>
   )
 }
 
-export default IndexPage;
+export default IndexPage
 export const query = graphql`
   query {
     home {
