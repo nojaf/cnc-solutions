@@ -153,7 +153,7 @@ const ProductPage = ({ data, pageContext }) => {
               </a>
             </div>
             <div id="products-grid">
-              {productItems.map(pi => (
+              {productItems.map((pi) => (
                 <Product {...products} {...pi} />
               ))}
             </div>
@@ -167,7 +167,7 @@ const ProductPage = ({ data, pageContext }) => {
   )
 }
 
-export default ProductPage;
+export default ProductPage
 export const query = graphql`
   query {
     products {

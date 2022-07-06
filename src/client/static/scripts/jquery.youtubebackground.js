@@ -11,14 +11,14 @@
 
 // Chain of Responsibility pattern. Creates base class that can be overridden.
 if (typeof Object.create !== "function") {
-  Object.create = function(obj) {
+  Object.create = function (obj) {
     function F() {}
     F.prototype = obj
     return new F()
   }
 }
 
-;(function($, window, document) {
+;(function ($, window, document) {
   var loadAPI = function loadAPI(callback) {
       // Load Youtube API
       var tag = document.createElement("script"),
@@ -49,7 +49,7 @@ if (typeof Object.create !== "function") {
 
         // Creates deferred so, other players know when to wait.
         window.dfd = $.Deferred()
-        window.onYouTubeIframeAPIReady = function() {
+        window.onYouTubeIframeAPIReady = function () {
           window.onYouTubeIframeAPIReady = null
           window.dfd.resolve("done")
           callback()
@@ -57,7 +57,7 @@ if (typeof Object.create !== "function") {
       } else if (typeof YT === "object") {
         callback()
       } else {
-        window.dfd.done(function(name) {
+        window.dfd.done(function (name) {
           callback()
         })
       }
@@ -103,14 +103,13 @@ if (typeof Object.create !== "function") {
       var self = this
 
       self.userOptions = userOptions
-
       ;(self.$body = $("body")),
         (self.$node = $(node)),
         (self.$window = $(window))
 
       // Setup event defaults with the reference to this
       self.defaults.events = {
-        onReady: function(e) {
+        onReady: function (e) {
           self.onPlayerReady(e)
 
           // setup up pause on scroll
@@ -123,7 +122,7 @@ if (typeof Object.create !== "function") {
             self.options.callback.call(this)
           }
         },
-        onStateChange: function(e) {
+        onStateChange: function (e) {
           if (e.data === 1) {
             self.$node.find("img").fadeOut(400)
             self.$node.addClass("loaded")
@@ -145,7 +144,7 @@ if (typeof Object.create !== "function") {
         self.createContainerVideo()
       }
       // Listen for Resize Event
-      self.$window.on("resize.YTplayer" + self.ID, function() {
+      self.$window.on("resize.YTplayer" + self.ID, function () {
         self.resize(self)
       })
 
@@ -162,13 +161,13 @@ if (typeof Object.create !== "function") {
      */
     pauseOnScroll: function pauseOnScroll() {
       var self = this
-      self.$window.on("scroll.YTplayer" + self.ID, function() {
+      self.$window.on("scroll.YTplayer" + self.ID, function () {
         var state = self.player.getPlayerState()
         if (state === 1) {
           self.player.pauseVideo()
         }
       })
-      self.$window.scrollStopped(function() {
+      self.$window.scrollStopped(function () {
         var state = self.player.getPlayerState()
         if (state === 2) {
           self.player.playVideo()
@@ -319,10 +318,10 @@ if (typeof Object.create !== "function") {
   }
 
   // Scroll Stopped event.
-  $.fn.scrollStopped = function(callback) {
+  $.fn.scrollStopped = function (callback) {
     var $this = $(this),
       self = this
-    $this.scroll(function() {
+    $this.scroll(function () {
       if ($this.data("scrollTimeout")) {
         clearTimeout($this.data("scrollTimeout"))
       }
@@ -331,8 +330,8 @@ if (typeof Object.create !== "function") {
   }
 
   // Create plugin
-  $.fn.YTPlayer = function(options) {
-    return this.each(function() {
+  $.fn.YTPlayer = function (options) {
+    return this.each(function () {
       var el = this
 
       $(el).data("yt-init", true)

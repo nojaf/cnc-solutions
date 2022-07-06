@@ -1,11 +1,11 @@
-import React from "react"
+﻿import React from "react"
 import { graphql, Link } from "gatsby"
-import Layout from "../components/layout"
 import { pageInCulture } from "../selectors"
 import Header from "../components/header"
+import Layout from "../components/layout"
 import PageIntroduction from "../components/pageIntroduction"
 
-const Solution = ({ thumbnail, thumbnailAlt, title, url, icon }) => {
+const Case = ({ thumbnail, thumbnailAlt, title, url }) => {
   const {
     overview_desktop,
     overview_large_desktop,
@@ -14,8 +14,8 @@ const Solution = ({ thumbnail, thumbnailAlt, title, url, icon }) => {
     overview_tablet_portrait,
   } = thumbnail
   return (
-    <Link to={url} className="solution-tile">
-      <div className="solution-tile-img">
+    <Link to={url} className="case-tile">
+      <div className="case-tile-img">
         <picture>
           <source media="(min-width: 75em)" srcSet={overview_large_desktop} />
           <source media="(min-width: 62em)" srcSet={overview_desktop} />
@@ -30,35 +30,34 @@ const Solution = ({ thumbnail, thumbnailAlt, title, url, icon }) => {
             alt={thumbnailAlt}
           />
         </picture>
-        <img src={icon} alt={""} className="overlay-icon" />
       </div>
-      <div className="solution-tile-title">
+      <div className="case-tile-title">
         <h3>{title}</h3>
       </div>
     </Link>
   )
 }
 
-const SolutionPage = ({ data, pageContext }) => {
+const CasesPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
-  const solutions = pageInCulture(currentCulture, data.solutions)
-  const solutionItems = data.allSolution.edges.map(({ node }) => {
+  const cases = pageInCulture(currentCulture, data.cases)
+  const caseItems = data.allCase.edges.map(({ node }) => {
     return pageInCulture(currentCulture, node)
   })
 
   return (
     <Layout
-      culture={currentCulture}
+      culture={pageContext.culture}
       currentPageId={pageContext.umbracoId}
       seo={pageContext.seo}
     >
-      <Header currentPage={solutions} />
-      <PageIntroduction {...solutions} />
+      <Header currentPage={cases} />
+      <PageIntroduction {...cases} />
       <section>
         <div className="container">
-          <div id="solution-tiles">
-            {solutionItems.map((sl) => (
-              <Solution {...sl} />
+          <div id="case-tiles">
+            {caseItems.map((sl) => (
+              <Case {...sl} />
             ))}
           </div>
         </div>
@@ -70,10 +69,10 @@ const SolutionPage = ({ data, pageContext }) => {
   )
 }
 
-export default SolutionPage
+export default CasesPage
 export const query = graphql`
   query {
-    solutions {
+    cases {
       url {
         nl
         en
@@ -121,18 +120,13 @@ export const query = graphql`
         fr
       }
     }
-    allSolution {
+    allCase {
       edges {
         node {
           key: umbracoId
           url {
             en
             nl
-            fr
-          }
-          icon {
-            nl
-            en
             fr
           }
           thumbnail {

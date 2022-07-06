@@ -194,6 +194,56 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
+      cases {
+        umbracoId
+        url {
+          nl
+          en
+          fr
+        }
+        seoMetaDescription {
+          nl
+          en
+          fr
+        }
+        seoMetaKeywords {
+          nl
+          en
+          fr
+        }
+        title: navigationText {
+          nl
+          en
+          fr
+        }
+      }
+      allCase {
+        edges {
+          node {
+            umbracoId
+            url {
+              nl
+              en
+              fr
+            }
+            seoMetaDescription {
+              nl
+              en
+              fr
+            }
+            seoMetaKeywords {
+              nl
+              en
+              fr
+            }
+            title: navigationText {
+              nl
+              en
+              fr
+            }
+          }
+        }
+      }
     }
   `)
 
@@ -203,9 +253,11 @@ exports.createPages = async ({ graphql, actions }) => {
     contact,
     solutions,
     products,
+    cases,
     allCulture,
     allSolution,
-    allProduct
+    allProduct,
+    allCase,
   } = result.data
   const cultures = R.map(
     R.pipe(R.prop("node"), R.prop("value")),
@@ -213,10 +265,11 @@ exports.createPages = async ({ graphql, actions }) => {
   )
   const solutionItems = allSolution.edges.map(({ node }) => node)
   const productItems = allProduct.edges.map(({ node }) => node)
+  const caseItems = allCase.edges.map(({ node }) => node)
   const aboutPages = allAbout.edges.map(({ node }) => node)
 
-  cultures.forEach(culture => {
-    const selectSEO = page => {
+  cultures.forEach((culture) => {
+    const selectSEO = (page) => {
       return {
         description: page.seoMetaDescription[culture],
         keywords: page.seoMetaKeywords[culture],
@@ -248,7 +301,7 @@ exports.createPages = async ({ graphql, actions }) => {
     })
 
     // solution
-    solutionItems.forEach(solution => {
+    solutionItems.forEach((solution) => {
       createPage({
         path: solution.url[culture],
         component: path.resolve(`./src/templates/solution.js`),
@@ -272,7 +325,7 @@ exports.createPages = async ({ graphql, actions }) => {
     })
 
     // product
-    productItems.forEach(product => {
+    productItems.forEach((product) => {
       createPage({
         path: product.url[culture],
         component: path.resolve(`./src/templates/product.js`),
@@ -284,8 +337,32 @@ exports.createPages = async ({ graphql, actions }) => {
       })
     })
 
+    // cases
+    createPage({
+      path: cases.url[culture],
+      component: path.resolve(`./src/templates/cases.js`),
+      context: {
+        culture,
+        umbracoId: cases.umbracoId,
+        seo: selectSEO(cases),
+      },
+    })
+
+    // case
+    caseItems.forEach((c) => {
+      createPage({
+        path: c.url[culture],
+        component: path.resolve(`./src/templates/case.js`),
+        context: {
+          culture,
+          umbracoId: c.umbracoId,
+          seo: selectSEO(c),
+        },
+      })
+    })
+
     // about pages
-    aboutPages.forEach(about => {
+    aboutPages.forEach((about) => {
       createPage({
         path: about.url[culture],
         component: path.resolve(`./src/templates/about.js`),
@@ -350,9 +427,9 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions
   const urlNodePromise = fetchData(
     "https://cncsolutions-backend.azurewebsites.net/umbraco/api/graph/tree"
-  ).then(tree => {
+  ).then((tree) => {
     const lookup = mapDataToNodeLookup(tree)
-    lookup.forEach(l => {
+    lookup.forEach((l) => {
       const node = {
         id: createNodeId(`UmbracoUrl-${l.id}`),
         children: [],
@@ -372,23 +449,25 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   // Gatsby cannot infer the GraphQL type when all props are null
   // Return empty string instead for Umbraco.MediaPicker
   const sanitizeUmbracoProperties = (props) => {
-      const sanitizeProp = p => {
-         if(p.type === "Umbraco.MediaPicker" && !p.en && !p.fr && !p.nl){
-             return { type:p.type, en:"", fr:"", nl:""}
-         }
-         else {
-             return p;
-         }
+    const sanitizeProp = (p) => {
+      if (p.type === "Umbraco.MediaPicker" && !p.en && !p.fr && !p.nl) {
+        return { type: p.type, en: "", fr: "", nl: "" }
+      } else {
+        return p
       }
+    }
 
-      return Object.assign({}, ...Object.keys(props).map(k => ({[k]:sanitizeProp(props[k])})));
+    return Object.assign(
+      {},
+      ...Object.keys(props).map((k) => ({ [k]: sanitizeProp(props[k]) }))
+    )
   }
 
-  const resolveUmbracoNode = id => {
+  const resolveUmbracoNode = (id) => {
     const url = id
       ? `https://cncsolutions-backend.azurewebsites.net/umbraco/api/graph/byid/${id}`
       : "https://cncsolutions-backend.azurewebsites.net/umbraco/api/graph/tree"
-    const processNode = umbracoNode => {
+    const processNode = (umbracoNode) => {
       const gatsbyNode = Object.assign(
         {
           umbracoId: umbracoNode.id,
@@ -417,7 +496,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       umbracoNode.children.forEach(processNode)
     }
 
-    const processCulture = culture => {
+    const processCulture = (culture) => {
       const gatsbyNode = {
         id: createNodeId(`Culture-${culture}`),
         value: culture,
@@ -432,7 +511,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       createNode(gatsbyNode)
     }
 
-    return fetchData(url).then(result => {
+    return fetchData(url).then((result) => {
       result.cultures.forEach(processCulture)
       processNode(result.root)
     })
@@ -445,7 +524,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
     ["GatsbyHub"]
   )
 
-  client.on("GatsbyHub", "nodePublished", e => {
+  client.on("GatsbyHub", "nodePublished", (e) => {
     console.log(`SIGNALR NODE PUBLISHED`, e)
     return resolveUmbracoNode(e)
   })
@@ -462,20 +541,20 @@ exports.onCreateNode = async ({
   cache,
   createNodeId,
 }) => {
-    if(node.umbracoId === 1081 && node.mobilePlaceholder){
-        console.log(`created ${node.internal.type} ${node.umbracoId}`);
-        let fileNode = await createRemoteFileNode({
-            url: node.mobilePlaceholder.nl.mobile, // string that points to the URL of the image
-            parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
-            createNode, // helper function in gatsby-node to generate the node
-            createNodeId, // helper function in gatsby-node to generate the node id
-            cache, // Gatsby's cache
-            store, // Gatsby's Redux store
-        })
+  if (node.umbracoId === 1081 && node.mobilePlaceholder) {
+    console.log(`created ${node.internal.type} ${node.umbracoId}`)
+    let fileNode = await createRemoteFileNode({
+      url: node.mobilePlaceholder.nl.mobile, // string that points to the URL of the image
+      parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
+      createNode, // helper function in gatsby-node to generate the node
+      createNodeId, // helper function in gatsby-node to generate the node id
+      cache, // Gatsby's cache
+      store, // Gatsby's Redux store
+    })
 
-       // if the file was created, attach the new node to the parent node
-        if (fileNode) {
-            node.mobilePlaceholder.nl.mobileImage___NODE = fileNode.id
-        }
+    // if the file was created, attach the new node to the parent node
+    if (fileNode) {
+      node.mobilePlaceholder.nl.mobileImage___NODE = fileNode.id
     }
+  }
 }
