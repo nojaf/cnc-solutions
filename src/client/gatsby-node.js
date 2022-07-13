@@ -475,6 +475,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
           name: umbracoNode.name,
           url: umbracoNode.url,
           updateDate: umbracoNode.updateDate,
+          sortOrder: umbracoNode.sortOrder,
         },
         sanitizeUmbracoProperties(umbracoNode.properties),
         {

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react"
 
-const Video = ({ videoSrcURL, videoTitle, width, height }) => {
+const Video = ({ videoId, altText, width = 640, height = 360 }) => {
+  const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&rel=0&modestbranding=1&controls=0&showinfo=0&origin=https://cncsolutions.be&playlist=${videoId}&mute=1`
   const video = useRef(null)
   const [videoHeight, setVideoHeight] = useState(175)
 
@@ -27,8 +28,8 @@ const Video = ({ videoSrcURL, videoTitle, width, height }) => {
   return (
     <div className="video">
       <iframe
-        src={videoSrcURL}
-        title={videoTitle}
+        src={url}
+        title={altText}
         height={videoHeight}
         width={"100%"}
         ref={video}
