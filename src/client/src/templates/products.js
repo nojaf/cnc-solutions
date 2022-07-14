@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import { pageInCulture } from "../selectors"
 import Header from "../components/header"
 import PageIntroduction from "../components/pageIntroduction"
+import BottomEdge from "../components/bottomEdge"
 
 const ProductCarouselSlide = ({
   productDetailLinkText,
@@ -159,9 +160,7 @@ const ProductPage = ({ data, pageContext }) => {
             </div>
           </div>
         </div>
-        <div className="edge-container w-100">
-          <div className="edge"></div>
-        </div>
+        <BottomEdge />
       </section>
     </Layout>
   )

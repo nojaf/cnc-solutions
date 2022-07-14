@@ -6,6 +6,7 @@ import { graphql } from "gatsby"
 import PageIntroduction from "../components/pageIntroduction"
 import underlineWhite from "../images/underline-white.png"
 import Video from "../components/video"
+import BottomEdge from "../components/bottomEdge"
 
 const CaseRow = ({
   image,
@@ -45,10 +46,13 @@ const CaseRow = ({
   )
 }
 
-const QuoteRow = ({ quote }) => {
+const QuoteRow = ({ quote, clientName }) => {
   return (
-    <div className="row">
-      <p>{quote}</p>
+    <div className="row no-gutters quote-row">
+      <div className="col-12">
+        <blockquote>{quote}</blockquote>
+        {clientName && <span>&#45;&nbsp;{clientName}</span>}
+      </div>
     </div>
   )
 }
@@ -59,7 +63,6 @@ const CasePage = ({ data, pageContext }) => {
   const rows = [...data.allCaseRow.nodes, ...data.allQuoteRow.nodes]
     .map((n) => pageInCulture(currentCulture, n))
     .sort((a, b) => a.sortOrder - b.sortOrder)
-  console.log(rows)
 
   return (
     <Layout
@@ -80,6 +83,7 @@ const CasePage = ({ data, pageContext }) => {
           })}
         </div>
       </section>
+      <BottomEdge />
     </Layout>
   )
 }

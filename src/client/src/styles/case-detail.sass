@@ -1,6 +1,9 @@
 ﻿@import "../../node_modules/bootstrap/scss/mixins"
 @import "variables"
 
+#case-rows
+  margin-bottom: 30px
+
 .case-image
   img
     width: 100%
@@ -19,6 +22,20 @@
   p
     padding: 1rem 0.5rem 0
 
+.quote-row
+  background-color: $dark
+  color: $white
+  blockquote, span
+    padding: 0 2rem
+    display: block
+    line-height: 1
+  blockquote
+    font-size: 2rem
+    padding-top: 2rem
+    text-transform: uppercase
+  span
+    padding-bottom: 2rem
+
 @include media-breakpoint-up(sm)
   .case-info
     p
@@ -33,11 +50,20 @@
       height: 100%
       object-fit: cover
 
+  .quote-row
+    blockquote
+      font-size: 3rem
+    span
+      font-size: 1.5rem
+
 
 @include media-breakpoint-up(md)
   #case-rows
     margin-top: 3rem
-
+    margin-bottom: 3rem
+  .quote-row
+    blockquote
+      font-size: 4rem
 
 @include media-breakpoint-up(xl)
   #case-rows
