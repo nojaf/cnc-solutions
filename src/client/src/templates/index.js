@@ -6,6 +6,7 @@ import underlineDark from "../images/underline-dark.png"
 import underlineWhite from "../images/underline-white.png"
 import HomeVideoMp4 from "../videos/home.mp4"
 import HomeVideoWebm from "../videos/home.webm"
+import SlideShowSlide from "../components/slideShowSlide"
 
 const Hero = ({
   culture,
@@ -239,6 +240,121 @@ const HomeRow = ({
   )
 }
 
+const CaseSlide = (props) => {
+  const { index, umbracoId, culture } = props
+  const link = useUrl(culture, umbracoId)
+  return (
+    <SlideShowSlide
+      {...props}
+      isActive={index === 0}
+      parentUmbracoId={umbracoId}
+      link={link}
+    />
+  )
+}
+
+const Cases = ({
+  aboveCases,
+  casesTitle,
+  casesLead,
+  casesLink,
+  casesLinkText,
+  culture,
+  cases,
+}) => {
+  const link = useUrl(culture, casesLink)
+  const umbracoId = casesLink
+  return (
+    <section id={"cases"} className={"home-row dark"}>
+      <div className="container">
+        <div className="row">
+          <div className="col-12 col-lg-5 order-lg-1">
+            <h3 className="above text-lowercase">{aboveCases}</h3>
+            <h2>{casesTitle}</h2>
+            <img src={underlineDark} className="underline-bar" alt={""} />
+            <div dangerouslySetInnerHTML={{ __html: casesLead }}></div>
+            <div className="link-container d-none d-lg-block">
+              <Link to={link} className={`btn-cnc dark`}>
+                {casesLinkText}
+                <span className="corner" />
+                <span className="inner-corner" />
+              </Link>
+            </div>
+          </div>
+          <div className="col-12 col-lg-7 order-lg-0">
+            <div
+              className="carousel slide dark"
+              id="CasesCarousel"
+              data-ride="carousel"
+            >
+              <ol className="carousel-indicators">
+                {cases.map((s, i) => {
+                  return (
+                    <li
+                      key={`carousel-${umbracoId}-${i}`}
+                      data-target={`#CasesCarousel`}
+                      data-slide-to={i}
+                      className={i === 0 ? "active" : ""}
+                    >
+                      <div className="inner"></div>
+                    </li>
+                  )
+                })}
+              </ol>
+              <div className="carousel-inner">
+                {cases.map((c, i) => {
+                  return (
+                    <CaseSlide
+                      key={`carousel-${umbracoId}-${i}`}
+                      index={i}
+                      culture={culture}
+                      {...c}
+                      parentUmbracoId={umbracoId}
+                    />
+                  )
+                })}
+              </div>
+              <a
+                className="carousel-control-prev"
+                href={`#CasesCarousel`}
+                role="button"
+                data-slide="prev"
+              >
+                <span
+                  className="carousel-control-prev-icon"
+                  aria-hidden="true"
+                />
+                <span className="sr-only">Previous</span>
+              </a>
+              <a
+                className="carousel-control-next"
+                href={`#CasesCarousel`}
+                role="button"
+                data-slide="next"
+              >
+                <span
+                  className="carousel-control-next-icon"
+                  aria-hidden="true"
+                />
+                <span className="sr-only">Next</span>
+              </a>
+            </div>
+          </div>
+          <div className="col-12 d-lg-none text-center mt-4">
+            <div className="link-container">
+              <Link to={link} className={`btn-cnc dark`}>
+                {casesLinkText}
+                <span className="corner" />
+                <span className="inner-corner" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 const IndexPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const home = pageInCulture(currentCulture, data.home)
@@ -248,6 +364,8 @@ const IndexPage = ({ data, pageContext }) => {
   const homeRows = data.home.childrenHomeRow.map((hr) =>
     pageInCulture(currentCulture, hr)
   )
+  const cases = data.allCase.nodes.map((c) => pageInCulture(currentCulture, c))
+
   return (
     <Layout
       culture={pageContext.culture}
@@ -259,6 +377,7 @@ const IndexPage = ({ data, pageContext }) => {
       {homeRows.map((hr) => (
         <HomeRow culture={currentCulture} {...hr} />
       ))}
+      <Cases {...home} culture={currentCulture} cases={cases} />
     </Layout>
   )
 }
@@ -398,6 +517,31 @@ export const query = graphql`
           fr
         }
       }
+      aboveCases {
+        nl
+        en
+        fr
+      }
+      casesTitle {
+        nl
+        en
+        fr
+      }
+      casesLead {
+        nl
+        en
+        fr
+      }
+      casesLink {
+        nl
+        en
+        fr
+      }
+      casesLinkText {
+        nl
+        en
+        fr
+      }
     }
     allSolution {
       nodes {
@@ -438,6 +582,36 @@ export const query = graphql`
           fr
         }
         title {
+          nl
+          en
+          fr
+        }
+      }
+    }
+    allCase {
+      nodes {
+        umbracoId
+        image: homePageSlide {
+          nl {
+            mobile_portrait: phone
+            mobile_landscape: tablet
+            desktop: desktop
+            large_desktop: largeDesktop
+          }
+          en {
+            mobile_portrait: phone
+            mobile_landscape: tablet
+            desktop: desktop
+            large_desktop: largeDesktop
+          }
+          fr {
+            mobile_portrait: phone
+            mobile_landscape: tablet
+            desktop: desktop
+            large_desktop: largeDesktop
+          }
+        }
+        altText: title {
           nl
           en
           fr

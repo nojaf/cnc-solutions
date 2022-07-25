@@ -8,50 +8,19 @@ import PageIntroduction from "../components/pageIntroduction"
 import underlineWhite from "../images/underline-white.png"
 import underlineDark from "../images/underline-dark.png"
 import Video from "../components/video"
+import SlideShowSlide from "../components/slideShowSlide"
 
 function wrapIfSingleton(a) {
   return a ? (R.is(Array, a) ? a : [a]) : []
 }
 
-const SlideShowSlide = ({ image, isActive, altText, parentUmbracoId }) => {
-  const {
-    large_desktop,
-    desktop,
-    tablet,
-    mobile_landscape,
-    mobile_portrait,
-  } = image
-  return (
-    <div className={`carousel-item ${isActive ? "active" : ""}`}>
-      <a
-        href={desktop}
-        className="d-block w-100"
-        data-toggle="lightbox"
-        data-gallery={`gallery-${parentUmbracoId}`}
-      >
-        <picture>
-          <source media="(min-width: 75em)" srcSet={large_desktop} />
-          <source media="(min-width: 62em)" srcSet={desktop} />
-          <source media="(min-width: 48em)" srcSet={tablet} />
-          <source media="(min-width: 34em)" srcSet={mobile_landscape} />
-          <img
-            src={mobile_portrait}
-            alt={altText}
-            className="d-block m-auto w-100"
-          />
-        </picture>
-      </a>
-    </div>
-  )
-}
-
-const SolutionSlideShow = ({ culture, umbracoId, slides }) => {
+const SolutionSlideShow = ({ culture, umbracoId, slides, color }) => {
   const slideShowSlides = wrapIfSingleton(slides).map((s) =>
     pageInCulture(culture, s)
   )
   return (
     <div
-      className="carousel slide"
+      className={`carousel slide ${color}`}
       id={`block${umbracoId}Carousel`}
       data-ride="carousel"
     >
@@ -158,7 +127,7 @@ const SolutionRow = ({ blocks, culture }) => {
         <div className="row">
           {blocks.sort(sortSolutionBlock).map((b) => (
             <div className={blockColumn(b)} key={b.umbracoId}>
-              <SolutionBlock {...b} culture={culture} />
+              <SolutionBlock {...b} culture={culture} color={color} />
             </div>
           ))}
         </div>
