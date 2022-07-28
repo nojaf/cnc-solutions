@@ -4,3 +4,8 @@ vscode:
 tasks:
   - name: Start Gatsby
     command: ./start.sh
+ports:
+  - name: Gatsy Dev Server
+    description: The development server
+    port: 8000
+    onOpen: open-browser
