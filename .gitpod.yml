@@ -1,3 +1,11 @@
 vscode:
   extensions:
     - syler.sass-indented@1.8.15:OWaLl5oCHRK7fCfvhwK3og==
+tasks:
+  - name: Start Gatsby
+    command: ./start.sh
+ports:
+  - name: Gatsy Dev Server
+    description: The development server
+    port: 8000
+    onOpen: open-browser

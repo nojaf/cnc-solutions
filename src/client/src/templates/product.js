@@ -7,13 +7,6 @@ import PageIntroduction from "../components/pageIntroduction"
 import underlineWhite from "../images/underline-white.png"
 import Video from "../components/video"
 
-const ProductVideo = ({ videoId, altText }) => {
-  const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&rel=0&modestbranding=1&controls=0&showinfo=0&origin=https://cncsolutions.be&playlist=${videoId}&mute=1`
-  return (
-    <Video videoSrcURL={url} videoTitle={altText} width={640} height={360} />
-  )
-}
-
 const ProductHighlightRow = ({
   image,
   videoId,
@@ -28,7 +21,7 @@ const ProductHighlightRow = ({
       <div className="col-12 col-md-6">
         <div className="product-image">
           {videoId ? (
-            <ProductVideo videoId={videoId} altText={altText} />
+            <Video videoId={videoId} altText={altText} />
           ) : (
             <picture>
               <source media="(min-width: 62em)" srcSet={image.desktop} />

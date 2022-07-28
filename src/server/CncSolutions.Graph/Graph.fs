@@ -111,6 +111,7 @@ let rec private exportNode meta (node: IPublishedContent) =
 
     Encode.object [
         "id", Encode.int node.Id
+        "sortOrder", Encode.int node.SortOrder
         "name", Encode.string node.Name
         "alias", Encode.string node.ContentType.Alias
         "url", exportNodeUrls meta node
