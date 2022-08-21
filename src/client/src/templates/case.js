@@ -1,14 +1,15 @@
 ﻿import React from "react"
-import { pageInCulture } from "../selectors"
+import { pageInCulture, useUrl } from "../selectors"
 import Layout from "../components/layout"
 import Header from "../components/header"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import PageIntroduction from "../components/pageIntroduction"
 import underlineWhite from "../images/underline-white.png"
 import Video from "../components/video"
 import BottomEdge from "../components/bottomEdge"
 
 const CaseRow = ({
+  currentCulture,
   image,
   videoId,
   isMediaRight,
@@ -16,7 +17,12 @@ const CaseRow = ({
   title,
   lead,
   altText,
+  linkUrl,
+  linkText,
 }) => {
+  const link = useUrl(currentCulture, linkUrl)
+  const showLink = link && linkText
+
   return (
     <div className="row no-gutters">
       <div className="col-12 col-md-6">
@@ -40,6 +46,15 @@ const CaseRow = ({
           <h2>{title}</h2>
           <img src={underlineWhite} className="underline-bar" alt="" />
           <div dangerouslySetInnerHTML={{ __html: lead }}></div>
+          {showLink && (
+            <div className={"link-container"}>
+              <Link to={link} className="btn-cnc">
+                {linkText}
+                <span className="corner" />
+                <span className="inner-corner" />
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -76,7 +91,7 @@ const CasePage = ({ data, pageContext }) => {
         <div className="container-fluid px-0">
           {rows.map((row) => {
             if (row.typeName === "caseRow") {
-              return <CaseRow {...row} />
+              return <CaseRow {...row} currentCulture={currentCulture} />
             } else {
               return <QuoteRow {...row} />
             }

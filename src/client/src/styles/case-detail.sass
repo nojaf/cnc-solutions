@@ -22,6 +22,10 @@
   p
     padding: 1rem 0.5rem 0
 
+  .link-container
+    padding: 1rem 0.5rem 0
+    text-align: right
+
 .quote-row
   background-color: $dark
   color: $white
@@ -30,7 +34,7 @@
     display: block
     line-height: 1
   blockquote
-    font-size: 2rem
+    font-size: 1.5rem
     padding-top: 2rem
     text-transform: uppercase
   span
@@ -38,7 +42,7 @@
 
 @include media-breakpoint-up(sm)
   .case-info
-    p
+    p, .link-container
       width: 80%
       margin: auto
   .case-image
@@ -52,7 +56,7 @@
 
   .quote-row
     blockquote
-      font-size: 3rem
+      font-size: 2rem
     span
       font-size: 1.5rem
 
@@ -63,7 +67,7 @@
     margin-bottom: 3rem
   .quote-row
     blockquote
-      font-size: 4rem
+      font-size: 3rem
 
 @include media-breakpoint-up(xl)
   #case-rows
