@@ -105,7 +105,7 @@ const Navigation = ({ culture, currentPageId }) => {
               en
               fr
             }
-            navigationText {
+            title {
               nl
               en
               fr
@@ -272,7 +272,7 @@ const Navigation = ({ culture, currentPageId }) => {
                     key={c.umbracoId}
                     className={"dropdown-item"}
                   >
-                    {c.navigationText}
+                    {c.title}
                   </Link>
                 )
               })}
