@@ -28,7 +28,12 @@ const CaseRow = ({
       <div className="col-12 col-md-6">
         <div className="case-image">
           {videoId ? (
-            <Video videoId={videoId} altText={altText} />
+            <Video
+              videoId={videoId}
+              altText={altText}
+              mute={false}
+              controls={true}
+            />
           ) : (
             <picture>
               <source media="(min-width: 62em)" srcSet={image.desktop} />
