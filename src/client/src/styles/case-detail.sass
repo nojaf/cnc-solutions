@@ -4,12 +4,17 @@
 #case-rows
   margin-bottom: 30px
 
+  .row
+    margin: 2rem 0
+    
+    .col-12:last-of-type
+      margin-top: 2rem
+
 .case-image
   img
     width: 100%
 
 .case-info
-  padding: 2rem 0
   h2, h3
     text-align: center
 
@@ -40,7 +45,7 @@
   span
     padding-bottom: 2rem
 
-@include media-breakpoint-up(sm)
+@include media-breakpoint-up(sm)      
   .case-info
     p, .link-container
       width: 80%
@@ -62,9 +67,11 @@
 
 
 @include media-breakpoint-up(md)
+  #case-rows .row .col-12:last-of-type
+    margin-top: initial
+
   #case-rows
-    margin-top: 3rem
-    margin-bottom: 3rem
+    margin: 3rem 0
   .quote-row
     blockquote
       font-size: 3rem

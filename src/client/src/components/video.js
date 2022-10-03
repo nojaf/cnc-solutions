@@ -7,12 +7,16 @@ const Video = ({
   height = 360,
   mute = true,
   controls = false,
+  autoplay = true,
 }) => {
-  const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&rel=0&modestbranding=1&controls=${
-    controls ? 1 : 0
-  }&showinfo=0&origin=https://cncsolutions.be&playlist=${videoId}&mute=${
-    mute ? 1 : 0
-  }`
+  const toInt = (b) => (b ? 1 : 0)
+  const url = `https://www.youtube.com/embed/${videoId}?autoplay=${toInt(
+    autoplay
+  )}&loop=1&rel=0&modestbranding=1&controls=${toInt(
+    controls
+  )}&showinfo=0&origin=https://cncsolutions.be&playlist=${videoId}&mute=${toInt(
+    mute
+  )}`
   const video = useRef(null)
   const [videoHeight, setVideoHeight] = useState(175)
 

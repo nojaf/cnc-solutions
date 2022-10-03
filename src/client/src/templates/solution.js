@@ -2,72 +2,13 @@ import React from "react"
 import { graphql } from "gatsby"
 import * as R from "ramda"
 import Layout from "../components/layout"
-import { pageInCulture } from "../selectors"
+import { pageInCulture, wrapIfSingleton } from "../selectors"
 import Header from "../components/header"
 import PageIntroduction from "../components/pageIntroduction"
 import underlineWhite from "../images/underline-white.png"
 import underlineDark from "../images/underline-dark.png"
 import Video from "../components/video"
-import SlideShowSlide from "../components/slideShowSlide"
-
-function wrapIfSingleton(a) {
-  return a ? (R.is(Array, a) ? a : [a]) : []
-}
-
-const SolutionSlideShow = ({ culture, umbracoId, slides, color }) => {
-  const slideShowSlides = wrapIfSingleton(slides).map((s) =>
-    pageInCulture(culture, s)
-  )
-  return (
-    <div
-      className={`carousel slide ${color}`}
-      id={`block${umbracoId}Carousel`}
-      data-ride="carousel"
-    >
-      <ol className="carousel-indicators">
-        {slideShowSlides.map((s, i) => {
-          return (
-            <li
-              key={`carousel-${umbracoId}-${i}`}
-              data-target={`#block${umbracoId}Carousel`}
-              data-slide-to={i}
-              className={i === 0 ? "active" : ""}
-            >
-              <div className="inner"></div>
-            </li>
-          )
-        })}
-      </ol>
-      <div className="carousel-inner">
-        {slideShowSlides.map((s, i) => (
-          <SlideShowSlide
-            {...s}
-            isActive={i === 0}
-            key={`show-${umbracoId}-slide-${i}`}
-          />
-        ))}
-      </div>
-      <a
-        className="carousel-control-prev"
-        href={`#block${umbracoId}Carousel`}
-        role="button"
-        data-slide="prev"
-      >
-        <span className="carousel-control-prev-icon" aria-hidden="true" />
-        <span className="sr-only">Previous</span>
-      </a>
-      <a
-        className="carousel-control-next"
-        href={`#block${umbracoId}Carousel`}
-        role="button"
-        data-slide="next"
-      >
-        <span className="carousel-control-next-icon" aria-hidden="true" />
-        <span className="sr-only">Next</span>
-      </a>
-    </div>
-  )
-}
+import SlideShow from "../components/slideShow"
 
 const SolutionText = ({ aboveTitle, title, color, lead }) => {
   return (
@@ -94,7 +35,7 @@ const SolutionVideo = ({ videoId }) => {
 const SolutionBlock = (props) => {
   switch (props.alias) {
     case "solutionSlideshow":
-      return <SolutionSlideShow {...props} />
+      return <SlideShow {...props} />
     case "solutionText":
       return <SolutionText {...props} />
     case "solutionVideo":

@@ -7,22 +7,45 @@ import PageIntroduction from "../components/pageIntroduction"
 import underlineWhite from "../images/underline-white.png"
 import Video from "../components/video"
 import BottomEdge from "../components/bottomEdge"
+import SlideShow from "../components/slideShow"
 
-const CaseRow = ({
-  currentCulture,
-  image,
-  videoId,
-  isMediaRight,
-  aboveTitle,
-  title,
-  lead,
-  altText,
-  linkUrl,
-  linkText,
-}) => {
+const ImageOrSlideShow = ({ currentCulture, umbracoId, slides }) => {
+  if (slides && slides.length > 1) {
+    return (
+      <SlideShow
+        culture={currentCulture}
+        slides={slides}
+        umbracoId={umbracoId}
+        color={"light"}
+      />
+    )
+  } else {
+    const { image, altText } = pageInCulture(currentCulture, slides[0])
+    return (
+      <picture>
+        <source media="(min-width: 62em)" srcSet={image.desktop} />
+        <source media="(min-width: 48em)" srcSet={image.tablet} />
+        <img src={image.mobile} srcSet={image.mobile} alt={altText} />
+      </picture>
+    )
+  }
+}
+
+const CaseRow = (props) => {
+  const {
+    currentCulture,
+    videoId,
+    isMediaRight,
+    aboveTitle,
+    title,
+    lead,
+    linkUrl,
+    linkText,
+    slides,
+    umbracoId,
+  } = props
   const link = useUrl(currentCulture, linkUrl)
   const showLink = link && linkText
-
   return (
     <div className="row no-gutters">
       <div className="col-12 col-md-6">
@@ -30,16 +53,19 @@ const CaseRow = ({
           {videoId ? (
             <Video
               videoId={videoId}
-              altText={altText}
+              altText={title}
               mute={false}
               controls={true}
+              autoplay={false}
             />
           ) : (
-            <picture>
-              <source media="(min-width: 62em)" srcSet={image.desktop} />
-              <source media="(min-width: 48em)" srcSet={image.tablet} />
-              <img src={image.mobile} srcSet={image.mobile} alt={altText} />
-            </picture>
+            slides && (
+              <ImageOrSlideShow
+                currentCulture={currentCulture}
+                slides={slides}
+                umbracoId={umbracoId}
+              />
+            )
           )}
         </div>
       </div>
@@ -161,6 +187,7 @@ export const query = graphql`
     allCaseRow(filter: { parentUmbracoId: { eq: $umbracoId } }) {
       nodes {
         key: umbracoId
+        umbracoId
         typeName: __typename
         sortOrder
         aboveTitle {
@@ -178,34 +205,12 @@ export const query = graphql`
           fr
           en
         }
-        image {
-          nl {
-            mobile
-            tablet
-            desktop
-          }
-          fr {
-            mobile
-            tablet
-            desktop
-          }
-          en {
-            mobile
-            tablet
-            desktop
-          }
-        }
         isMediaRight {
           nl
           fr
           en
         }
         videoId {
-          nl
-          fr
-          en
-        }
-        altText {
           nl
           fr
           en
@@ -219,6 +224,38 @@ export const query = graphql`
           nl
           fr
           en
+        }
+        slides: childrenCaseSlideshowImage {
+          umbracoId
+          parentUmbracoId
+          image {
+            nl {
+              large_desktop: desktop
+              desktop
+              tablet
+              mobile_landscape: mobile
+              mobile_portrait: mobile
+            }
+            fr {
+              large_desktop: desktop
+              desktop
+              tablet
+              mobile_landscape: mobile
+              mobile_portrait: mobile
+            }
+            en {
+              large_desktop: desktop
+              desktop
+              tablet
+              mobile_landscape: mobile
+              mobile_portrait: mobile
+            }
+          }
+          altText {
+            en
+            nl
+            fr
+          }
         }
       }
     }
