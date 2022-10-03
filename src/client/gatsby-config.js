@@ -5,6 +5,16 @@ module.exports = {
     author: `@nojaf`,
   },
   plugins: [
+    { // this must be loaded first in order to work
+      resolve: `gatsby-plugin-google-gtag`, // note this instead of gatsby-plugin-react-helmet
+      options: {
+        trackingIds: [ "GTM-PX6K6L4"],
+        pluginConfig: {
+          head: true,
+          anonymize: false
+        }
+      }
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -28,16 +38,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-sass`,
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        // The property ID; the tracking code won't be generated without it
-        trackingId: "UA-162931414-1",
-        // Defines where to place the tracking script - `true` in the head and `false` in the body
-        head: true,
-        respectDNT: true,
-      },
-    },
     {
       resolve: `gatsby-plugin-facebook-pixel`,
       options: {

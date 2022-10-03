@@ -51,3 +51,7 @@ export function useUrlsForPage(umbracoId) {
   const lookup = R.mergeAll(R.map(mapNode, allUrls.data.edges))
   return lookup[umbracoId]
 }
+
+export function wrapIfSingleton(a) {
+  return a ? (R.is(Array, a) ? a : [a]) : []
+}
