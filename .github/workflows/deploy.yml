@@ -33,11 +33,10 @@ jobs:
       working-directory: ./src/client
     - run: yarn build
       working-directory: ./src/client
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./src/client/public
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: ./src/client/public
 
   # Deployment job
   deploy:
