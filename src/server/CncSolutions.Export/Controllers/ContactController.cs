@@ -63,7 +63,7 @@ namespace CncSolutions.Export.Controllers
         {
             var apiKey = ConfigurationManager.AppSettings["SendGrid"];
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("website@cncsolutions.be", "Website");
+            var from = new EmailAddress("info@cncsolutions.be", "Website");
             var subject = "Contact formulier op cncsolutions.be";
             var to = new EmailAddress(receiver);
 

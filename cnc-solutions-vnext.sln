@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CncSolutions.Export", "src\
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CncSolutions.Graph", "src\server\CncSolutions.Graph\CncSolutions.Graph.fsproj", "{DD6675BD-974C-48E1-B86C-1C565CDE8A04}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{53EA7B15-3017-4FA3-84C2-7DDD4A802153}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CncSolution.PlaywrightTests", "tests\CncSolution.PlaywrightTests\CncSolution.PlaywrightTests.fsproj", "{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,7 +48,20 @@ Global
 		{DD6675BD-974C-48E1-B86C-1C565CDE8A04}.Release|x64.Build.0 = Release|Any CPU
 		{DD6675BD-974C-48E1-B86C-1C565CDE8A04}.Release|x86.ActiveCfg = Release|Any CPU
 		{DD6675BD-974C-48E1-B86C-1C565CDE8A04}.Release|x86.Build.0 = Release|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Debug|x64.Build.0 = Debug|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Debug|x86.Build.0 = Debug|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Release|x64.ActiveCfg = Release|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Release|x64.Build.0 = Release|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Release|x86.ActiveCfg = Release|Any CPU
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{3E2AC4C0-BED1-42EB-9C21-3AE8CD6B21D2} = {53EA7B15-3017-4FA3-84C2-7DDD4A802153}
 	EndGlobalSection
 EndGlobal
