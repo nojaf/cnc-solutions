@@ -42,18 +42,19 @@ const Video = ({
 
   return (
     <div className="video">
-      <iframe
-        src={url}
-        title={altText}
-        height={videoHeight}
-        width={"100%"}
-        ref={video}
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        frameBorder="0"
-        webkitallowfullscreen="true"
-        mozallowfullscreen="true"
-        allowFullScreen
-      />
+        {videoId && 
+            <iframe
+                src={url}
+                title={altText}
+                height={videoHeight}
+                width={"100%"}
+                ref={video}
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                frameBorder="0"
+                webkitallowfullscreen="true"
+                mozallowfullscreen="true"
+                allowFullScreen
+              />}
     </div>
   )
 }
