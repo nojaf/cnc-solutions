@@ -7,7 +7,7 @@
   "dependencies": {
     "bootstrap": "4.6.0",
     "eventsource": "1.0.7",
-    "gatsby": "4.9.1",
+    "gatsby": "4.25.7",
     "gatsby-image": "3.11.0",
     "gatsby-plugin-google-gtag": "^4.24.0",
     "gatsby-plugin-manifest": "4.9.0",
