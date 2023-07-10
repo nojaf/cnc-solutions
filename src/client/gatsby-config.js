@@ -5,15 +5,16 @@ module.exports = {
     author: `@nojaf`,
   },
   plugins: [
-    { // this must be loaded first in order to work
+    {
+      // this must be loaded first in order to work
       resolve: `gatsby-plugin-google-gtag`, // note this instead of gatsby-plugin-react-helmet
       options: {
-        trackingIds: [ "GTM-PX6K6L4"],
+        trackingIds: ["GTM-PX6K6L4"],
         pluginConfig: {
           head: true,
-          anonymize: false
-        }
-      }
+          anonymize: false,
+        },
+      },
     },
     `gatsby-plugin-react-helmet`,
     {

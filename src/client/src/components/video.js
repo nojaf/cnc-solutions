@@ -3,8 +3,6 @@ import React, { useRef, useState, useEffect } from "react"
 const Video = ({
   videoId,
   altText,
-  width = 640,
-  height = 360,
   mute = true,
   controls = false,
   autoplay = true,
@@ -42,19 +40,20 @@ const Video = ({
 
   return (
     <div className="video">
-        {videoId && 
-            <iframe
-                src={url}
-                title={altText}
-                height={videoHeight}
-                width={"100%"}
-                ref={video}
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                frameBorder="0"
-                webkitallowfullscreen="true"
-                mozallowfullscreen="true"
-                allowFullScreen
-              />}
+      {videoId && (
+        <iframe
+          src={url}
+          title={altText}
+          height={videoHeight}
+          width={"100%"}
+          ref={video}
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          frameBorder="0"
+          webkitallowfullscreen="true"
+          mozallowfullscreen="true"
+          allowFullScreen
+        />
+      )}
     </div>
   )
 }

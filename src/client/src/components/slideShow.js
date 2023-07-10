@@ -6,7 +6,6 @@ const SlideShow = ({ culture, umbracoId, slides, color }) => {
   const slideShowSlides = wrapIfSingleton(slides).map((s) =>
     pageInCulture(culture, s)
   )
-  console.log("slideShowSlides", slideShowSlides)
   return (
     <div
       className={`carousel slide ${color}`}
