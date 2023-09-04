@@ -7,6 +7,7 @@ import underlineWhite from "../images/underline-white.png"
 import HomeVideoMp4 from "../videos/home.mp4"
 import HomeVideoWebm from "../videos/home.webm"
 import SlideShowSlide from "../components/slideShowSlide"
+import Video from "../components/video"
 
 const Hero = ({
   culture,
@@ -167,6 +168,17 @@ const Solutions = ({ aboveSolutions, solutionsTitle, solutions, culture }) => {
   )
 }
 
+const HomeRowImage = ({ phone, tablet, desktop, largeDesktop, altText }) => {
+  return (
+    <picture>
+      <source media="(min-width: 75em)" srcSet={largeDesktop} />
+      <source media="(min-width: 62em)" srcSet={desktop} />
+      <source media="(min-width: 48em)" srcSet={tablet} />
+      <img src={phone} srcSet={phone} alt={altText} />
+    </picture>
+  )
+}
+
 const HomeRow = ({
   culture,
   theme,
@@ -179,10 +191,10 @@ const HomeRow = ({
   imageRight,
   image,
   altText,
+  videoId,
 }) => {
   const underline = theme === "dark" ? underlineDark : underlineWhite
   const link = useUrl(culture, linkNode)
-  const { phone, tablet, desktop, largeDesktop } = image
 
   return (
     <section className={`home-row ${theme}`}>
@@ -193,12 +205,17 @@ const HomeRow = ({
               imageRight ? "order-lg-1" : "order-lg-0"
             }`}
           >
-            <picture>
-              <source media="(min-width: 75em)" srcSet={largeDesktop} />
-              <source media="(min-width: 62em)" srcSet={desktop} />
-              <source media="(min-width: 48em)" srcSet={tablet} />
-              <img src={phone} srcSet={phone} alt={altText} />
-            </picture>
+            {videoId && (
+              <Video
+                className={"underline-bar"}
+                videoId={videoId}
+                altText={"Bedankt Frank!"}
+                controls={true}
+                mute={false}
+                autoplay={false}
+              />
+            )}
+            {image && <HomeRowImage {...image} altText={altText} />}
           </div>
           <div
             className={`col-xs-12 col-lg-5 ${
@@ -514,6 +531,11 @@ export const query = graphql`
         altText {
           nl
           en
+          fr
+        }
+        videoId {
+          en
+          nl
           fr
         }
       }

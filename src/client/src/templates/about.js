@@ -5,6 +5,7 @@ import Header from "../components/header"
 import underlineWhite from "../images/underline-white.png"
 import { pageInCulture, useUrl } from "../selectors"
 import PageIntroduction from "../components/pageIntroduction"
+import Video from "../components/video"
 
 const AboutRowLink = ({ linkText, linkUrl, culture }) => {
   const url = useUrl(culture, linkUrl)
@@ -18,9 +19,20 @@ const AboutRowLink = ({ linkText, linkUrl, culture }) => {
   )
 }
 
+const AboutRowImage = ({ desktop, medium, small, tablet, altText }) => {
+  return (
+    <picture>
+      <source media="(min-width: 75em)" srcSet={desktop} />
+      <source media="(min-width: 62em)" srcSet={tablet} />
+      <source media="(min-width: 48em)" srcSet={tablet} />
+      <source media="(min-width: 34em)" srcSet={medium} />
+      <img className="w-100" src={small} srcSet={small} alt={altText} />
+    </picture>
+  )
+}
+
 const AboutRow = ({ culture, page }) => {
   const currentPage = pageInCulture(culture, page)
-  const { desktop, medium, small, tablet } = currentPage.image
   const [imageClass, contentClass] = currentPage.imageRight
     ? ["order-md-1", "order-md-0"]
     : ["order-md-0", "order-md-1"]
@@ -30,18 +42,21 @@ const AboutRow = ({ culture, page }) => {
       <div className="container-md p-0">
         <div className="row no-gutters about-row">
           <div className={`col-12 col-md-6 ${imageClass}`}>
-            <picture>
-              <source media="(min-width: 75em)" srcSet={desktop} />
-              <source media="(min-width: 62em)" srcSet={tablet} />
-              <source media="(min-width: 48em)" srcSet={tablet} />
-              <source media="(min-width: 34em)" srcSet={medium} />
-              <img
-                className="w-100"
-                src={small}
-                srcSet={small}
-                alt={currentPage.altText}
+            {currentPage.image && (
+              <AboutRowImage
+                {...currentPage.image}
+                altText={currentPage.altText}
               />
-            </picture>
+            )}
+            {currentPage.videoId && (
+              <Video
+                videoId={currentPage.videoId}
+                altText={currentPage.altText}
+                controls={true}
+                mute={false}
+                autoplay={false}
+              />
+            )}
           </div>
           <div className={`col-12 col-md-6 ${contentClass}`}>
             <div className="container content">
@@ -187,6 +202,11 @@ export const query = graphql`
             fr
           }
           altText {
+            en
+            nl
+            fr
+          }
+          videoId {
             en
             nl
             fr
