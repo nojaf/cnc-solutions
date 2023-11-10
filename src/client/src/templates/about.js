@@ -38,7 +38,7 @@ const AboutRow = ({ culture, page }) => {
     : ["order-md-0", "order-md-1"]
 
   return (
-    <section>
+    <section className="about-row-section">
       <div className="container-md p-0">
         <div className="row no-gutters about-row">
           <div className={`col-12 col-md-6 ${imageClass}`}>
@@ -91,6 +91,7 @@ const AboutPage = ({ data, pageContext }) => {
       culture={currentCulture}
       currentPageId={pageContext.umbracoId}
       seo={pageContext.seo}
+      mainClass="about-page"
     >
       <Header currentPage={about} />
       <PageIntroduction {...about} />
