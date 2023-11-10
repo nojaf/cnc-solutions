@@ -4,6 +4,7 @@ import Navigation from "./navigation"
 import "../styles/main.sass"
 import Footer from "./footer"
 import SEO from "./seo"
+import Cookies from "./cookies"
 
 const Layout = ({ children, culture, currentPageId, seo, mainClass = "" }) => {
   return (
@@ -12,6 +13,7 @@ const Layout = ({ children, culture, currentPageId, seo, mainClass = "" }) => {
       <Navigation culture={culture} currentPageId={currentPageId} />
       <main className={mainClass}>{children}</main>
       <Footer culture={culture} />
+      <Cookies culture={culture} />
     </>
   )
 }

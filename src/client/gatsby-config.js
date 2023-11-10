@@ -10,9 +10,13 @@ module.exports = {
       resolve: `gatsby-plugin-google-gtag`, // note this instead of gatsby-plugin-react-helmet
       options: {
         trackingIds: ["GTM-PX6K6L4"],
+        gtagConfig: {
+          anonymize_ip: true,
+          cookie_expires: 0,
+        },
         pluginConfig: {
           head: true,
-          anonymize: false,
+          respectDNT: true,
         },
       },
     },
