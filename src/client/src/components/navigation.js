@@ -129,6 +129,18 @@ const Navigation = ({ culture, currentPageId }) => {
           }
         }
       }
+      team {
+        url {
+          nl
+          en
+          fr
+        }
+        navigationText {
+          nl
+          en
+          fr
+        }
+      }
       contact {
         url {
           nl
@@ -149,6 +161,9 @@ const Navigation = ({ culture, currentPageId }) => {
   const aboutPages = linksQueryResult.allAbout.edges.map(({ node }) =>
     pageInCulture(culture, node)
   )
+  const aboutPage = aboutPages[0]
+  const vacancyPage = aboutPages[1]
+  const teamPage = pageInCulture(culture, linksQueryResult.team)
   const contactPage = pageInCulture(culture, linksQueryResult.contact)
   const solutionsPage = pageInCulture(culture, linksQueryResult.solutions)
   const productsPage = pageInCulture(culture, linksQueryResult.products)
@@ -278,15 +293,47 @@ const Navigation = ({ culture, currentPageId }) => {
               })}
             </div>
           </li>
-          {aboutPages.map((aboutPage, i) => {
-            return (
-              <li className="nav-item" key={`about-${i}`}>
-                <Link to={aboutPage.url} className="nav-link">
-                  {aboutPage.navigationText}
-                </Link>
-              </li>
-            )
-          })}
+          {/*{aboutPages.map((aboutPage, i) => {*/}
+          {/*  return (*/}
+          {/*    <li className="nav-item" key={`about-${i}`}>*/}
+          {/*      <Link to={aboutPage.url} className="nav-link">*/}
+          {/*        {aboutPage.navigationText}*/}
+          {/*      </Link>*/}
+          {/*    </li>*/}
+          {/*  )*/}
+          {/*})}*/}
+          <li className="nav-item dropdown">
+            <Link
+              className="nav-link d-inline-block"
+              to={aboutPage.url}
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {aboutPage.navigationText}
+            </Link>
+            <div
+              className="dropdown-toggle d-inline-block link-toggle"
+              id="aboutDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            ></div>
+            <div className="dropdown-menu" aria-labelledby="aboutDropdown">
+              <Link
+                to={teamPage.url}
+                key={teamPage.umbracoId}
+                className={"dropdown-item"}
+              >
+                {teamPage.navigationText}
+              </Link>
+            </div>
+          </li>
+          <li className="nav-item">
+            <Link to={vacancyPage.url} className="nav-link">
+              {vacancyPage.navigationText}
+            </Link>
+          </li>
           <li className="nav-item">
             <Link to={contactPage.url} className="nav-link">
               {contactPage.navigationText}

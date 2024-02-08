@@ -1,0 +1,58 @@
+@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+.team-page
+  padding-bottom: 3rem
+
+$gap: 2.5rem
+  
+#team
+  display: flex
+  gap: $gap
+  flex-wrap: nowrap
+  flex-direction: column
+  white-space: nowrap
+
+  .team-member
+    text-align: center
+    
+    .above
+      margin-bottom: 0.5rem
+
+    h3
+      margin: 0
+    
+    .underline-bar
+      margin-block: 1rem
+
+    img:last-child
+      width: 80%
+
+@include media-breakpoint-up(sm)
+  #team .team-member img:last-child
+    width: 66%
+      
+@include media-breakpoint-up(md)
+  #team
+    flex-wrap: wrap
+    flex-direction: row
+    justify-content: space-around
+
+    .team-member
+      flex: 1 1 calc(50% - $gap / 2)
+      max-width: calc(50% - $gap / 2)
+      margin-bottom: $gap
+      img:last-child
+        width: 100%
+
+@include media-breakpoint-up(lg)
+  #team
+    .team-member
+      flex: 1 1 calc(33% - $gap / 2)
+      max-width: calc(33% - $gap / 2)
+      
+@include media-breakpoint-up(xl)
+  #team
+    .team-member
+      flex: 1 1 calc(25% - $gap / 2)
+      max-width: calc(25% - $gap / 2)
