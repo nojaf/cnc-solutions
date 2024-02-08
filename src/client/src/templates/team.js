@@ -99,6 +99,7 @@ const TeamPage = ({data, pageContext}) => {
   const team = pageInCulture(currentCulture, data.team)
   console.log(data)
   const members = (data.members.edges || [])
+    .filter(e => e.node.photo)
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .map((e) => pageInCulture(currentCulture, e.node));
   

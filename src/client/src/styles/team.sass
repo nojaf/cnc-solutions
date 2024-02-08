@@ -4,7 +4,7 @@
 .team-page
   padding-bottom: 3rem
 
-$gap: 2rem
+$gap: 2.5rem
   
 #team
   display: flex
@@ -26,19 +26,24 @@ $gap: 2rem
       margin-block: 1rem
 
     img:last-child
-      width: 100%
+      width: 80%
 
+@include media-breakpoint-up(sm)
+  #team .team-member img:last-child
+    width: 66%
+      
 @include media-breakpoint-up(md)
   #team
     flex-wrap: wrap
     flex-direction: row
-    justify-content: space-between
-    gap: 0
+    justify-content: space-around
 
     .team-member
       flex: 1 1 calc(50% - $gap / 2)
       max-width: calc(50% - $gap / 2)
       margin-bottom: $gap
+      img:last-child
+        width: 100%
 
 @include media-breakpoint-up(lg)
   #team
