@@ -22,14 +22,18 @@ $gap: 2.5rem
     h3
       margin: 0
     
+    h4
+      font-size: 1rem
+     
     .underline-bar
-      margin-block: 1rem
+      margin-block: 0.5rem
 
-    img:last-child
+    img:first-of-type
+      margin-bottom: 1rem
       width: 80%
 
 @include media-breakpoint-up(sm)
-  #team .team-member img:last-child
+  #team .team-member img:first-of-type
     width: 66%
       
 @include media-breakpoint-up(md)
@@ -42,7 +46,7 @@ $gap: 2.5rem
       flex: 1 1 calc(50% - $gap / 2)
       max-width: calc(50% - $gap / 2)
       margin-bottom: $gap
-      img:last-child
+      img:first-of-type
         width: 100%
 
 @include media-breakpoint-up(lg)

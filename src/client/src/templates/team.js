@@ -63,7 +63,7 @@ export const query = graphql`
             fr
             en
           }
-          f:function {
+          f: function {
             nl
             fr
             en
@@ -85,24 +85,28 @@ export const query = graphql`
   }
 `
 
-const TeamMember = ({firstName, lastName, f, photo}) => {
-  return <div className={"team-member"}>
-    <h4 className={"above"}>{f}</h4>
-    <h3>{firstName} {lastName}</h3>
-    <img src={underlineWhite} alt={""} className="underline-bar"/>
-    <img src={photo.main} alt={`${firstName} ${lastName}`} />
-  </div>
+const TeamMember = ({ firstName, lastName, f, photo }) => {
+  return (
+    <div className={"team-member"}>
+      <img src={photo.main} alt={`${firstName} ${lastName}`} />
+      <h4 className={"above"}>{f}</h4>
+      <h3>
+        {firstName} {lastName}
+      </h3>
+      <img src={underlineWhite} alt={""} className="underline-bar" />
+    </div>
+  )
 }
 
-const TeamPage = ({data, pageContext}) => {
+const TeamPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const team = pageInCulture(currentCulture, data.team)
   console.log(data)
   const members = (data.members.edges || [])
-    .filter(e => e.node.photo)
+    .filter((e) => e.node.photo)
     .sort((a, b) => a.sortOrder - b.sortOrder)
-    .map((e) => pageInCulture(currentCulture, e.node));
-  
+    .map((e) => pageInCulture(currentCulture, e.node))
+
   return (
     <Layout
       culture={currentCulture}
@@ -110,7 +114,7 @@ const TeamPage = ({data, pageContext}) => {
       seo={pageContext.seo}
       mainClass="team-page"
     >
-      <Header currentPage={team}/>
+      <Header currentPage={team} />
       <PageIntroduction {...team} />
       <div className="container" id="team">
         {members.map((m, i) => {
@@ -118,7 +122,7 @@ const TeamPage = ({data, pageContext}) => {
         })}
       </div>
     </Layout>
-)
+  )
 }
 
 export default TeamPage
