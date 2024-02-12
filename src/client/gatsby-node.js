@@ -399,15 +399,15 @@ exports.createPages = async ({ graphql, actions }) => {
     })
 
     // Team page
-    createPage({
-      path: team.url[culture],
-      component: path.resolve(`./src/templates/team.js`),
-      context: {
-        culture,
-        umbracoId: team.umbracoId,
-        seo: selectSEO(team),
-      },
-    })
+    // createPage({
+    //   path: team.url[culture],
+    //   component: path.resolve(`./src/templates/team.js`),
+    //   context: {
+    //     culture,
+    //     umbracoId: team.umbracoId,
+    //     seo: selectSEO(team),
+    //   },
+    // })
 
     // contact
     createPage({
