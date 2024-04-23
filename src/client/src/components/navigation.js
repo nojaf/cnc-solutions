@@ -163,7 +163,7 @@ const Navigation = ({ culture, currentPageId }) => {
   )
   const aboutPage = aboutPages[0]
   const vacancyPage = aboutPages[1]
-  // const teamPage = pageInCulture(culture, linksQueryResult.team)
+  const teamPage = pageInCulture(culture, linksQueryResult.team)
   const contactPage = pageInCulture(culture, linksQueryResult.contact)
   const solutionsPage = pageInCulture(culture, linksQueryResult.solutions)
   const productsPage = pageInCulture(culture, linksQueryResult.products)
@@ -311,23 +311,23 @@ const Navigation = ({ culture, currentPageId }) => {
             >
               {aboutPage.navigationText}
             </Link>
-            {/*<div*/}
-            {/*  className="dropdown-toggle d-inline-block link-toggle"*/}
-            {/*  id="aboutDropdown"*/}
-            {/*  role="button"*/}
-            {/*  data-toggle="dropdown"*/}
-            {/*  aria-haspopup="true"*/}
-            {/*  aria-expanded="false"*/}
-            {/*></div>*/}
-            {/*<div className="dropdown-menu" aria-labelledby="aboutDropdown">*/}
-            {/*  <Link*/}
-            {/*    to={teamPage.url}*/}
-            {/*    key={teamPage.umbracoId}*/}
-            {/*    className={"dropdown-item"}*/}
-            {/*  >*/}
-            {/*    {teamPage.navigationText}*/}
-            {/*  </Link>*/}
-            {/*</div>*/}
+            <div
+              className="dropdown-toggle d-inline-block link-toggle"
+              id="aboutDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            ></div>
+            <div className="dropdown-menu" aria-labelledby="aboutDropdown">
+              <Link
+                to={teamPage.url}
+                key={teamPage.umbracoId}
+                className={"dropdown-item"}
+              >
+                {teamPage.navigationText}
+              </Link>
+            </div>
           </li>
           <li className="nav-item">
             <Link to={vacancyPage.url} className="nav-link">
