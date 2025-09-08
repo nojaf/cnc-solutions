@@ -141,6 +141,18 @@ const Navigation = ({ culture, currentPageId }) => {
           fr
         }
       }
+      news {
+        url {
+          nl
+          en
+          fr
+        }
+        navigationText {
+          nl
+          en
+          fr
+        }
+      }
       contact {
         url {
           nl
@@ -164,6 +176,7 @@ const Navigation = ({ culture, currentPageId }) => {
   const aboutPage = aboutPages[0]
   const vacancyPage = aboutPages[1]
   const teamPage = pageInCulture(culture, linksQueryResult.team)
+  const newsPage = pageInCulture(culture, linksQueryResult.news)
   const contactPage = pageInCulture(culture, linksQueryResult.contact)
   const solutionsPage = pageInCulture(culture, linksQueryResult.solutions)
   const productsPage = pageInCulture(culture, linksQueryResult.products)
@@ -326,6 +339,13 @@ const Navigation = ({ culture, currentPageId }) => {
                 className={"dropdown-item"}
               >
                 {teamPage.navigationText}
+              </Link>
+              <Link
+                to={newsPage.url}
+                key={newsPage.umbracoId}
+                className={"dropdown-item"}
+              >
+                {newsPage.navigationText}
               </Link>
             </div>
           </li>

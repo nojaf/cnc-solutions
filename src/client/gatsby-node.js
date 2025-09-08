@@ -117,6 +117,29 @@ exports.createPages = async ({ graphql, actions }) => {
           fr
         }
       }
+      news {
+        umbracoId
+        url {
+          nl
+          en
+          fr
+        }
+        seoMetaDescription {
+          nl
+          en
+          fr
+        }
+        seoMetaKeywords {
+          nl
+          en
+          fr
+        }
+        title: navigationText {
+          nl
+          en
+          fr
+        }
+      }
       solutions {
         umbracoId
         url {
@@ -282,6 +305,7 @@ exports.createPages = async ({ graphql, actions }) => {
     allProduct,
     allCase,
     team,
+    news,
   } = result.data
   const cultures = R.map(
     R.pipe(R.prop("node"), R.prop("value")),
@@ -406,6 +430,17 @@ exports.createPages = async ({ graphql, actions }) => {
         culture,
         umbracoId: team.umbracoId,
         seo: selectSEO(team),
+      },
+    })
+
+    // News page
+    createPage({
+      path: news.url[culture],
+      component: path.resolve(`./src/templates/news.js`),
+      context: {
+        culture,
+        umbracoId: news.umbracoId,
+        seo: selectSEO(news),
       },
     })
 
