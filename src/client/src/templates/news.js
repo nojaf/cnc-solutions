@@ -8,7 +8,7 @@ import PageIntroduction from "../components/pageIntroduction"
 function parseNewsPageThumbnail(newsPage) {
   return {
     desktop: newsPage.thumbnail.desktop,
-    large_desktop: newsPage.thumbnail.large_desktop,
+    tablet: newsPage.thumbnail.tablet,
     mobile: newsPage.thumbnail.mobile,
   }
 }
@@ -19,18 +19,21 @@ const NewsPageThumbnail = ({ newsPage, currentCulture }) => {
     pageInCulture(currentCulture, newsPage)
   )
   return (
-    <div>
-      <h3>{newsPage.title[currentCulture]}</h3>
-      <time>
-        {publicationDate.getDate()} / {publicationDate.getMonth() + 1} /{" "}
-        {publicationDate.getFullYear()}
-      </time>
-      <picture>
-        <source media="(min-width: 75em)" srcSet={thumbnail.large_desktop} />
-        <source media="(min-width: 62em)" srcSet={thumbnail.desktop} />
-        <img src={thumbnail.mobile} alt={newsPage.title[currentCulture]} />
-      </picture>
-    </div>
+    <a href={newsPage.url[currentCulture]} className="news-thumbnail">
+      <article>
+        <h3>{newsPage.title[currentCulture]}</h3>
+        <time>
+          {publicationDate.getDate().toString().padStart(2, "0")}/
+          {(publicationDate.getMonth() + 1).toString().padStart(2, "0")}/
+          {publicationDate.getFullYear()}
+        </time>
+        <picture>
+          <source media="(min-width: 75em)" srcSet={thumbnail.desktop} />
+          <source media="(min-width: 62em)" srcSet={thumbnail.tablet} />
+          <img src={thumbnail.mobile} alt={newsPage.title[currentCulture]} />
+        </picture>
+      </article>
+    </a>
   )
 }
 
@@ -48,27 +51,15 @@ const NewsPage = ({ data, pageContext }) => {
       <Header currentPage={news} />
       <PageIntroduction {...news} />
       <main className="container">
-        {newsPages
-          .reduce((rows, newsPage, index) => {
-            const rowIndex = Math.floor(index / 3)
-            if (!rows[rowIndex]) {
-              rows[rowIndex] = []
-            }
-            rows[rowIndex].push(newsPage)
-            return rows
-          }, [])
-          .map((row, rowIndex) => (
-            <div key={rowIndex} className="row">
-              {row.map((newsPage) => (
-                <div key={newsPage.umbracoId} className="col-12 col-md-4 mb-4">
-                  <NewsPageThumbnail
-                    newsPage={newsPage}
-                    currentCulture={currentCulture}
-                  />
-                </div>
-              ))}
-            </div>
+        <div className="row news-grid">
+          {newsPages.map((newsPage) => (
+            <NewsPageThumbnail
+              key={newsPage.umbracoId}
+              newsPage={newsPage}
+              currentCulture={currentCulture}
+            />
           ))}
+        </div>
       </main>
     </Layout>
   )
@@ -128,6 +119,11 @@ export const query = graphql`
     allNewsPage(sort: { fields: publicationDate___nl, order: DESC }) {
       nodes {
         umbracoId
+        url {
+          en
+          fr
+          nl
+        }
         title {
           en
           fr
@@ -141,17 +137,17 @@ export const query = graphql`
         thumbnail {
           en {
             desktop
-            large_desktop
+            tablet
             mobile
           }
           fr {
             desktop
-            large_desktop
+            tablet
             mobile
           }
           nl {
             desktop
-            large_desktop
+            tablet
             mobile
           }
         }
