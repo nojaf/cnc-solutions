@@ -54,6 +54,7 @@
 @include media-breakpoint-up(md)
   .news-grid
     gap: $grid-gutter-width / 2
+    margin-block: $spacer * 6
 
     .news-thumbnail
       flex: 0 1 calc(50% - #{$grid-gutter-width / 2}) // 2 columns with gap, don't grow
@@ -61,5 +62,6 @@
 // Desktop: 3 columns  
 @include media-breakpoint-up(lg)
   .news-grid
+    margin-block: $spacer * 8
     .news-thumbnail
       flex: 0 1 calc(33.333% - #{$grid-gutter-width / 2}) // 3 columns with gap, don't grow
