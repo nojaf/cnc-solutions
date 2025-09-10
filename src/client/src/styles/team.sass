@@ -5,7 +5,7 @@
   padding-bottom: 3rem
 
 $gap: 2.5rem
-  
+
 #team
   display: flex
   gap: $gap
@@ -15,16 +15,16 @@ $gap: 2.5rem
 
   .team-member
     text-align: center
-    
+
     .above
       margin-bottom: 0.5rem
 
     h3
       margin: 0
-    
+
     h4
       font-size: 1rem
-     
+
     .underline-bar
       margin-block: 0.5rem
 
@@ -35,7 +35,7 @@ $gap: 2.5rem
 @include media-breakpoint-up(sm)
   #team .team-member img:first-of-type
     width: 66%
-      
+
 @include media-breakpoint-up(md)
   #team
     flex-wrap: wrap
@@ -54,7 +54,7 @@ $gap: 2.5rem
     .team-member
       flex: 1 1 calc(33% - $gap / 2)
       max-width: calc(33% - $gap / 2)
-      
+
 @include media-breakpoint-up(xl)
   #team
     .team-member

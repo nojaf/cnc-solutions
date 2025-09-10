@@ -2,8 +2,8 @@
 .news-grid
   display: flex
   flex-wrap: wrap
-  gap: $grid-gutter-width / 2
-  margin-block: $spacer * 2
+  gap: $grid-gutter-width
+  margin-block: $spacer * 4
 
   .news-thumbnail
     flex: 1 1 100% // Mobile: 1 column
@@ -11,22 +11,20 @@
     position: relative
     display: block
     box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 10px
-    
+
     h3
-      font-size: $font-size-lg
-      margin-bottom: $spacer / 2
-      line-height: $line-height-sm
+      font-size: $font-size-base
       background-color: $primary
       color: $dark
       position: absolute
       bottom: 0
       width: 100%
       margin: 0
-      padding: $spacer / 2
+      padding: $spacer
       text-align: center
       transition: 200ms all ease
       z-index: 2
-      
+
     time
       display: block
       font-size: $font-size-sm
@@ -37,11 +35,11 @@
       top: $spacer
       z-index: 2
       font-weight: 300
-      
+
     picture
       display: block
       width: 100%
-      
+
     img
       width: 100%
       height: auto
@@ -52,15 +50,16 @@
         color: $primary
         background-color: $dark
 
-
 // Tablet: 2 columns
 @include media-breakpoint-up(md)
   .news-grid
+    gap: $grid-gutter-width / 2
+
     .news-thumbnail
-      flex: 0 1 calc(50% - #{$grid-gutter-width / 4}) // 2 columns with gap, don't grow
+      flex: 0 1 calc(50% - #{$grid-gutter-width / 2}) // 2 columns with gap, don't grow
 
 // Desktop: 3 columns  
 @include media-breakpoint-up(lg)
   .news-grid
     .news-thumbnail
-      flex: 0 1 calc(33.333% - #{$grid-gutter-width / 3}) // 3 columns with gap, don't grow
+      flex: 0 1 calc(33.333% - #{$grid-gutter-width / 2}) // 3 columns with gap, don't grow

@@ -43,7 +43,6 @@ $half-gutter: $grid-gutter-width / 2
 @function get-breakpoints($key: "md")
   @return map-get($container-max-widths, $key)
 
-
 #__bs_notify__
   /* Move notification to bottom */
   top: auto !important
@@ -106,7 +105,7 @@ h1, h2
 
   &.dark
     .inner-corner
-        border-color: transparent transparent $dark transparent
+      border-color: transparent transparent $dark transparent
 
 .edge-container
   margin-top: -6px
@@ -149,7 +148,6 @@ footer
   li
     margin-top: 16px
 
-
   a
     color: $white
     font-size: 12px
@@ -166,9 +164,9 @@ footer
       border-width: 0 0 40px 100vw
 
   footer .container
-    margin-left: 0
-    margin-right: 0
-    width: 100%
+      margin-left: 0
+      margin-right: 0
+      width: 100%
 
 @include media-breakpoint-up(md)
   .edge-container
@@ -253,7 +251,7 @@ footer
 
   .carousel-control-next-icon
     border-color: transparent transparent transparent $white
-  
+
 @import "homepage"
 @import "home-row"
 @import "solutions-overview"
@@ -267,4 +265,5 @@ footer
 @import "contact"
 @import "cookies"
 @import "news"
+@import "new-page"
 @import "debug"
