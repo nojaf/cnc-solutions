@@ -2,7 +2,7 @@ import { graphql, Link, useStaticQuery } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
 import * as R from "ramda"
-import logo from "../images/CNC-Logo.png"
+import logo from "../images/CNC-CMYK.png"
 import menuBar from "../images/menu-bar@2X.png"
 import { pageInCulture, useUrlsForPage } from "../selectors"
 
