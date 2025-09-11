@@ -24,7 +24,14 @@
     padding: $spacer / 3
     font-style: italic
 
+#news-detail-navigation
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-block: $spacer * 4
+
 @include media-breakpoint-up(md)
   .news-image
-    max-width: 50%
-    margin-inline: auto
+    img
+      max-width: 50%
+      margin-inline: auto

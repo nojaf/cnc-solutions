@@ -48,7 +48,29 @@ const NewsPage = ({ data, pageContext }) => {
   const blocks = [...texts, ...images].toSorted(
     (a, b) => a.sortOrder - b.sortOrder || a.key - b.key
   )
-  console.log(blocks)
+  const previousNewsLinkText = data.news.previousNewsLinkText[currentCulture]
+  const nextNewsLinkText = data.news.nextNewsLinkText[currentCulture]
+  const otherNews = data.otherNews.nodes
+    .map((node) => {
+      const otherNews = pageInCulture(currentCulture, node)
+      return {
+        ...otherNews,
+        publicationDate: new Date(otherNews.publicationDate),
+      }
+    })
+    .toSorted(
+      (a, b) => a.publicationDate.getTime() - b.publicationDate.getTime()
+    )
+  const currentNewsDate = new Date(newsPage.publicationDate)
+  const previousNews = otherNews.find(
+    (otherNews) =>
+      otherNews.publicationDate.getTime() < currentNewsDate.getTime()
+  )
+  const nextNews = otherNews.find(
+    (otherNews) =>
+      otherNews.publicationDate.getTime() > currentNewsDate.getTime()
+  )
+
   return (
     <Layout
       culture={currentCulture}
@@ -66,6 +88,14 @@ const NewsPage = ({ data, pageContext }) => {
           )
         )}
       </div>
+      <div className="container" id="news-detail-navigation">
+        {previousNews ? (
+          <Link to={previousNews.url}>{previousNewsLinkText}</Link>
+        ) : (
+          <span>&nbsp;</span>
+        )}
+        {nextNews && <Link to={nextNews.url}>{nextNewsLinkText}</Link>}
+      </div>
     </Layout>
   )
 }
@@ -78,6 +108,11 @@ export const query = graphql`
       url {
         en
         nl
+        fr
+      }
+      publicationDate {
+        nl
+        en
         fr
       }
       headerImage {
@@ -158,6 +193,33 @@ export const query = graphql`
           fr
           en
         }
+      }
+    }
+    otherNews: allNewsPage(filter: { umbracoId: { ne: $umbracoId } }) {
+      nodes {
+        umbracoId
+        publicationDate {
+          nl
+          en
+          fr
+        }
+        url {
+          nl
+          en
+          fr
+        }
+      }
+    }
+    news {
+      previousNewsLinkText {
+        nl
+        fr
+        en
+      }
+      nextNewsLinkText {
+        nl
+        fr
+        en
       }
     }
   }

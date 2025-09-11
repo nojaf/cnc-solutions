@@ -11,28 +11,33 @@
     position: relative
     display: block
     box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 10px
+    transition: 200ms all ease
+
+    h3, time
+      background-color: $dark
+      color: $primary
+      transition: 200ms all ease
 
     h3
       font-size: $font-size-base
-      background-color: $primary
-      color: $dark
       position: absolute
       bottom: 0
       width: 100%
       margin: 0
       padding: $spacer
       text-align: center
-      transition: 200ms all ease
       z-index: 2
+      line-height: 1.2
 
     time
       display: block
+      font-family: $font-family-monospace
       font-size: $font-size-sm
-      color: $text-muted
       position: absolute
-      color: $white
-      right: $spacer
-      top: $spacer
+      line-height: 1
+      right: 0
+      top: 0
+      padding: $spacer / 3
       z-index: 2
       font-weight: 300
 
@@ -45,10 +50,9 @@
       height: auto
 
     &:hover
-      outline: 2px solid $dark
-      h3
-        color: $primary
-        background-color: $dark
+      h3, time
+        color: $dark
+        background-color: $primary
 
 // Tablet: 2 columns
 @include media-breakpoint-up(md)
