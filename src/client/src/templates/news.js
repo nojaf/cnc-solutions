@@ -13,34 +13,98 @@ function parseNewsPageThumbnail(newsPage) {
   }
 }
 
-const NewsPageThumbnail = ({ newsPage, currentCulture }) => {
-  const publicationDate = new Date(newsPage.publicationDate[currentCulture])
-  const thumbnail = parseNewsPageThumbnail(
-    pageInCulture(currentCulture, newsPage)
-  )
+const monthNamesNl = [
+  "januari",
+  "februari",
+  "maart",
+  "april",
+  "mei",
+  "juni",
+  "juli",
+  "augustus",
+  "september",
+  "oktober",
+  "november",
+  "december",
+]
+
+const monthNamesEn = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]
+
+const monthNamesFr = [
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Août",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Décembre",
+]
+
+function getMonthName(currentCulture, month) {
+  if (currentCulture === "nl") {
+    return monthNamesNl[month]
+  } else if (currentCulture === "en") {
+    return monthNamesEn[month]
+  } else if (currentCulture === "fr") {
+    return monthNamesFr[month]
+  }
+}
+
+const NewsPageThumbnail = ({ newsPage, currentCulture, readMoreText }) => {
+  const publicationDate = new Date(newsPage.publicationDate)
+  const thumbnail = parseNewsPageThumbnail(newsPage)
   return (
-    <a href={newsPage.url[currentCulture]} className="news-thumbnail">
-      <article>
-        <h3>{newsPage.title[currentCulture]}</h3>
+    <article className="row news-thumbnail">
+      <picture className="col-12 col-lg-6 order-lg-1">
+        <source media="(min-width: 75em)" srcSet={thumbnail.desktop} />
+        <source media="(min-width: 62em)" srcSet={thumbnail.tablet} />
+        <img src={thumbnail.mobile} alt={newsPage.title} />
+      </picture>
+      <div className="col-12 col-lg-6 order-lg-0">
         <time>
-          {publicationDate.getDate().toString().padStart(2, "0")}/
-          {(publicationDate.getMonth() + 1).toString().padStart(2, "0")}/
+          {publicationDate.getDate().toString().padStart(2, "0")}{" "}
+          {getMonthName(currentCulture, publicationDate.getMonth())}{" "}
           {publicationDate.getFullYear()}
         </time>
-        <picture>
-          <source media="(min-width: 75em)" srcSet={thumbnail.desktop} />
-          <source media="(min-width: 62em)" srcSet={thumbnail.tablet} />
-          <img src={thumbnail.mobile} alt={newsPage.title[currentCulture]} />
-        </picture>
-      </article>
-    </a>
+        <h3>{newsPage.title}</h3>
+        <p className="text-muted">{newsPage.overviewLead}</p>
+      </div>
+
+      <div className="col-12 text-right col-lg-12 order-lg-3">
+        <Link to={newsPage.url} className={`btn-cnc`}>
+          {readMoreText}
+          <span className="corner" />
+          <span className="inner-corner" />
+        </Link>
+      </div>
+    </article>
   )
 }
 
 const NewsPage = ({ data, pageContext }) => {
   const currentCulture = pageContext.culture
   const news = pageInCulture(currentCulture, data.news)
-  const newsPages = data.allNewsPage.nodes
+  const newsPages = data.allNewsPage.nodes.map((newsPage) =>
+    pageInCulture(currentCulture, newsPage)
+  )
   return (
     <Layout
       culture={currentCulture}
@@ -50,16 +114,15 @@ const NewsPage = ({ data, pageContext }) => {
     >
       <Header currentPage={news} />
       <PageIntroduction {...news} />
-      <main className="container">
-        <div className="row news-grid">
-          {newsPages.map((newsPage) => (
-            <NewsPageThumbnail
-              key={newsPage.umbracoId}
-              newsPage={newsPage}
-              currentCulture={currentCulture}
-            />
-          ))}
-        </div>
+      <main id="news-overview" className="container">
+        {newsPages.map((newsPage) => (
+          <NewsPageThumbnail
+            key={newsPage.umbracoId}
+            newsPage={newsPage}
+            currentCulture={currentCulture}
+            readMoreText={news.readMoreText}
+          />
+        ))}
       </main>
     </Layout>
   )
@@ -115,6 +178,11 @@ export const query = graphql`
         nl
         fr
       }
+      readMoreText {
+        en
+        nl
+        fr
+      }
     }
     allNewsPage(sort: { fields: publicationDate___nl, order: DESC }) {
       nodes {
@@ -133,6 +201,11 @@ export const query = graphql`
           en
           fr
           nl
+        }
+        overviewLead {
+          nl
+          fr
+          en
         }
         thumbnail {
           en {

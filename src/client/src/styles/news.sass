@@ -1,71 +1,78 @@
-// News page styles
-.news-grid
-  display: flex
-  flex-wrap: wrap
-  gap: $grid-gutter-width
+#news-overview
   margin-block: $spacer * 4
 
-  .news-thumbnail
-    flex: 1 1 100% // Mobile: 1 column
-    min-width: 0 // Prevent flex items from overflowing
-    position: relative
+.news-thumbnail
+  display: block
+  transition: 200ms all ease
+  text-decoration: none
+  margin-block: $spacer * 4
+
+  &:first-of-type
+    margin-block-start: 0
+  &:last-of-type
+    margin-block-end: 0
+
+  h3
+    font-size: $h2-font-size
+    margin-block: 0
+    font-weight: 300
+    color: $dark
+    transition: inherit
+
+  time
     display: block
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 10px
-    transition: 200ms all ease
+    text-align: center
+    font-size: $font-size-lg
+    line-height: 2
+    margin-block: $spacer / 2
+    font-weight: 300
+    color: $primary
 
-    h3, time
-      background-color: $dark
-      color: $primary
-      transition: 200ms all ease
+  picture
+    display: block
+    width: 100%
 
-    h3
-      font-size: $font-size-base
-      position: absolute
-      bottom: 0
-      width: 100%
-      margin: 0
-      padding: $spacer
-      text-align: center
-      z-index: 2
-      line-height: 1.2
+  img
+    width: 100%
+    height: 320px
+    object-fit: cover
 
-    time
-      display: block
-      font-family: $font-family-monospace
-      font-size: $font-size-sm
-      position: absolute
-      line-height: 1
-      right: 0
-      top: 0
-      padding: $spacer / 3
-      z-index: 2
-      font-weight: 300
+  p
+    margin-top: $spacer / 2
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
 
-    picture
-      display: block
-      width: 100%
+  .btn-cnc
+    margin-top: $spacer
+    margin-bottom: 0
 
-    img
-      width: 100%
-      height: auto
-
-    &:hover
-      h3, time
-        color: $dark
-        background-color: $primary
-
-// Tablet: 2 columns
 @include media-breakpoint-up(md)
-  .news-grid
-    gap: $grid-gutter-width / 2
+  .news-thumbnail
     margin-block: $spacer * 6
 
-    .news-thumbnail
-      flex: 0 1 calc(50% - #{$grid-gutter-width / 2}) // 2 columns with gap, don't grow
-
-// Desktop: 3 columns  
 @include media-breakpoint-up(lg)
-  .news-grid
-    margin-block: $spacer * 8
-    .news-thumbnail
-      flex: 0 1 calc(33.333% - #{$grid-gutter-width / 2}) // 3 columns with gap, don't grow
+  .news-thumbnail
+    margin-block: $spacer * 6
+    display: flex
+    flex-wrap: wrap
+    time
+      text-align: left
+      align-self: center
+
+    h3
+      margin-top: $spacer * 2
+
+// // Tablet: 2 columns
+// @include media-breakpoint-up(md)
+//   .news-grid
+//     gap: $grid-gutter-width / 2
+//     margin-block: $spacer * 6
+
+//     .news-thumbnail
+//       flex: 0 1 calc(50% - #{$grid-gutter-width / 2}) // 2 columns with gap, don't grow
+
+// // Desktop: 3 columns  
+// @include media-breakpoint-up(lg)
+//   .news-grid
+//     margin-block: $spacer * 8
