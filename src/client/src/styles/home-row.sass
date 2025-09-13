@@ -5,8 +5,11 @@
   &.dark
     background-color: $dark
     color: $white
+  
+  &.light
+    background-color: $white
 
-  padding: 30px 0
+  padding: (3 * $spacer) 0
   h2, h3
     margin: auto
     max-width: 50%
@@ -22,8 +25,10 @@
     margin-top: 20px
 
   picture img, .video
-    margin-bottom: 15px
     width: 100%
+
+  .col-xs-12
+    margin-block: $spacer
 
 @include media-breakpoint-up(lg)
   .home-row
