@@ -73,12 +73,12 @@ const NewsPageThumbnail = ({ newsPage, currentCulture, readMoreText }) => {
   const thumbnail = parseNewsPageThumbnail(newsPage)
   return (
     <article className="row news-thumbnail">
-      <picture className="col-12 col-lg-6 order-lg-1">
+      <picture className="col-12 col-lg-6 order-lg-0">
         <source media="(min-width: 75em)" srcSet={thumbnail.desktop} />
         <source media="(min-width: 62em)" srcSet={thumbnail.tablet} />
         <img src={thumbnail.mobile} alt={newsPage.title} />
       </picture>
-      <div className="col-12 col-lg-6 order-lg-0">
+      <div className="col-12 col-lg-6 order-lg-1">
         <time>
           {publicationDate.getDate().toString().padStart(2, "0")}{" "}
           {getMonthName(currentCulture, publicationDate.getMonth())}{" "}
