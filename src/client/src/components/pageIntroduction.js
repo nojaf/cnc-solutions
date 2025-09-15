@@ -11,11 +11,13 @@ const PageIntroduction = ({ aboveTitle, title, lead }) => {
           <div className="title-container">
             <h1 className="mb-0">{title}</h1>
             <img src={underlineWhite} alt={""} className="underline-bar" />
-            <div
-              className="text-left"
-              id="lead"
-              dangerouslySetInnerHTML={{ __html: lead }}
-            ></div>
+            {lead && (
+              <div
+                className="text-left"
+                id="lead"
+                dangerouslySetInnerHTML={{ __html: lead }}
+              ></div>
+            )}
           </div>
         </div>
       </div>

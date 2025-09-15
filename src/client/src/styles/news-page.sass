@@ -1,0 +1,37 @@
+@import "../../node_modules/bootstrap/scss/mixins"
+@import "variables"
+
+.news-text, .news-image
+  margin-block: $spacer * 3
+
+.news-image
+  margin-block: $spacer * 4
+  margin-inline: auto
+
+  img
+    max-width: 100%
+    display: block
+    margin-inline: auto
+    &.full-width
+      max-width: 100%
+
+  figure
+    background-color: $white
+  figcaption
+    color: $dark
+    text-align: center
+    margin-top: $spacer / 2
+    padding: $spacer / 3
+    font-style: italic
+
+#news-detail-navigation
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-block: $spacer * 4
+
+@include media-breakpoint-up(md)
+  .news-image
+    img
+      max-width: 50%
+      margin-inline: auto

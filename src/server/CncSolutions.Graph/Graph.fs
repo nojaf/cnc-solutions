@@ -31,6 +31,7 @@ let private exportPropertyValue meta (value: obj) =
             |> Seq.toArray
             |> Encode.array
         | :? bool as b -> Encode.bool b
+        | :? DateTime as d -> Encode.datetime d
         | _ ->
             printfn "no support for %A" value
             Encode.nil
@@ -67,6 +68,9 @@ let private exportProperty meta (node: IPublishedContent) (property: IPublishedP
         elif property.PropertyType.DataType.EditorAlias = "Umbraco.Integer" then
             let content = node.Value<int>(property.Alias)
             c, Encode.int content
+        elif property.PropertyType.DataType.EditorAlias = "Umbraco.DateTime" then
+            let content = node.Value<DateTime>(property.Alias)
+            c, Encode.datetime content
         else
             let valueForCulture = property.GetValue(c)
             let value =

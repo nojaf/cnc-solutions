@@ -117,6 +117,56 @@ exports.createPages = async ({ graphql, actions }) => {
           fr
         }
       }
+      news {
+        umbracoId
+        url {
+          nl
+          en
+          fr
+        }
+        seoMetaDescription {
+          nl
+          en
+          fr
+        }
+        seoMetaKeywords {
+          nl
+          en
+          fr
+        }
+        title: navigationText {
+          nl
+          en
+          fr
+        }
+      }
+      allNewsPage {
+        edges {
+          node {
+            umbracoId
+            url {
+              nl
+              en
+              fr
+            }
+            seoMetaDescription {
+              nl
+              en
+              fr
+            }
+            seoMetaKeywords {
+              nl
+              en
+              fr
+            }
+            title: navigationText {
+              nl
+              en
+              fr
+            }
+          }
+        }
+      }
       solutions {
         umbracoId
         url {
@@ -282,6 +332,8 @@ exports.createPages = async ({ graphql, actions }) => {
     allProduct,
     allCase,
     team,
+    news,
+    allNewsPage,
   } = result.data
   const cultures = R.map(
     R.pipe(R.prop("node"), R.prop("value")),
@@ -291,6 +343,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const productItems = allProduct.edges.map(({ node }) => node)
   const caseItems = allCase.edges.map(({ node }) => node)
   const aboutPages = allAbout.edges.map(({ node }) => node)
+  const newsPages = allNewsPage.edges.map(({ node }) => node)
 
   cultures.forEach((culture) => {
     const selectSEO = (page) => {
@@ -407,6 +460,30 @@ exports.createPages = async ({ graphql, actions }) => {
         umbracoId: team.umbracoId,
         seo: selectSEO(team),
       },
+    })
+
+    // News page
+    createPage({
+      path: news.url[culture],
+      component: path.resolve(`./src/templates/news.js`),
+      context: {
+        culture,
+        umbracoId: news.umbracoId,
+        seo: selectSEO(news),
+      },
+    })
+
+    // News pages
+    newsPages.forEach((newsPage) => {
+      createPage({
+        path: newsPage.url[culture],
+        component: path.resolve(`./src/templates/news-page.js`),
+        context: {
+          culture,
+          umbracoId: newsPage.umbracoId,
+          seo: selectSEO(newsPage),
+        },
+      })
     })
 
     // contact
