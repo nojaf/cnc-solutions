@@ -1,9 +1,18 @@
 import React from "react"
 import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
-import { pageInCulture, useUrl } from "../selectors"
+import { pageInCulture } from "../selectors"
 import Header from "../components/header"
 import PageIntroduction from "../components/pageIntroduction"
+import Video from "../components/video"
+
+const VideoBlock = ({ videoId }) => {
+  return (
+    <div className="news-video">
+      <Video videoId={videoId} autoplay={false} controls={true} mute={false} />
+    </div>
+  )
+}
 
 const TextBlock = ({ content }) => {
   return (
@@ -45,7 +54,10 @@ const NewsPage = ({ data, pageContext }) => {
   const images = data.images.nodes.map((node) =>
     pageInCulture(currentCulture, node)
   )
-  const blocks = [...texts, ...images].toSorted(
+  const videos = data.videos.nodes.map((node) =>
+    pageInCulture(currentCulture, node)
+  )
+  const blocks = [...texts, ...images, ...videos].toSorted(
     (a, b) => a.sortOrder - b.sortOrder || a.key - b.key
   )
   const previousNewsLinkText = data.news.previousNewsLinkText[currentCulture]
@@ -80,13 +92,18 @@ const NewsPage = ({ data, pageContext }) => {
       <Header currentPage={newsPage} />
       <PageIntroduction {...newsPage} />
       <div className="container">
-        {blocks.map((block) =>
-          block.kind === "newsText" ? (
-            <TextBlock {...block} />
-          ) : (
-            <ImageBlock {...block} />
-          )
-        )}
+        {blocks.map((block) => {
+          switch (block.kind) {
+            case "newsText":
+              return <TextBlock {...block} />
+            case "newsImage":
+              return <ImageBlock {...block} />
+            case "newsVideo":
+              return <VideoBlock {...block} />
+            default:
+              return null
+          }
+        })}
       </div>
       <div className="container" id="news-detail-navigation">
         {previousNews ? (
@@ -192,6 +209,18 @@ export const query = graphql`
           nl
           fr
           en
+        }
+      }
+    }
+    videos: allNewsVideo(filter: { parentUmbracoId: { eq: $umbracoId } }) {
+      nodes {
+        key: umbracoId
+        kind: __typename
+        sortOrder
+        videoId {
+          nl
+          en
+          fr
         }
       }
     }

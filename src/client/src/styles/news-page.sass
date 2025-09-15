@@ -1,8 +1,11 @@
 @import "../../node_modules/bootstrap/scss/mixins"
 @import "variables"
 
-.news-text, .news-image
+.news-text, .news-image, .news-video
   margin-block: $spacer * 3
+
+.news-video
+  margin-block: $spacer * 4
 
 .news-image
   margin-block: $spacer * 4
@@ -34,4 +37,9 @@
   .news-image
     img
       max-width: 50%
+      margin-inline: auto
+
+  .news-video
+    .video
+      width: 80%
       margin-inline: auto
