@@ -86,13 +86,12 @@ const NewsPageThumbnail = ({ newsPage, currentCulture, readMoreText }) => {
         </time>
         <h3>{newsPage.title}</h3>
         <p className="text-muted">{newsPage.overviewLead}</p>
-        <div className="text-right">
-          <Link to={newsPage.url} className={`btn-cnc`}>
-            {readMoreText}
-            <span className="corner" />
-            <span className="inner-corner" />
-          </Link>
-        </div>
+
+        <Link to={newsPage.url} className={`btn-cnc`}>
+          {readMoreText}
+          <span className="corner" />
+          <span className="inner-corner" />
+        </Link>
       </div>
     </article>
   )
