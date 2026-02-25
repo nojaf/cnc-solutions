@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+interface Props {
+  culture: string;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, seo } = Astro.props;
+---
+
+<BaseLayout title={seo.title || "Solutions"} lang={culture}>
+  <h1>Solutions</h1>
+  <p>Culture: {culture} | Umbraco ID: {umbracoId}</p>
+</BaseLayout>

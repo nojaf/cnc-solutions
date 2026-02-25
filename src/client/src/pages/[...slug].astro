@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import type { Culture } from "../lib/umbraco";
+import { cultures } from "../lib/umbraco";
+
+import Home from "../templates/Home.astro";
+import Solutions from "../templates/Solutions.astro";
+
+const templateMap: Record<string, any> = {
+  home: Home,
+  solutions: Solutions,
+};
+
+export async function getStaticPaths() {
+  const pageCollections = ["home", "solutions"] as const;
+  const paths: Array<{
+    params: { slug: string | undefined };
+    props: {
+      culture: Culture;
+      contentType: string;
+      umbracoId: number;
+      urls: { nl: string; en: string; fr: string };
+      seo: { title: string; description: string; keywords: any; lang: string };
+    };
+  }> = [];
+
+  for (const contentType of pageCollections) {
+    const items = await getCollection(contentType);
+    for (const item of items) {
+      for (const culture of cultures) {
+        const url = item.data.url[culture];
+        const slug = url.replace(/^\/|\/$/g, ""); // trim slashes
+
+        paths.push({
+          params: { slug: slug || undefined },
+          props: {
+            culture,
+            contentType,
+            umbracoId: item.data.umbracoId,
+            urls: item.data.url,
+            seo: {
+              title: item.data.navigationText?.[culture] ?? item.data.name,
+              description: item.data.seoMetaDescription?.[culture] ?? "",
+              keywords: item.data.seoMetaKeywords?.[culture] ?? "",
+              lang: culture,
+            },
+          },
+        });
+      }
+    }
+  }
+
+  return paths;
+}
+
+const { culture, contentType, umbracoId, urls, seo } = Astro.props;
+const Template = templateMap[contentType];
+---
+
+<Template culture={culture} umbracoId={umbracoId} urls={urls} seo={seo} />
