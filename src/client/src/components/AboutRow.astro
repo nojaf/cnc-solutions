@@ -1,0 +1,27 @@
+---
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  page: Record<string, any>;
+  culture: Culture;
+}
+
+const { page, culture } = Astro.props;
+const row = pageInCulture(culture, page);
+---
+
+<section>
+  <div>
+    <div>
+      {row.image && <p>Image placeholder — altText: {row.altText}</p>}
+      {row.videoId && <p>Video placeholder — videoId: {row.videoId}</p>}
+    </div>
+    <div>
+      {row.aboveTitle && <h3>{row.aboveTitle}</h3>}
+      <h2>{row.title}</h2>
+      {row.lead && <div set:html={row.lead} />}
+      {row.linkText && <p>Link placeholder — text: {row.linkText}</p>}
+    </div>
+  </div>
+</section>

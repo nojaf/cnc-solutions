@@ -38,6 +38,10 @@ export const collections = {
     loader: umbracoLoader("about"),
     schema: baseSchema.passthrough(),
   }),
+  aboutRow: defineCollection({
+    loader: umbracoLoader("aboutRow"),
+    schema: baseSchema.passthrough(),
+  }),
   contact: defineCollection({
     loader: umbracoLoader("contact"),
     schema: baseSchema.passthrough(),

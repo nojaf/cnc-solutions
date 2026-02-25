@@ -1,0 +1,11 @@
+---
+interface Props {
+  currentPage: Record<string, any>;
+}
+
+const { currentPage } = Astro.props;
+---
+
+<header>
+  <p>Header placeholder — headerImage: {currentPage.headerImage ? "present" : "missing"}</p>
+</header>

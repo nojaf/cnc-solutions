@@ -107,6 +107,27 @@ export function wrapIfSingleton<T>(a: T | T[] | null | undefined): T[] {
 }
 
 /**
+ * Strip the Umbraco `type` key from each property value so that localized
+ * fields become clean `{ nl, en, fr }` objects — matching what Gatsby's
+ * GraphQL layer produced. Without this, `pageInCulture` fails because the
+ * extra `type` key (length 4) breaks the "all keys have length 2" heuristic.
+ */
+function stripPropertyTypes(
+  properties: Record<string, any>
+): Record<string, any> {
+  const result: Record<string, any> = {};
+  for (const [key, value] of Object.entries(properties)) {
+    if (value && typeof value === "object" && !Array.isArray(value) && "type" in value) {
+      const { type, ...rest } = value;
+      result[key] = rest;
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
+/**
  * Convert an UmbracoNode into a flat data object (properties merged to top-level).
  */
 export function nodeToEntry(node: UmbracoNode) {
@@ -120,6 +141,6 @@ export function nodeToEntry(node: UmbracoNode) {
     updateDate: node.updateDate,
     sortOrder: node.sortOrder,
     children: node.children,
-    ...node.properties,
+    ...stripPropertyTypes(node.properties),
   };
 }

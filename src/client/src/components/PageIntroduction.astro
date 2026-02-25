@@ -1,0 +1,15 @@
+---
+interface Props {
+  aboveTitle?: string;
+  title: string;
+  lead?: string;
+}
+
+const { aboveTitle, title, lead } = Astro.props;
+---
+
+<section>
+  {aboveTitle && <h2>{aboveTitle}</h2>}
+  <h1>{title}</h1>
+  {lead && <div set:html={lead} />}
+</section>
