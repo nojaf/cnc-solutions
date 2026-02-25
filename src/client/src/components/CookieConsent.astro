@@ -1,0 +1,11 @@
+---
+import type { Culture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+}
+
+const { culture } = Astro.props;
+---
+
+<p>CookieConsent placeholder — culture: {culture}</p>

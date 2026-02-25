@@ -9,7 +9,7 @@ export default function umbracoSignalR(): AstroIntegration {
       "astro:server:setup": ({ server, refreshContent }) => {
         const client = new signalR.client(
           "wss://cncsolutions-backend.azurewebsites.net/umbraco/backoffice/signalr/hubs",
-          ["GatsbyHub"]
+          ["GatsbyHub"],
         );
 
         client.on("GatsbyHub", "nodePublished", (nodeId: string) => {

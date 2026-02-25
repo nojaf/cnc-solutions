@@ -7,6 +7,46 @@ const localizedString = z.object({
   fr: z.string(),
 });
 
+const localizedOptionalString = z.object({
+  nl: z.string().nullable().optional(),
+  en: z.string().nullable().optional(),
+  fr: z.string().nullable().optional(),
+});
+
+const localizedBoolean = z.object({
+  nl: z.boolean(),
+  en: z.boolean(),
+  fr: z.boolean(),
+});
+
+// Header images use: mobile, tablet, desktop, large-desktop
+const headerResponsiveImage = z.object({
+  mobile: z.string(),
+  tablet: z.string(),
+  desktop: z.string(),
+  "large-desktop": z.string(),
+});
+
+const localizedHeaderImage = z.object({
+  nl: headerResponsiveImage,
+  en: headerResponsiveImage,
+  fr: headerResponsiveImage,
+});
+
+// Content images use: small, medium, tablet, desktop
+const contentResponsiveImage = z.object({
+  small: z.string(),
+  medium: z.string(),
+  tablet: z.string(),
+  desktop: z.string(),
+});
+
+const localizedContentImage = z.object({
+  nl: contentResponsiveImage.nullable(),
+  en: contentResponsiveImage.nullable(),
+  fr: contentResponsiveImage.nullable(),
+});
+
 // Shared fields present on every page-level node
 const baseSchema = z.object({
   umbracoId: z.number(),
@@ -36,11 +76,46 @@ export const collections = {
   }),
   about: defineCollection({
     loader: umbracoLoader("about"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        lead: localizedString,
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: z
+          .object({
+            nl: z.array(z.string()).nullable().optional(),
+            en: z.array(z.string()).nullable().optional(),
+            fr: z.array(z.string()).nullable().optional(),
+          })
+          .optional(),
+      })
+      .passthrough(),
   }),
   aboutRow: defineCollection({
     loader: umbracoLoader("aboutRow"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        image: localizedContentImage.optional(),
+        imageRight: localizedBoolean.optional(),
+        title: localizedString,
+        aboveTitle: localizedOptionalString.optional(),
+        lead: localizedOptionalString.optional(),
+        linkText: localizedOptionalString.optional(),
+        linkUrl: z
+          .object({
+            nl: z.number().nullable().optional(),
+            en: z.number().nullable().optional(),
+            fr: z.number().nullable().optional(),
+          })
+          .optional(),
+        altText: localizedOptionalString.optional(),
+        videoId: localizedOptionalString.optional(),
+      })
+      .passthrough(),
   }),
   contact: defineCollection({
     loader: umbracoLoader("contact"),

@@ -1,11 +1,27 @@
 ---
+import BottomEdge from "./BottomEdge.astro";
+
 interface Props {
   currentPage: Record<string, any>;
 }
 
 const { currentPage } = Astro.props;
+const mobile = currentPage.headerImage?.mobile;
+const tablet = currentPage.headerImage?.tablet;
+const desktop = currentPage.headerImage?.desktop;
+const largeDesktop = currentPage.headerImage?.large_desktop;
+const alt = currentPage.headerImageAlt ?? "";
 ---
 
-<header>
-  <p>Header placeholder — headerImage: {currentPage.headerImage ? "present" : "missing"}</p>
+<header
+  class="relative min-h-[60vw] md:min-h-[41vw] md:h-[41vw] md:overflow-y-hidden lg:min-h-[30vw] lg:h-[30vw] xl:min-h-[20vw] xl:h-[20vw]"
+>
+  <picture>
+    {largeDesktop && <source media="(min-width: 75em)" srcset={largeDesktop} />}
+    {desktop && <source media="(min-width: 62em)" srcset={desktop} />}
+    {tablet && <source media="(min-width: 48em)" srcset={tablet} />}
+    {mobile && <source media="(min-width: 34em)" srcset={mobile} />}
+    <img class="w-full" src={mobile} srcset={mobile} alt={alt} />
+  </picture>
+  <BottomEdge variant="white" absolute />
 </header>

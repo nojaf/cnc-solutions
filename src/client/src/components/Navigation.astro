@@ -1,0 +1,14 @@
+---
+import type { Culture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  currentPageId: number;
+}
+
+const { culture, currentPageId } = Astro.props;
+---
+
+<nav>
+  <p>Navigation placeholder — culture: {culture}, pageId: {currentPageId}</p>
+</nav>

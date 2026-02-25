@@ -1,0 +1,13 @@
+---
+import type { Culture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+}
+
+const { culture } = Astro.props;
+---
+
+<footer>
+  <p>Footer placeholder — culture: {culture}</p>
+</footer>

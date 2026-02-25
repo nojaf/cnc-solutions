@@ -29,8 +29,9 @@ export async function getStaticPaths() {
   for (const contentType of pageCollections) {
     const items = await getCollection(contentType);
     for (const item of items) {
+      const data = item.data as Record<string, any>;
       for (const culture of cultures) {
-        const url = item.data.url[culture];
+        const url = data.url[culture];
         const slug = url.replace(/^\/|\/$/g, ""); // trim slashes
 
         paths.push({
@@ -38,12 +39,12 @@ export async function getStaticPaths() {
           props: {
             culture,
             contentType,
-            umbracoId: item.data.umbracoId,
-            urls: item.data.url,
+            umbracoId: data.umbracoId,
+            urls: data.url,
             seo: {
-              title: item.data.navigationText?.[culture] ?? item.data.name,
-              description: item.data.seoMetaDescription?.[culture] ?? "",
-              keywords: item.data.seoMetaKeywords?.[culture] ?? "",
+              title: data.navigationText?.[culture] ?? data.name,
+              description: data.seoMetaDescription?.[culture] ?? "",
+              keywords: data.seoMetaKeywords?.[culture] ?? "",
               lang: culture,
             },
           },

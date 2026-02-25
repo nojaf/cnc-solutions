@@ -11,7 +11,7 @@ interface Props {
 const { culture, umbracoId, seo } = Astro.props;
 ---
 
-<BaseLayout title={seo.title || "Solutions"} lang={culture}>
+<BaseLayout culture={culture} currentPageId={umbracoId} seo={seo}>
   <h1>Solutions</h1>
   <p>Culture: {culture} | Umbraco ID: {umbracoId}</p>
 </BaseLayout>

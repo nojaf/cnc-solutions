@@ -1,4 +1,6 @@
 ---
+import underlineWhite from "../assets/underline-white.png";
+
 interface Props {
   aboveTitle?: string;
   title: string;
@@ -9,7 +11,28 @@ const { aboveTitle, title, lead } = Astro.props;
 ---
 
 <section>
-  {aboveTitle && <h2>{aboveTitle}</h2>}
-  <h1>{title}</h1>
-  {lead && <div set:html={lead} />}
+  <div class="container mx-auto px-4">
+    <div class="text-center mt-5 mb-2">
+      {
+        aboveTitle && (
+          <h2 class="text-sm lg:text-2xl lg:leading-9.5 font-light p-0 m-0 lowercase">
+            {aboveTitle}
+          </h2>
+        )
+      }
+      <div class="inline-block text-center">
+        <h1
+          class="uppercase text-[30px] lg:text-5xl lg:leading-12 font-bold mb-0"
+        >
+          {title}
+        </h1>
+        <img
+          src={underlineWhite.src}
+          alt=""
+          class="block mx-auto mb-7.5 w-6.25"
+        />
+        {lead && <div id="lead" class="" set:html={lead} />}
+      </div>
+    </div>
+  </div>
 </section>

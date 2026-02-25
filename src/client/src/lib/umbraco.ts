@@ -50,23 +50,21 @@ export function flattenTree(node: UmbracoNode): UmbracoNode[] {
 
 export function getNodesByAlias(
   root: UmbracoNode,
-  alias: string
+  alias: string,
 ): UmbracoNode[] {
   return flattenTree(root).filter((n) => n.alias === alias);
 }
 
 export function getNodeById(
   root: UmbracoNode,
-  id: number
+  id: number,
 ): UmbracoNode | undefined {
   return flattenTree(root).find((n) => n.id === id);
 }
 
 // --- URL lookup ---
 
-export function buildUrlLookup(
-  root: UmbracoNode
-): Map<number, UmbracoUrl> {
+export function buildUrlLookup(root: UmbracoNode): Map<number, UmbracoUrl> {
   const map = new Map<number, UmbracoUrl>();
   for (const node of flattenTree(root)) {
     map.set(node.id, node.url);
@@ -83,7 +81,7 @@ export function buildUrlLookup(
  */
 export function pageInCulture<T extends Record<string, any>>(
   culture: Culture,
-  page: T
+  page: T,
 ): Record<string, any> {
   const result: Record<string, any> = {};
   for (const [key, value] of Object.entries(page)) {
@@ -113,11 +111,16 @@ export function wrapIfSingleton<T>(a: T | T[] | null | undefined): T[] {
  * extra `type` key (length 4) breaks the "all keys have length 2" heuristic.
  */
 function stripPropertyTypes(
-  properties: Record<string, any>
+  properties: Record<string, any>,
 ): Record<string, any> {
   const result: Record<string, any> = {};
   for (const [key, value] of Object.entries(properties)) {
-    if (value && typeof value === "object" && !Array.isArray(value) && "type" in value) {
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      "type" in value
+    ) {
       const { type, ...rest } = value;
       result[key] = rest;
     } else {

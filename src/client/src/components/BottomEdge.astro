@@ -1,0 +1,27 @@
+---
+interface Props {
+  variant?: "dark" | "white";
+  fullWidth?: boolean;
+  absolute?: boolean;
+}
+
+const { variant = "dark", fullWidth = false, absolute = false } = Astro.props;
+---
+
+<div
+  class:list={[
+    "z-20 -mt-1.5 max-w-[100vw] overflow-x-hidden h-5 sm:h-10 md:h-15 lg:h-25",
+    absolute ? "absolute bottom-0 left-0 w-full" : "relative",
+    { "w-full": fullWidth && !absolute },
+  ]}
+>
+  <div
+    class:list={[
+      "w-0 h-0 border-solid border-[0_0_20px_100vw] sm:border-[0_0_40px_100vw] md:border-[0_0_60px_100vw] lg:border-[0_0_100px_100vw]",
+      variant === "white"
+        ? "border-transparent border-b-white"
+        : "border-transparent border-b-dark",
+    ]}
+  >
+  </div>
+</div>

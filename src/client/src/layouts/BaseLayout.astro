@@ -1,20 +1,42 @@
 ---
+import "../styles/global.css";
+import SEO from "../components/SEO.astro";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+import CookieConsent from "../components/CookieConsent.astro";
+import type { Culture } from "../lib/umbraco";
+
 interface Props {
-  title: string;
-  lang?: string;
+  culture: Culture;
+  currentPageId: number;
+  seo: {
+    title: string;
+    description?: string;
+    keywords?: string;
+    lang?: string;
+  };
+  mainClass?: string;
 }
 
-const { title, lang = "nl" } = Astro.props;
+const { culture, currentPageId, seo, mainClass = "" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={seo.lang ?? culture}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>{title}</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <SEO {...seo} />
   </head>
   <body>
-    <slot />
+    <Navigation culture={culture} currentPageId={currentPageId} />
+    <main class={mainClass}>
+      <slot />
+    </main>
+    <Footer culture={culture} />
+    <CookieConsent culture={culture} />
   </body>
 </html>

@@ -28,10 +28,17 @@ const rows = allRows
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 ---
 
-<BaseLayout title={seo.title} lang={culture}>
+<BaseLayout
+  culture={culture}
+  currentPageId={umbracoId}
+  seo={seo}
+  mainClass="about-page"
+>
   <Header currentPage={about} />
-  <PageIntroduction aboveTitle={about.aboveTitle} title={about.title} lead={about.lead} />
-  {rows.map((r) => (
-    <AboutRow page={r.data} culture={culture} />
-  ))}
+  <PageIntroduction
+    aboveTitle={about.aboveTitle}
+    title={about.title}
+    lead={about.lead}
+  />
+  {rows.map((r) => <AboutRow page={r.data} culture={culture} />)}
 </BaseLayout>
