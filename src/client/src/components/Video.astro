@@ -20,13 +20,15 @@ const url = `https://www.youtube.com/embed/${videoId}?autoplay=${toInt(autoplay)
 ---
 
 <div class="video">
-  {videoId && (
-    <iframe
-      class="w-full aspect-video"
-      src={url}
-      title={altText}
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    />
-  )}
+  {
+    videoId && (
+      <iframe
+        class="w-full aspect-video"
+        src={url}
+        title={altText}
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      />
+    )
+  }
 </div>

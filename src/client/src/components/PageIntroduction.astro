@@ -27,7 +27,7 @@ const { aboveTitle, title, lead } = Astro.props;
           {title}
         </h1>
         <img src={underlineWhite.src} alt="" class="block mx-auto mb-8 w-6" />
-        {lead && <div id="lead" set:html={lead} />}
+        {lead && <div id="lead" class="cms-content" set:html={lead} />}
       </div>
     </div>
   </div>

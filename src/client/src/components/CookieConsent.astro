@@ -6,6 +6,78 @@ interface Props {
 }
 
 const { culture } = Astro.props;
+
+const texts: Record<
+  string,
+  { description: string; accept: string; reject: string }
+> = {
+  nl: {
+    description: "Deze website gebruikt cookies voor marketingdoeleinden.",
+    accept: "Accepteer",
+    reject: "Weiger",
+  },
+  en: {
+    description: "This website uses cookies for marketing purposes.",
+    accept: "Accept",
+    reject: "Reject",
+  },
+  fr: {
+    description: "Ce site web utilise des cookies à des fins de marketing.",
+    accept: "Accepter",
+    reject: "Refuser",
+  },
+};
+
+const t = texts[culture];
 ---
 
-<p>CookieConsent placeholder — culture: {culture}</p>
+<div
+  id="cookies-banner"
+  class="hidden fixed bottom-0 left-0 w-full bg-dark text-white z-1000 border-t border-white"
+>
+  <div class="flex items-center justify-end p-4">
+    <span class="mx-2">{t.description}</span>
+    <button
+      id="cookie-accept"
+      class="mx-2 px-3 py-1.5 text-base bg-primary text-dark border border-primary rounded cursor-pointer"
+    >
+      {t.accept}
+    </button>
+    <button
+      id="cookie-reject"
+      class="mx-2 px-3 py-1.5 text-base bg-[rgb(224,29,49)] text-white border border-[rgb(224,29,49)] rounded cursor-pointer"
+    >
+      {t.reject}
+    </button>
+  </div>
+</div>
+
+<script>
+  const banner = document.getElementById("cookies-banner");
+  const decision = localStorage.getItem("cookiesDecision");
+
+  if (!decision && banner) {
+    banner.classList.remove("hidden");
+  }
+
+  function setCookieDecision(answer: string) {
+    localStorage.setItem("cookiesDecision", answer);
+    banner?.classList.add("hidden");
+    if (answer === "disallow") {
+      if ((window as any).gaOptout) {
+        (window as any).gaOptout();
+      }
+      if ((window as any).fbq) {
+        (window as any).fbq("consent", "revoke");
+      }
+    }
+  }
+
+  document.getElementById("cookie-accept")?.addEventListener("click", () => {
+    setCookieDecision("allow");
+  });
+
+  document.getElementById("cookie-reject")?.addEventListener("click", () => {
+    setCookieDecision("disallow");
+  });
+</script>

@@ -25,14 +25,16 @@ body {
   font-family: var(--font-body);
 }
 
-p,
-ul li,
-ol li {
+/* Scoped to .cms-content so these styles only apply to dynamic CMS content (set:html).
+   Without this scope, they clash with Tailwind utility classes. */
+.cms-content p,
+.cms-content ul li,
+.cms-content ol li {
   font-size: 1.1rem;
   line-height: 1.7rem;
 }
 
-p {
+.cms-content p {
   margin-bottom: 1rem;
   margin-top: 0;
 }

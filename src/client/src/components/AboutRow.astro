@@ -86,7 +86,7 @@ const imageRight = row.imageRight ?? false;
             {row.title}
           </h2>
           <img src={underlineWhite.src} alt="" class="block mb-8 w-6" />
-          {row.lead && <div set:html={row.lead} />}
+          {row.lead && <div class="cms-content" set:html={row.lead} />}
           {
             linkHref && row.linkText && (
               <ButtonCnc href={linkHref}>{row.linkText}</ButtonCnc>

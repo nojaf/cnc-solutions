@@ -127,6 +127,18 @@ Always check interactive states:
 - Dropdown open/close behavior
 - Arrow rotation on submenu toggle (use `rotate-180` class toggle)
 
+## Dynamic CMS Content (`.cms-content`)
+
+Global typography styles (`font-size`, `line-height`, `margin`) for `p`, `ul li`, and `ol li` are scoped under the `.cms-content` class in `global.css`. This prevents them from clashing with Tailwind utility classes.
+
+**Rule:** Any dynamic HTML from Umbraco rendered via `set:html` must be wrapped in a container with `class="cms-content"`:
+
+```astro
+{content && <div class="cms-content" set:html={content} />}
+```
+
+Without `.cms-content`, paragraphs and list items inside CMS content will lack proper font sizing and spacing. Conversely, keeping these styles global would override Tailwind utilities like `m-0` or `text-xs` on regular elements.
+
 ## Theme Reference
 
 Defined in `src/styles/global.css`:
