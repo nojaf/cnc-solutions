@@ -1,0 +1,32 @@
+---
+interface Props {
+  videoId: string;
+  altText?: string;
+  mute?: boolean;
+  controls?: boolean;
+  autoplay?: boolean;
+}
+
+const {
+  videoId,
+  altText = "Video",
+  mute = true,
+  controls = false,
+  autoplay = true,
+} = Astro.props;
+
+const toInt = (b: boolean) => (b ? 1 : 0);
+const url = `https://www.youtube.com/embed/${videoId}?autoplay=${toInt(autoplay)}&loop=1&rel=0&modestbranding=1&controls=${toInt(controls)}&showinfo=0&origin=https://cncsolutions.be&playlist=${videoId}&mute=${toInt(mute)}`;
+---
+
+<div class="video">
+  {videoId && (
+    <iframe
+      class="w-full aspect-video"
+      src={url}
+      title={altText}
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    />
+  )}
+</div>

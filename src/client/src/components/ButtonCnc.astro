@@ -1,0 +1,27 @@
+---
+interface Props {
+  href?: string;
+  dark?: boolean;
+  type?: "button" | "submit";
+}
+
+const { href, dark = false, type } = Astro.props;
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  href={href}
+  type={!href ? type : undefined}
+  class="relative inline-block bg-primary text-white border-2 border-primary py-2 px-6 no-underline hover:bg-white hover:text-primary"
+>
+  <slot />
+  <span
+    class="absolute right-0 bottom-0 w-0 h-0 border-solid border-t-0 border-r-0 border-b-10 border-l-10 border-t-transparent border-r-transparent border-b-primary border-l-transparent"
+  ></span>
+  <span
+    class:list={[
+      "absolute right-[-2px] bottom-[-2px] w-0 h-0 z-2 border-solid border-t-0 border-r-0 border-b-10 border-l-10 border-t-transparent border-r-transparent border-l-transparent",
+      dark ? "border-b-dark" : "border-b-white",
+    ]}
+  ></span>
+</Tag>
