@@ -9,6 +9,7 @@ import type { Culture } from "../lib/umbraco";
 interface Props {
   culture: Culture;
   currentPageId: number;
+  urls: { nl: string; en: string; fr: string };
   seo: {
     title: string;
     description?: string;
@@ -18,7 +19,7 @@ interface Props {
   mainClass?: string;
 }
 
-const { culture, currentPageId, seo, mainClass = "" } = Astro.props;
+const { culture, currentPageId, urls, seo, mainClass = "" } = Astro.props;
 ---
 
 <!doctype html>
@@ -32,7 +33,7 @@ const { culture, currentPageId, seo, mainClass = "" } = Astro.props;
     <SEO {...seo} />
   </head>
   <body>
-    <Navigation culture={culture} currentPageId={currentPageId} />
+    <Navigation culture={culture} currentPageId={currentPageId} urls={urls} />
     <main class={mainClass}>
       <slot />
     </main>

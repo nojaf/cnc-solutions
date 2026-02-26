@@ -10,6 +10,14 @@
   --color-success: #66d4ac;
   --color-body: rgba(65, 64, 66, 1);
   --font-body: "Hind", sans-serif;
+
+  /* Override breakpoints to match Bootstrap 4 */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+
+  --spacing: 4px;
 }
 
 body {

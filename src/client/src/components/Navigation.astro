@@ -1,14 +1,215 @@
 ---
+import { getCollection } from "astro:content";
 import type { Culture } from "../lib/umbraco";
+import { pageInCulture, cultures } from "../lib/umbraco";
+import logo from "../assets/CNC-CMYK.png";
+import menuBar from "../assets/menu-bar@2X.png";
+import NavDropdown from "./NavDropdown.astro";
 
 interface Props {
   culture: Culture;
   currentPageId: number;
+  urls: { nl: string; en: string; fr: string };
 }
 
-const { culture, currentPageId } = Astro.props;
+const { culture, currentPageId, urls } = Astro.props;
+
+// Fetch all navigation data at build time
+const [
+  homeItems,
+  solutionsItems,
+  solutionItems,
+  productsItems,
+  productItems,
+  casesItems,
+  caseItems,
+  aboutItems,
+  teamItems,
+  newsItems,
+  contactItems,
+] = await Promise.all([
+  getCollection("home"),
+  getCollection("solutions"),
+  getCollection("solution"),
+  getCollection("products"),
+  getCollection("product"),
+  getCollection("cases"),
+  getCollection("case"),
+  getCollection("about"),
+  getCollection("team"),
+  getCollection("news"),
+  getCollection("contact"),
+]);
+
+const homePage = pageInCulture(culture, homeItems[0].data);
+const solutionsPage = pageInCulture(culture, solutionsItems[0].data);
+const solutions = solutionItems
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((s) => pageInCulture(culture, s.data));
+const productsPage = pageInCulture(culture, productsItems[0].data);
+const products = productItems
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((p) => pageInCulture(culture, p.data));
+const casesPage = pageInCulture(culture, casesItems[0].data);
+const cases = caseItems
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((c) => pageInCulture(culture, c.data));
+
+// About pages: first is "about us", second is "vacancies"
+const aboutPages = aboutItems
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((a) => pageInCulture(culture, a.data));
+const aboutPage = aboutPages[0];
+const vacancyPage = aboutPages[1];
+
+const teamPage = pageInCulture(culture, teamItems[0].data);
+const newsPage = pageInCulture(culture, newsItems[0].data);
+const contactPage = pageInCulture(culture, contactItems[0].data);
+
+const dropdowns = [
+  {
+    label: solutionsPage.navigationText,
+    href: solutionsPage.url,
+    items: solutions.map((s) => ({ url: s.url, text: s.navigationText })),
+  },
+  {
+    label: productsPage.navigationText,
+    href: productsPage.url,
+    items: products.map((p) => ({ url: p.url, text: p.navigationText })),
+  },
+  {
+    label: casesPage.navigationText,
+    href: casesPage.url,
+    items: cases.map((c) => ({ url: c.url, text: c.title })),
+  },
+  {
+    label: aboutPage.navigationText,
+    href: aboutPage.url,
+    items: [
+      { url: teamPage.url, text: teamPage.navigationText },
+      { url: newsPage.url, text: newsPage.navigationText },
+    ],
+  },
+];
 ---
 
-<nav>
-  <p>Navigation placeholder — culture: {culture}, pageId: {currentPageId}</p>
+<nav
+  class="mx-auto flex items-center justify-between px-4 py-6 lg:max-w-240 lg:py-5 xl:max-w-285 xl:py-8"
+>
+  <a href={homePage.url}>
+    <img src={logo.src} alt="CNC Solutions" class="h-12" />
+  </a>
+
+  <button
+    id="nav-toggle"
+    class="lg:hidden border-none bg-transparent p-0"
+    aria-label="Toggle navigation"
+  >
+    <img src={menuBar.src} class="h-8" alt="" />
+  </button>
+
+  <ul
+    id="nav-menu"
+    class="hidden lg:flex items-center list-none m-0 p-0 ml-auto"
+  >
+    {
+      dropdowns.map((d) => (
+        <NavDropdown label={d.label} href={d.href} items={d.items} />
+      ))
+    }
+
+    <!-- Vacancies (standalone link) -->
+    {
+      vacancyPage && (
+        <li class="mr-1 xl:mr-4">
+          <a
+            href={vacancyPage.url}
+            class="text-dark text-base p-2 no-underline hover:text-primary"
+          >
+            {vacancyPage.navigationText}
+          </a>
+        </li>
+      )
+    }
+
+    <!-- Contact (standalone link) -->
+    <li class="mr-1 xl:mr-4">
+      <a
+        href={contactPage.url}
+        class="text-dark text-base p-2 no-underline hover:text-primary"
+      >
+        {contactPage.navigationText}
+      </a>
+    </li>
+
+    <!-- Language switcher -->
+    <NavDropdown
+      label={culture}
+      items={cultures.map((c) => ({ url: urls[c], text: c }))}
+      alignRight
+    />
+  </ul>
 </nav>
+
+<!-- Mobile menu (hidden by default, toggled via JS) -->
+<div id="nav-mobile-menu" class="hidden lg:hidden bg-primary text-center">
+  <ul class="list-none m-0 p-0">
+    {
+      dropdowns.map((d) => (
+        <NavDropdown label={d.label} href={d.href} items={d.items} />
+      ))
+    }
+
+    <!-- Vacancies (no submenu) -->
+    {
+      vacancyPage && (
+        <li class="border-b border-white">
+          <a
+            href={vacancyPage.url}
+            class="block uppercase font-semibold text-white text-xl leading-10 no-underline py-1"
+          >
+            {vacancyPage.navigationText}
+          </a>
+        </li>
+      )
+    }
+
+    <!-- Contact (no submenu) -->
+    <li class="border-b border-white">
+      <a
+        href={contactPage.url}
+        class="block uppercase font-semibold text-white text-xl leading-10 no-underline py-1"
+      >
+        {contactPage.navigationText}
+      </a>
+    </li>
+
+    <!-- Language switcher -->
+    <NavDropdown
+      label={culture}
+      items={cultures.map((c) => ({ url: urls[c], text: c }))}
+      alignRight
+    />
+  </ul>
+</div>
+
+<script>
+  const toggle = document.getElementById("nav-toggle");
+  const menu = document.getElementById("nav-mobile-menu");
+  toggle?.addEventListener("click", () => {
+    menu?.classList.toggle("hidden");
+  });
+
+  document.querySelectorAll(".mobile-submenu-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const submenu = btn.closest("li")?.querySelector(".mobile-submenu");
+      const arrow = btn.querySelector("span");
+      if (submenu) {
+        submenu.classList.toggle("hidden");
+      }
+      if (arrow) {
+        arrow.classList.toggle("rotate-180");
+      }
+    });
+  });
+</script>
