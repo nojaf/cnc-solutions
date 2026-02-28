@@ -1,7 +1,8 @@
 ---
 import type { Culture } from "../lib/umbraco";
-import { pageInCulture } from "../lib/umbraco";
+import { pageInCulture, getImageParams } from "../lib/umbraco";
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
 import underlineWhite from "../assets/underline-white.png";
 import Video from "./Video.astro";
 import ButtonCnc from "./ButtonCnc.astro";
@@ -41,6 +42,16 @@ if (row.linkUrl && row.linkText) {
 }
 
 const imageRight = row.imageRight ?? false;
+
+// Process remote CMS images through Astro's image pipeline
+const img = row.image
+  ? {
+      small: await getImage(getImageParams(row.image.small)),
+      medium: await getImage(getImageParams(row.image.medium)),
+      tablet: await getImage(getImageParams(row.image.tablet)),
+      desktop: await getImage(getImageParams(row.image.desktop)),
+    }
+  : null;
 ---
 
 <section>
@@ -48,18 +59,13 @@ const imageRight = row.imageRight ?? false;
     <div class:list={["flex flex-wrap", imageRight && "md:flex-row-reverse"]}>
       <div class="w-full md:w-1/2">
         {
-          row.image && (
+          img && (
             <picture>
-              <source media="(min-width: 75em)" srcset={row.image.desktop} />
-              <source media="(min-width: 62em)" srcset={row.image.tablet} />
-              <source media="(min-width: 48em)" srcset={row.image.tablet} />
-              <source media="(min-width: 34em)" srcset={row.image.medium} />
-              <img
-                class="w-full"
-                src={row.image.small}
-                srcset={row.image.small}
-                alt={row.altText || ""}
-              />
+              <source media="(min-width: 75em)" srcset={img.desktop.src} />
+              <source media="(min-width: 62em)" srcset={img.tablet.src} />
+              <source media="(min-width: 48em)" srcset={img.tablet.src} />
+              <source media="(min-width: 34em)" srcset={img.medium.src} />
+              <img class="w-full" src={img.small.src} alt={row.altText || ""} />
             </picture>
           )
         }

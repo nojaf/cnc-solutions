@@ -1,27 +1,42 @@
 ---
+import { getImage } from "astro:assets";
 import BottomEdge from "./BottomEdge.astro";
+import { getImageParams } from "../lib/umbraco";
 
 interface Props {
   currentPage: Record<string, any>;
 }
 
 const { currentPage } = Astro.props;
-const mobile = currentPage.headerImage?.mobile;
-const tablet = currentPage.headerImage?.tablet;
-const desktop = currentPage.headerImage?.desktop;
-const largeDesktop = currentPage.headerImage?.["large-desktop"];
 const alt = currentPage.headerImageAlt ?? "";
+
+const mobile = currentPage.headerImage?.mobile
+  ? await getImage(getImageParams(currentPage.headerImage.mobile))
+  : null;
+const tablet = currentPage.headerImage?.tablet
+  ? await getImage(getImageParams(currentPage.headerImage.tablet))
+  : null;
+const desktop = currentPage.headerImage?.desktop
+  ? await getImage(getImageParams(currentPage.headerImage.desktop))
+  : null;
+const largeDesktop = currentPage.headerImage?.["large-desktop"]
+  ? await getImage(getImageParams(currentPage.headerImage["large-desktop"]))
+  : null;
 ---
 
 <header
   class="relative min-h-[60vw] md:min-h-[41vw] md:h-[41vw] md:overflow-y-hidden lg:min-h-[30vw] lg:h-[30vw] xl:min-h-[20vw] xl:h-[20vw]"
 >
   <picture>
-    {largeDesktop && <source media="(min-width: 75em)" srcset={largeDesktop} />}
-    {desktop && <source media="(min-width: 62em)" srcset={desktop} />}
-    {tablet && <source media="(min-width: 48em)" srcset={tablet} />}
-    {mobile && <source media="(min-width: 34em)" srcset={mobile} />}
-    <img class="w-full" src={mobile} srcset={mobile} alt={alt} />
+    {
+      largeDesktop && (
+        <source media="(min-width: 75em)" srcset={largeDesktop.src} />
+      )
+    }
+    {desktop && <source media="(min-width: 62em)" srcset={desktop.src} />}
+    {tablet && <source media="(min-width: 48em)" srcset={tablet.src} />}
+    {mobile && <source media="(min-width: 34em)" srcset={mobile.src} />}
+    <img class="w-full" src={mobile?.src} alt={alt} />
   </picture>
   <BottomEdge variant="white" absolute />
 </header>

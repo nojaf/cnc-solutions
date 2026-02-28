@@ -1,11 +1,12 @@
 ---
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import PageIntroduction from "../components/PageIntroduction.astro";
 import underlineWhite from "../assets/underline-white.png";
 import type { Culture } from "../lib/umbraco";
-import { pageInCulture } from "../lib/umbraco";
+import { pageInCulture, getImageParams } from "../lib/umbraco";
 
 interface Props {
   culture: Culture;
@@ -26,6 +27,10 @@ const members = allMembers
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
   .map((m) => pageInCulture(culture, m.data))
   .filter((m: any) => m.photo);
+
+const processedPhotos = await Promise.all(
+  members.map(async (m: any) => getImage(getImageParams(m.photo.main))),
+);
 ---
 
 <BaseLayout
@@ -45,10 +50,10 @@ const members = allMembers
     class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285 flex flex-col md:flex-row md:flex-wrap md:justify-around gap-10 whitespace-nowrap"
   >
     {
-      members.map((m: any) => (
+      members.map((m: any, i: number) => (
         <div class="text-center md:mb-10 md:basis-[calc(50%-20px)] md:max-w-[calc(50%-20px)] lg:basis-[calc(33%-20px)] lg:max-w-[calc(33%-20px)] xl:basis-[calc(25%-20px)] xl:max-w-[calc(25%-20px)]">
           <img
-            src={m.photo.main}
+            src={processedPhotos[i].src}
             alt={`${m.firstName} ${m.lastName}`}
             class="w-4/5 sm:w-2/3 md:w-full mb-4 inline-block"
           />

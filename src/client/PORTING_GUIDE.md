@@ -127,6 +127,93 @@ Always check interactive states:
 - Dropdown open/close behavior
 - Arrow rotation on submenu toggle (use `rotate-180` class toggle)
 
+## CMS Images — `getImage()` Pipeline
+
+All images served from the Umbraco backend (`cncsolutions-backend.azurewebsites.net`) **must** be processed through Astro's image pipeline at build time. This eliminates the runtime dependency on the backend — the production site serves only local, optimized files.
+
+The domain is already authorized in `astro.config.mjs`:
+
+```js
+image: {
+  domains: ["cncsolutions-backend.azurewebsites.net"],
+}
+```
+
+### `getImageParams()` helper
+
+CMS image URLs include `width` and `height` query parameters (e.g. `?width=500&height=333`). The `getImageParams()` helper in `src/lib/umbraco.ts` parses these to pass explicit dimensions to `getImage()`, avoiding the extra network round-trip that `inferSize` requires. When the URL lacks these params, it falls back to `inferSize: true`.
+
+```ts
+import { getImageParams } from "../lib/umbraco";
+import { getImage } from "astro:assets";
+
+// Returns { src, width, height } or { src, inferSize: true }
+const processed = await getImage(getImageParams(remoteUrl));
+```
+
+**Always use `getImageParams()` instead of `inferSize: true` directly.**
+
+### Single-URL images
+
+For images with a single remote URL (e.g. team photos, news images), use `getImage()` with `getImageParams()` in the frontmatter and pass the result's `.src` to a plain `<img>` tag:
+
+```astro
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+
+const processed = await getImage(getImageParams(remoteUrl));
+---
+
+<img src={processed.src} alt="..." class="w-full" />
+```
+
+### Responsive `<picture>` with multiple URLs
+
+The CMS provides different image URLs per breakpoint (different crops/sizes, not just formats). Use `getImage()` with `getImageParams()` for each variant in the frontmatter, then use the local URLs in `<source>` and `<img>` tags:
+
+```astro
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+
+const mobile = await getImage(getImageParams(data.mobile));
+const tablet = await getImage(getImageParams(data.tablet));
+const desktop = await getImage(getImageParams(data.desktop));
+---
+
+<picture>
+  <source media="(min-width: 62em)" srcset={desktop.src} />
+  <source media="(min-width: 48em)" srcset={tablet.src} />
+  <img src={mobile.src} alt="..." class="w-full" />
+</picture>
+```
+
+### Batch processing in loops
+
+When images are inside a `.map()` loop (e.g. news thumbnails, team members), process all images upfront in the frontmatter with `Promise.all`, then reference them by index in the template:
+
+```astro
+---
+import { getImageParams } from "../lib/umbraco";
+
+const processedImages = await Promise.all(
+  items.map(async (item) => {
+    if (!item.image) return null;
+    return getImage(getImageParams(item.image));
+  }),
+);
+---
+
+{items.map((item, i) => <img src={processedImages[i]?.src} alt={item.title} />)}
+```
+
+### Important: Do NOT use plain `<img src={remoteUrl}>`
+
+Plain `<img>` tags with remote URLs bypass Astro's pipeline entirely. The images will still reference the backend domain in the built output. Always use `getImage()` (or Astro's `<Image>` component) for CMS images.
+
+Local assets (logos, icons, decorative images) imported via `import` statements are already handled by Astro's build — no changes needed for those.
+
 ## Dynamic CMS Content (`.cms-content`)
 
 Global typography styles (`font-size`, `line-height`, `margin`) for `p`, `ul li`, and `ol li` are scoped under the `.cms-content` class in `global.css`. This prevents them from clashing with Tailwind utility classes.
@@ -172,4 +259,5 @@ Defined in `src/styles/global.css`:
 - [ ] Verify desktop hover behavior
 - [ ] Verify mobile click/toggle behavior
 - [ ] Compare computed styles between both sites at all breakpoints
+- [ ] Process all CMS images through `getImage()` — no plain `<img src={remoteUrl}>`
 - [ ] Check for Tailwind warnings (prefer built-in classes over bracket notation)

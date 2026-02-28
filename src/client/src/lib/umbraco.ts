@@ -99,6 +99,30 @@ export function pageInCulture<T extends Record<string, any>>(
   return result;
 }
 
+/**
+ * Build `getImage()` params from a CMS image URL.
+ * Extracts `width` and `height` from the query string when available,
+ * avoiding the extra network round-trip that `inferSize` requires.
+ */
+export function getImageParams(src: string): {
+  src: string;
+  width?: number;
+  height?: number;
+  inferSize?: boolean;
+} {
+  try {
+    const url = new URL(src);
+    const w = url.searchParams.get("width");
+    const h = url.searchParams.get("height");
+    if (w && h) {
+      return { src, width: Number(w), height: Number(h) };
+    }
+  } catch {
+    // not a valid URL, fall through
+  }
+  return { src, inferSize: true };
+}
+
 export function wrapIfSingleton<T>(a: T | T[] | null | undefined): T[] {
   if (!a) return [];
   return Array.isArray(a) ? a : [a];
