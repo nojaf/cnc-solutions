@@ -1,0 +1,179 @@
+---
+export interface Slide {
+  href: string;
+  altText: string;
+  phone: string;
+  tablet?: string;
+  desktop?: string;
+  largeDesktop?: string;
+  imgClass?: string;
+  overlay?: {
+    icon: string;
+    title: string;
+  };
+}
+
+interface Props {
+  id: string;
+  theme?: "dark" | "light";
+  slides: Slide[];
+  showIndicators?: boolean;
+}
+
+const { id, theme = "dark", slides, showIndicators = true } = Astro.props;
+---
+
+<div class="carousel relative" id={id}>
+  {/* Slides */}
+  <div class="overflow-hidden relative">
+    <div
+      class="carousel-track flex transition-transform duration-500 ease-in-out"
+    >
+      {
+        slides.map((s) => (
+          <a href={s.href} class="min-w-full w-full shrink-0 relative block">
+            <picture>
+              {s.largeDesktop && (
+                <source media="(min-width: 75em)" srcset={s.largeDesktop} />
+              )}
+              {s.desktop && (
+                <source media="(min-width: 62em)" srcset={s.desktop} />
+              )}
+              {s.tablet && (
+                <source media="(min-width: 48em)" srcset={s.tablet} />
+              )}
+              {s.tablet && (
+                <source media="(min-width: 34em)" srcset={s.tablet} />
+              )}
+              <img
+                src={s.phone}
+                alt={s.altText}
+                class:list={["block mx-auto", s.imgClass ?? "w-full"]}
+              />
+            </picture>
+            {s.overlay && (
+              <Fragment>
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-38 md:w-125 md:h-59 bg-black/50 z-1" />
+                <div class="absolute inset-0 flex flex-col items-center pt-5 sm:pt-5 z-2">
+                  <img
+                    src={s.overlay.icon}
+                    alt={s.overlay.title}
+                    class="w-25"
+                  />
+                  <h5 class="uppercase font-bold text-base -mt-1">
+                    {s.overlay.title}
+                  </h5>
+                </div>
+              </Fragment>
+            )}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  {/* Indicators */}
+  {
+    showIndicators && (
+      <div class="flex justify-center gap-3 mt-12">
+        {slides.map((_, i) => (
+          <button
+            class:list={[
+              "carousel-dot w-3 h-3 cursor-pointer relative",
+              theme === "dark" ? "bg-white" : "bg-dark",
+            ]}
+            data-slide-to={i}
+            aria-label={`Slide ${i + 1}`}
+          >
+            <svg
+              class:list={[
+                "absolute inset-0 w-3 h-3",
+                i === 0 ? "block" : "hidden",
+              ]}
+              viewBox="0 0 12 12"
+            >
+              <polygon points="0,0 12,12 0,12" fill="var(--color-primary)" />
+            </svg>
+          </button>
+        ))}
+      </div>
+    )
+  }
+
+  {/* Controls */}
+  <button
+    class="carousel-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-4 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+    aria-label="Previous"
+  >
+    <svg
+      class="w-4 h-5"
+      viewBox="0 0 8 8"
+      fill={theme === "dark" ? "white" : "var(--color-primary)"}
+    >
+      <path d="M5.25 0l-4 4 4 4 1.5-1.5L4.25 4l2.5-2.5L5.25 0z"></path>
+    </svg>
+  </button>
+  <button
+    class="carousel-next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-4 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+    aria-label="Next"
+  >
+    <svg
+      class="w-4 h-5"
+      viewBox="0 0 8 8"
+      fill={theme === "dark" ? "white" : "var(--color-primary)"}
+    >
+      <path d="M2.75 0l-1.5 1.5L3.75 4l-2.5 2.5L2.75 8l4-4-4-4z"></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  function initCarousel(id: string) {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const track = container.querySelector<HTMLElement>(".carousel-track");
+    const dots = container.querySelectorAll<HTMLElement>(".carousel-dot");
+    const slideCount = track?.children.length ?? 0;
+    if (!track || slideCount === 0) return;
+    let current = 0;
+    let timer: ReturnType<typeof setInterval>;
+
+    function show(index: number) {
+      track!.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((d, i) => {
+        const triangle = d.querySelector("svg");
+        if (triangle) {
+          triangle.classList.toggle("block", i === index);
+          triangle.classList.toggle("hidden", i !== index);
+        }
+      });
+      current = index;
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => show((current + 1) % slideCount), 5000);
+    }
+
+    container.querySelector(".carousel-prev")?.addEventListener("click", () => {
+      show((current - 1 + slideCount) % slideCount);
+      resetTimer();
+    });
+    container.querySelector(".carousel-next")?.addEventListener("click", () => {
+      show((current + 1) % slideCount);
+      resetTimer();
+    });
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => {
+        show(i);
+        resetTimer();
+      });
+    });
+
+    resetTimer();
+  }
+
+  document.querySelectorAll(".carousel").forEach((el) => {
+    if (el.id) initCarousel(el.id);
+  });
+</script>

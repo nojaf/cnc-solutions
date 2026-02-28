@@ -1,0 +1,102 @@
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+import BottomEdge from "./BottomEdge.astro";
+import ButtonCnc from "./ButtonCnc.astro";
+
+interface Props {
+  aboveSlogan: string;
+  slogan: string;
+  mobilePlaceholder?: string;
+  firstFrameVideo?: string;
+  primaryLinkUrl?: string;
+  primaryLinkText?: string;
+}
+
+const {
+  aboveSlogan,
+  slogan,
+  mobilePlaceholder,
+  firstFrameVideo,
+  primaryLinkUrl,
+  primaryLinkText,
+} = Astro.props;
+
+const showLink = primaryLinkText && primaryLinkUrl;
+
+const poster = firstFrameVideo
+  ? await getImage(getImageParams(firstFrameVideo))
+  : null;
+const mobileBg = mobilePlaceholder
+  ? await getImage(getImageParams(mobilePlaceholder))
+  : null;
+---
+
+<section
+  id="hero"
+  class="relative box-border min-h-70 h-[calc(50vw+3rem)] sm:h-auto sm:max-h-[calc(100vh-5rem)] lg:max-h-[calc(100vh-7rem)] bg-cover text-white text-center flex flex-col"
+>
+  <div
+    class="m-auto relative z-10 px-4 w-full md:max-w-180 lg:max-w-240 xl:max-w-285 lg:text-left lg:box-content lg:min-h-150 lg:pt-48 lg:pb-48"
+  >
+    <p class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light">
+      {aboveSlogan}
+    </p>
+    <h1
+      class="w-1/2 mx-auto text-3xl font-bold leading-9 uppercase lg:text-5xl lg:leading-14 lg:w-auto lg:mx-0 lg:text-left"
+    >
+      {slogan}
+    </h1>
+    {
+      showLink && (
+        <div class="mt-2 lg:mt-8">
+          <ButtonCnc href={primaryLinkUrl}>{primaryLinkText}</ButtonCnc>
+        </div>
+      )
+    }
+  </div>
+  {
+    mobileBg && (
+      <div
+        class="block sm:hidden absolute inset-0 z-0 bg-cover bg-no-repeat"
+        style={`background-image: url(${mobileBg.src})`}
+      />
+    )
+  }
+  <div class="hidden sm:block absolute inset-0 z-0 overflow-hidden">
+    <video
+      class="w-full h-full object-cover"
+      autoplay
+      loop
+      muted
+      playsinline
+      poster={poster?.src}
+    >
+      <source src="/videos/home.mp4" type="video/mp4" />
+      <source src="/videos/home.webm" type="video/webm" />
+    </video>
+  </div>
+  <div class="absolute inset-0 bg-black/50 z-1"></div>
+  <div class="absolute bottom-0 left-0 w-full z-20">
+    <BottomEdge variant="dark" />
+  </div>
+</section>
+
+<script>
+  const hero = document.getElementById("hero");
+  const video = hero?.querySelector("video");
+  if (hero && video) {
+    function updateHeight() {
+      const w = video!.videoWidth;
+      const h = video!.videoHeight;
+      if (w && h) {
+        const maxH = parseFloat(getComputedStyle(hero!).maxHeight) || Infinity;
+        const videoH = hero!.offsetWidth * (h / w);
+        hero!.style.minHeight = `${Math.min(videoH, maxH)}px`;
+      }
+    }
+
+    video.addEventListener("loadedmetadata", updateHeight);
+    new ResizeObserver(updateHeight).observe(hero);
+  }
+</script>

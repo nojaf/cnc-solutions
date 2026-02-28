@@ -1,0 +1,121 @@
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+import underlineDark from "../assets/underline-dark.png";
+import underlineWhite from "../assets/underline-white.png";
+import ButtonCnc from "./ButtonCnc.astro";
+import Carousel from "./Carousel.astro";
+
+interface SlideData {
+  href: string;
+  images: {
+    phone: string;
+    tablet: string;
+    desktop: string;
+    largeDesktop: string;
+  };
+  altText: string;
+}
+
+interface Props {
+  id: string;
+  theme: "dark" | "light";
+  aboveTitle: string;
+  title: string;
+  lead: string;
+  linkHref: string;
+  linkText: string;
+  slides: SlideData[];
+  textPosition?: "left" | "right";
+}
+
+const {
+  id,
+  theme,
+  aboveTitle,
+  title,
+  lead,
+  linkHref,
+  linkText,
+  slides,
+  textPosition = "left",
+} = Astro.props;
+
+const underline = theme === "dark" ? underlineDark : underlineWhite;
+
+const carouselSlides = await Promise.all(
+  slides.map(async (s) => {
+    const [phone, tablet, desktop, largeDesktop] = await Promise.all([
+      getImage(getImageParams(s.images.phone)),
+      getImage(getImageParams(s.images.tablet)),
+      getImage(getImageParams(s.images.desktop)),
+      getImage(getImageParams(s.images.largeDesktop)),
+    ]);
+    return {
+      href: s.href,
+      altText: s.altText,
+      phone: phone.src,
+      tablet: tablet.src,
+      desktop: desktop.src,
+      largeDesktop: largeDesktop.src,
+    };
+  }),
+);
+---
+
+<section
+  class:list={["py-12", theme === "dark" ? "bg-dark text-white" : "bg-white"]}
+>
+  <div class="mx-auto p-0 md:max-w-180 lg:max-w-240 xl:max-w-285">
+    <div class="flex flex-wrap">
+      {/* Text column */}
+      <div
+        class:list={[
+          "w-full px-4 lg:w-5/12",
+          textPosition === "left" ? "lg:order-0" : "lg:order-1",
+        ]}
+      >
+        <div class="text-center lg:text-left">
+          <h3
+            class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light m-0 mx-auto lg:mx-0 lowercase"
+          >
+            {aboveTitle}
+          </h3>
+          <h2
+            class="uppercase text-[30px] leading-9 lg:text-5xl lg:leading-12 font-bold m-0 mx-auto max-w-1/2 lg:max-w-none"
+          >
+            {title}
+          </h2>
+          <img src={underline.src} alt="" class="block mx-auto mb-7 h-1 w-6" />
+          {lead && <div class="cms-content text-left" set:html={lead} />}
+          {
+            linkHref && linkText && (
+              <div class="hidden lg:block text-left mt-5">
+                <ButtonCnc href={linkHref}>{linkText}</ButtonCnc>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      {/* Carousel column */}
+      <div
+        class:list={[
+          "w-full px-4 lg:w-7/12",
+          textPosition === "left" ? "lg:order-1" : "lg:order-0",
+        ]}
+      >
+        <Carousel id={id} theme={theme} slides={carouselSlides} />
+      </div>
+
+      {/* Mobile button */}
+      {
+        linkHref && linkText && (
+          <div class="w-full lg:hidden text-center mt-4">
+            <ButtonCnc href={linkHref}>{linkText}</ButtonCnc>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

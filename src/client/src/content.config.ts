@@ -60,6 +60,20 @@ const localizedThumbnailImage = z.object({
   fr: thumbnailResponsiveImage.nullable(),
 });
 
+// Slide / homeRow images use: phone, tablet, desktop, largeDesktop
+const slideResponsiveImage = z.object({
+  phone: z.string(),
+  tablet: z.string(),
+  desktop: z.string(),
+  largeDesktop: z.string(),
+});
+
+const localizedSlideImage = z.object({
+  nl: slideResponsiveImage.nullable(),
+  en: slideResponsiveImage.nullable(),
+  fr: slideResponsiveImage.nullable(),
+});
+
 // Shared fields present on every page-level node
 const baseSchema = z.object({
   umbracoId: z.number(),
@@ -127,6 +141,30 @@ export const collections = {
           .optional(),
         altText: localizedOptionalString.optional(),
         videoId: localizedOptionalString.optional(),
+      })
+      .passthrough(),
+  }),
+  homeRow: defineCollection({
+    loader: umbracoLoader("homeRow"),
+    schema: baseSchema
+      .extend({
+        theme: localizedOptionalString.optional(),
+        aboveTitle: localizedOptionalString.optional(),
+        title: localizedString,
+        lead: localizedOptionalString.optional(),
+        linkText: localizedOptionalString.optional(),
+        linkNode: z
+          .object({
+            nl: z.number().nullable().optional(),
+            en: z.number().nullable().optional(),
+            fr: z.number().nullable().optional(),
+          })
+          .optional(),
+        imageRight: localizedBoolean.optional(),
+        image: localizedSlideImage.optional(),
+        altText: localizedOptionalString.optional(),
+        videoId: localizedOptionalString.optional(),
+        fileDownloadFile: localizedOptionalString.optional(),
       })
       .passthrough(),
   }),
