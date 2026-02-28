@@ -1,0 +1,66 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import underlineWhite from "../assets/underline-white.png";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+const allTeam = await getCollection("team");
+const teamEntry = allTeam.find((t) => t.data.umbracoId === umbracoId);
+const team = pageInCulture(culture, teamEntry!.data);
+
+const allMembers = await getCollection("teamMember");
+const members = allMembers
+  .filter((m) => m.data.parentId === umbracoId)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((m) => pageInCulture(culture, m.data))
+  .filter((m: any) => m.photo);
+---
+
+<BaseLayout
+  culture={culture}
+  currentPageId={umbracoId}
+  urls={urls}
+  seo={seo}
+  mainClass="pb-12"
+>
+  <Header currentPage={team} />
+  <PageIntroduction
+    aboveTitle={team.aboveTitle}
+    title={team.title}
+    lead={team.lead}
+  />
+  <div
+    class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285 flex flex-col md:flex-row md:flex-wrap md:justify-around gap-10 whitespace-nowrap"
+  >
+    {
+      members.map((m: any) => (
+        <div class="text-center md:basis-[calc(50%-20px)] md:max-w-[calc(50%-20px)] lg:basis-[calc(33%-20px)] lg:max-w-[calc(33%-20px)] xl:basis-[calc(25%-20px)] xl:max-w-[calc(25%-20px)]">
+          <img
+            src={m.photo.main}
+            alt={`${m.firstName} ${m.lastName}`}
+            class="w-4/5 sm:w-2/3 md:w-full mb-4 inline-block"
+          />
+          <h4 class="text-base font-thin lg:font-light leading-5 lg:leading-10 mb-2 m-0">
+            {m.function}
+          </h4>
+          <h3 class="text-7 leading-8 font-medium m-0">
+            {m.firstName} {m.lastName}
+          </h3>
+          <img src={underlineWhite.src} alt="" class="inline-block my-2 w-6" />
+        </div>
+      ))
+    }
+  </div>
+</BaseLayout>

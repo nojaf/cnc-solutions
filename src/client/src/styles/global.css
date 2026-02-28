@@ -30,11 +30,11 @@ body {
 .cms-content p,
 .cms-content ul li,
 .cms-content ol li {
-  font-size: 1.1rem;
-  line-height: 1.7rem;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .cms-content p {
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   margin-top: 0;
 }

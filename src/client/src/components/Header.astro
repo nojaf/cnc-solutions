@@ -9,7 +9,7 @@ const { currentPage } = Astro.props;
 const mobile = currentPage.headerImage?.mobile;
 const tablet = currentPage.headerImage?.tablet;
 const desktop = currentPage.headerImage?.desktop;
-const largeDesktop = currentPage.headerImage?.large_desktop;
+const largeDesktop = currentPage.headerImage?.["large-desktop"];
 const alt = currentPage.headerImageAlt ?? "";
 ---
 

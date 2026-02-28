@@ -6,15 +6,17 @@ import { cultures } from "../lib/umbraco";
 import Home from "../templates/Home.astro";
 import Solutions from "../templates/Solutions.astro";
 import About from "../templates/About.astro";
+import Team from "../templates/Team.astro";
 
 const templateMap: Record<string, any> = {
   home: Home,
   solutions: Solutions,
   about: About,
+  team: Team,
 };
 
 export async function getStaticPaths() {
-  const pageCollections = ["home", "solutions", "about"] as const;
+  const pageCollections = ["home", "solutions", "about", "team"] as const;
   const paths: Array<{
     params: { slug: string | undefined };
     props: {

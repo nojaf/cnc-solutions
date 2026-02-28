@@ -147,7 +147,39 @@ export const collections = {
   }),
   team: defineCollection({
     loader: umbracoLoader("team"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        lead: localizedString,
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: z
+          .object({
+            nl: z.array(z.string()).nullable().optional(),
+            en: z.array(z.string()).nullable().optional(),
+            fr: z.array(z.string()).nullable().optional(),
+          })
+          .optional(),
+      })
+      .passthrough(),
+  }),
+  teamMember: defineCollection({
+    loader: umbracoLoader("teamMember"),
+    schema: baseSchema
+      .extend({
+        firstName: localizedString,
+        lastName: localizedString,
+        function: localizedString,
+        photo: z.object({
+          nl: z.object({ main: z.string() }).nullable(),
+          en: z.object({ main: z.string() }).nullable(),
+          fr: z.object({ main: z.string() }).nullable(),
+        }),
+      })
+      .passthrough(),
   }),
   news: defineCollection({
     loader: umbracoLoader("news"),
