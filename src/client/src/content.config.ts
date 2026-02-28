@@ -47,6 +47,19 @@ const localizedContentImage = z.object({
   fr: contentResponsiveImage.nullable(),
 });
 
+// Thumbnail images use: mobile, tablet, desktop
+const thumbnailResponsiveImage = z.object({
+  mobile: z.string(),
+  tablet: z.string(),
+  desktop: z.string(),
+});
+
+const localizedThumbnailImage = z.object({
+  nl: thumbnailResponsiveImage.nullable(),
+  en: thumbnailResponsiveImage.nullable(),
+  fr: thumbnailResponsiveImage.nullable(),
+});
+
 // Shared fields present on every page-level node
 const baseSchema = z.object({
   umbracoId: z.number(),
@@ -183,10 +196,46 @@ export const collections = {
   }),
   news: defineCollection({
     loader: umbracoLoader("news"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedOptionalString.optional(),
+        title: localizedString,
+        lead: localizedOptionalString.optional(),
+        readMoreText: localizedString,
+        previousNewsLinkText: localizedOptionalString.optional(),
+        nextNewsLinkText: localizedOptionalString.optional(),
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: z
+          .object({
+            nl: z.array(z.string()).nullable().optional(),
+            en: z.array(z.string()).nullable().optional(),
+            fr: z.array(z.string()).nullable().optional(),
+          })
+          .optional(),
+      })
+      .passthrough(),
   }),
   newsPage: defineCollection({
     loader: umbracoLoader("newsPage"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        title: localizedString,
+        publicationDate: localizedString,
+        thumbnail: localizedThumbnailImage,
+        overviewLead: localizedOptionalString.optional(),
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: z
+          .object({
+            nl: z.array(z.string()).nullable().optional(),
+            en: z.array(z.string()).nullable().optional(),
+            fr: z.array(z.string()).nullable().optional(),
+          })
+          .optional(),
+      })
+      .passthrough(),
   }),
 };

@@ -1,0 +1,135 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import ButtonCnc from "../components/ButtonCnc.astro";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+const allNews = await getCollection("news");
+const newsEntry = allNews.find((n) => n.data.umbracoId === umbracoId);
+const news = pageInCulture(culture, newsEntry!.data);
+
+const allNewsPages = await getCollection("newsPage");
+const newsPages = allNewsPages
+  .filter((np) => np.data.parentId === umbracoId)
+  .map((np) => pageInCulture(culture, np.data))
+  .sort(
+    (a: any, b: any) =>
+      new Date(b.publicationDate).getTime() -
+      new Date(a.publicationDate).getTime(),
+  );
+
+const monthNames: Record<string, string[]> = {
+  nl: [
+    "januari",
+    "februari",
+    "maart",
+    "april",
+    "mei",
+    "juni",
+    "juli",
+    "augustus",
+    "september",
+    "oktober",
+    "november",
+    "december",
+  ],
+  en: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+  fr: [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre",
+  ],
+};
+
+function formatDate(dateStr: string, lang: string): string {
+  const d = new Date(dateStr);
+  const day = d.getDate().toString().padStart(2, "0");
+  const month = monthNames[lang]?.[d.getMonth()] ?? "";
+  return `${day} ${month} ${d.getFullYear()}`;
+}
+---
+
+<BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
+  <Header currentPage={news} />
+  <PageIntroduction
+    aboveTitle={news.aboveTitle}
+    title={news.title}
+    lead={news.lead}
+  />
+  <div class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285 my-16">
+    {
+      newsPages.map((np: any) => {
+        const date = formatDate(np.publicationDate, culture);
+        return (
+          <article class="-mx-4 block lg:flex lg:flex-wrap mb-16 md:mb-24 first:mt-0 last:mb-0">
+            <picture class="block w-full px-4 lg:w-1/2">
+              {np.thumbnail?.desktop && (
+                <source
+                  media="(min-width: 75em)"
+                  srcset={np.thumbnail.desktop}
+                />
+              )}
+              {np.thumbnail?.tablet && (
+                <source
+                  media="(min-width: 62em)"
+                  srcset={np.thumbnail.tablet}
+                />
+              )}
+              <img src={np.thumbnail?.mobile} alt={np.title} class="w-full" />
+            </picture>
+            <div class="w-full px-4 lg:w-1/2">
+              <time class="block text-center lg:text-left text-xl leading-10 font-light text-primary my-2">
+                {date}
+              </time>
+              <h3 class="text-3xl font-light m-0 lg:mt-8 text-dark">
+                {np.title}
+              </h3>
+              {np.overviewLead && (
+                <p class="mt-2 mb-4 text-lg whitespace-nowrap overflow-hidden text-ellipsis text-[rgb(108,117,125)]">
+                  {np.overviewLead}
+                </p>
+              )}
+              <div class="mt-8">
+                <ButtonCnc href={np.url}>{news.readMoreText}</ButtonCnc>
+              </div>
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+</BaseLayout>

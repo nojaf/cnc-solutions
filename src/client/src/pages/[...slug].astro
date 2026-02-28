@@ -7,16 +7,24 @@ import Home from "../templates/Home.astro";
 import Solutions from "../templates/Solutions.astro";
 import About from "../templates/About.astro";
 import Team from "../templates/Team.astro";
+import News from "../templates/News.astro";
 
 const templateMap: Record<string, any> = {
   home: Home,
   solutions: Solutions,
   about: About,
   team: Team,
+  news: News,
 };
 
 export async function getStaticPaths() {
-  const pageCollections = ["home", "solutions", "about", "team"] as const;
+  const pageCollections = [
+    "home",
+    "solutions",
+    "about",
+    "team",
+    "news",
+  ] as const;
   const paths: Array<{
     params: { slug: string | undefined };
     props: {
