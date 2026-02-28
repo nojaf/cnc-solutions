@@ -1,0 +1,135 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import NewsTextBlock from "../components/NewsTextBlock.astro";
+import NewsImageBlock from "../components/NewsImageBlock.astro";
+import NewsVideoBlock from "../components/NewsVideoBlock.astro";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+// Fetch current news page
+const allNewsPages = await getCollection("newsPage");
+const newsPageEntry = allNewsPages.find((n) => n.data.umbracoId === umbracoId);
+const newsPage = pageInCulture(culture, newsPageEntry!.data);
+
+// Fetch content blocks
+const allTexts = await getCollection("newsText");
+const texts = allTexts
+  .filter((t) => t.data.parentId === umbracoId)
+  .map((t) => ({ ...pageInCulture(culture, t.data), kind: "newsText" }));
+
+const allImages = await getCollection("newsImage");
+const images = allImages
+  .filter((i) => i.data.parentId === umbracoId)
+  .map((i) => ({ ...pageInCulture(culture, i.data), kind: "newsImage" }));
+
+const allVideos = await getCollection("newsVideo");
+const videos = allVideos
+  .filter((v) => v.data.parentId === umbracoId)
+  .map((v) => ({ ...pageInCulture(culture, v.data), kind: "newsVideo" }));
+
+const blocks = [...texts, ...images, ...videos].sort(
+  (a: any, b: any) => a.sortOrder - b.sortOrder || a.umbracoId - b.umbracoId,
+);
+
+// Fetch parent news entry for prev/next link text
+const parentId = newsPageEntry!.data.parentId;
+const allNews = await getCollection("news");
+const newsEntry = allNews.find((n) => n.data.umbracoId === parentId);
+const news = pageInCulture(culture, newsEntry!.data);
+
+// Determine previous/next news pages
+const siblingPages = allNewsPages
+  .filter(
+    (np) => np.data.parentId === parentId && np.data.umbracoId !== umbracoId,
+  )
+  .map((np) => {
+    const page = pageInCulture(culture, np.data);
+    return { ...page, publicationDate: new Date(page.publicationDate) };
+  })
+  .sort(
+    (a: any, b: any) =>
+      a.publicationDate.getTime() - b.publicationDate.getTime(),
+  );
+
+const currentDate = new Date((newsPage as any).publicationDate);
+const previousNews = siblingPages.findLast(
+  (p: any) => p.publicationDate.getTime() < currentDate.getTime(),
+);
+const nextNews = siblingPages.find(
+  (p: any) => p.publicationDate.getTime() > currentDate.getTime(),
+);
+---
+
+<BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
+  <Header currentPage={newsPage} />
+  <PageIntroduction
+    aboveTitle={(newsPage as any).aboveTitle}
+    title={(newsPage as any).title}
+    lead={(newsPage as any).lead}
+  />
+  <div class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285">
+    {
+      blocks.map((block: any) => {
+        switch (block.kind) {
+          case "newsText":
+            return <NewsTextBlock content={block.content} />;
+          case "newsImage":
+            return (
+              <NewsImageBlock
+                image={block.image}
+                altText={block.altText}
+                caption={block.caption}
+                isFullWidth={block.isFullWidth}
+              />
+            );
+          case "newsVideo":
+            return <NewsVideoBlock videoId={block.videoId} />;
+          default:
+            return null;
+        }
+      })
+    }
+  </div>
+  <div
+    id="news-detail-navigation"
+    class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285 flex justify-between items-center my-16"
+  >
+    {
+      previousNews ? (
+        <a href={(previousNews as any).url}>
+          {(news as any).previousNewsLinkText}
+        </a>
+      ) : (
+        <span>&nbsp;</span>
+      )
+    }
+    {
+      nextNews && (
+        <a href={(nextNews as any).url}>{(news as any).nextNewsLinkText}</a>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  #news-detail-navigation :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  #news-detail-navigation :global(a:hover) {
+    color: color-mix(in srgb, var(--color-primary) 75%, black);
+  }
+</style>

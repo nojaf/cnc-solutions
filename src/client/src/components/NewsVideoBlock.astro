@@ -1,0 +1,15 @@
+---
+import Video from "./Video.astro";
+
+interface Props {
+  videoId: string;
+}
+
+const { videoId } = Astro.props;
+---
+
+<div class="my-16">
+  <div class="md:w-4/5 md:mx-auto">
+    <Video videoId={videoId} autoplay={false} controls={true} mute={false} />
+  </div>
+</div>

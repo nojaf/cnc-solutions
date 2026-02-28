@@ -224,6 +224,10 @@ export const collections = {
       .extend({
         title: localizedString,
         publicationDate: localizedString,
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedOptionalString.optional(),
+        lead: localizedOptionalString.optional(),
         thumbnail: localizedThumbnailImage,
         overviewLead: localizedOptionalString.optional(),
         navigationText: localizedOptionalString.optional(),
@@ -235,6 +239,33 @@ export const collections = {
             fr: z.array(z.string()).nullable().optional(),
           })
           .optional(),
+      })
+      .passthrough(),
+  }),
+  newsText: defineCollection({
+    loader: umbracoLoader("newsText"),
+    schema: baseSchema
+      .extend({
+        content: localizedOptionalString.optional(),
+      })
+      .passthrough(),
+  }),
+  newsImage: defineCollection({
+    loader: umbracoLoader("newsImage"),
+    schema: baseSchema
+      .extend({
+        image: localizedOptionalString.optional(),
+        altText: localizedOptionalString.optional(),
+        caption: localizedOptionalString.optional(),
+        isFullWidth: localizedBoolean.optional(),
+      })
+      .passthrough(),
+  }),
+  newsVideo: defineCollection({
+    loader: umbracoLoader("newsVideo"),
+    schema: baseSchema
+      .extend({
+        videoId: localizedOptionalString.optional(),
       })
       .passthrough(),
   }),

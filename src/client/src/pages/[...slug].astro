@@ -8,6 +8,7 @@ import Solutions from "../templates/Solutions.astro";
 import About from "../templates/About.astro";
 import Team from "../templates/Team.astro";
 import News from "../templates/News.astro";
+import NewsPage from "../templates/NewsPage.astro";
 
 const templateMap: Record<string, any> = {
   home: Home,
@@ -15,6 +16,7 @@ const templateMap: Record<string, any> = {
   about: About,
   team: Team,
   news: News,
+  newsPage: NewsPage,
 };
 
 export async function getStaticPaths() {
@@ -24,6 +26,7 @@ export async function getStaticPaths() {
     "about",
     "team",
     "news",
+    "newsPage",
   ] as const;
   const paths: Array<{
     params: { slug: string | undefined };
