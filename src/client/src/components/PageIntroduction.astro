@@ -29,10 +29,28 @@ const { aboveTitle, title, lead } = Astro.props;
         <img
           src={underlineWhite.src}
           alt=""
-          class:list={["block mx-auto w-6", lead ? "mb-8" : "mb-0"]}
+          class:list={[
+            "intro-underline block mx-auto w-6 opacity-0 transition-opacity duration-600 ease-in",
+            lead ? "mb-8" : "mb-0",
+          ]}
         />
         {lead && <div id="lead" class="cms-content" set:html={lead} />}
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const img = document.querySelector<HTMLImageElement>(".intro-underline");
+    if (!img) return;
+    function reveal() {
+      img!.style.opacity = "1";
+    }
+    if (img.complete) {
+      reveal();
+    } else {
+      img.addEventListener("load", reveal);
+    }
+  });
+</script>

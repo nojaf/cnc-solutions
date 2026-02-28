@@ -173,7 +173,9 @@ const { id, theme = "dark", slides, showIndicators = true } = Astro.props;
     resetTimer();
   }
 
-  document.querySelectorAll(".carousel").forEach((el) => {
-    if (el.id) initCarousel(el.id);
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll(".carousel").forEach((el) => {
+      if (el.id) initCarousel(el.id);
+    });
   });
 </script>

@@ -83,20 +83,23 @@ const mobileBg = mobilePlaceholder
 </section>
 
 <script>
-  const hero = document.getElementById("hero");
-  const video = hero?.querySelector("video");
-  if (hero && video) {
-    function updateHeight() {
-      const w = video!.videoWidth;
-      const h = video!.videoHeight;
-      if (w && h) {
-        const maxH = parseFloat(getComputedStyle(hero!).maxHeight) || Infinity;
-        const videoH = hero!.offsetWidth * (h / w);
-        hero!.style.minHeight = `${Math.min(videoH, maxH)}px`;
+  document.addEventListener("astro:page-load", () => {
+    const hero = document.getElementById("hero");
+    const video = hero?.querySelector("video");
+    if (hero && video) {
+      function updateHeight() {
+        const w = video!.videoWidth;
+        const h = video!.videoHeight;
+        if (w && h) {
+          const maxH =
+            parseFloat(getComputedStyle(hero!).maxHeight) || Infinity;
+          const videoH = hero!.offsetWidth * (h / w);
+          hero!.style.minHeight = `${Math.min(videoH, maxH)}px`;
+        }
       }
-    }
 
-    video.addEventListener("loadedmetadata", updateHeight);
-    new ResizeObserver(updateHeight).observe(hero);
-  }
+      video.addEventListener("loadedmetadata", updateHeight);
+      new ResizeObserver(updateHeight).observe(hero);
+    }
+  });
 </script>

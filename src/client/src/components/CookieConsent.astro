@@ -53,31 +53,33 @@ const t = texts[culture];
 </div>
 
 <script>
-  const banner = document.getElementById("cookies-banner");
-  const decision = localStorage.getItem("cookiesDecision");
+  document.addEventListener("astro:page-load", () => {
+    const banner = document.getElementById("cookies-banner");
+    const decision = localStorage.getItem("cookiesDecision");
 
-  if (!decision && banner) {
-    banner.classList.remove("hidden");
-  }
+    if (!decision && banner) {
+      banner.classList.remove("hidden");
+    }
 
-  function setCookieDecision(answer: string) {
-    localStorage.setItem("cookiesDecision", answer);
-    banner?.classList.add("hidden");
-    if (answer === "disallow") {
-      if ((window as any).gaOptout) {
-        (window as any).gaOptout();
-      }
-      if ((window as any).fbq) {
-        (window as any).fbq("consent", "revoke");
+    function setCookieDecision(answer: string) {
+      localStorage.setItem("cookiesDecision", answer);
+      banner?.classList.add("hidden");
+      if (answer === "disallow") {
+        if ((window as any).gaOptout) {
+          (window as any).gaOptout();
+        }
+        if ((window as any).fbq) {
+          (window as any).fbq("consent", "revoke");
+        }
       }
     }
-  }
 
-  document.getElementById("cookie-accept")?.addEventListener("click", () => {
-    setCookieDecision("allow");
-  });
+    document.getElementById("cookie-accept")?.addEventListener("click", () => {
+      setCookieDecision("allow");
+    });
 
-  document.getElementById("cookie-reject")?.addEventListener("click", () => {
-    setCookieDecision("disallow");
+    document.getElementById("cookie-reject")?.addEventListener("click", () => {
+      setCookieDecision("disallow");
+    });
   });
 </script>
