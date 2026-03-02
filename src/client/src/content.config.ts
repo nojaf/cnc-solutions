@@ -170,7 +170,42 @@ export const collections = {
   }),
   contact: defineCollection({
     loader: umbracoLoader("contact"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        aboveAddress: localizedOptionalString.optional(),
+        address: localizedOptionalString.optional(),
+        email: localizedOptionalString.optional(),
+        phone: localizedOptionalString.optional(),
+        linkedInUrl: localizedOptionalString.optional(),
+        facebookUrl: localizedOptionalString.optional(),
+        aboveForm: localizedOptionalString.optional(),
+        labelName: localizedOptionalString.optional(),
+        labelCompany: localizedOptionalString.optional(),
+        labelAddress: localizedOptionalString.optional(),
+        labelZip: localizedOptionalString.optional(),
+        labelCity: localizedOptionalString.optional(),
+        labelCountry: localizedOptionalString.optional(),
+        labelEmail: localizedOptionalString.optional(),
+        labelPhone: localizedOptionalString.optional(),
+        labelMessage: localizedOptionalString.optional(),
+        sendButtonText: localizedOptionalString.optional(),
+        successText: localizedOptionalString.optional(),
+        errorText: localizedOptionalString.optional(),
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: z
+          .object({
+            nl: z.array(z.string()).nullable().optional(),
+            en: z.array(z.string()).nullable().optional(),
+            fr: z.array(z.string()).nullable().optional(),
+          })
+          .optional(),
+      })
+      .passthrough(),
   }),
   solutions: defineCollection({
     loader: umbracoLoader("solutions"),

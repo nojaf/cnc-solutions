@@ -1,4 +1,5 @@
-const API_BASE = "https://cncsolutions-backend.azurewebsites.net/umbraco/api";
+export const API_BASE =
+  "https://cncsolutions-backend.azurewebsites.net/umbraco/api";
 
 export interface UmbracoUrl {
   nl: string;
