@@ -1,13 +1,15 @@
 using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using Azure.Identity;
 using CncSolutions.Export.Models;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using Microsoft.Graph;
+using Microsoft.Graph.Auth;
+using Microsoft.Identity.Client;
 using Umbraco.Web;
 
 namespace CncSolutions.Export.Controllers
@@ -35,6 +37,9 @@ namespace CncSolutions.Export.Controllers
                 {
                     var receiver = GetReceiver();
                     if (string.IsNullOrWhiteSpace(receiver)) throw new Exception("Receiver is not set!");
+                    var logMessage = model.Message?.Replace("\r", "").Replace("\n", " ") ?? "";
+                    if (logMessage.Length > 100) logMessage = logMessage.Substring(0, 100) + "...";
+                    Logger.Info(typeof(ContactController), $"Contact form received - Name: {model.Name}, Company: {model.Company}, Email: {model.Email}, Telephone: {model.Telephone}, Message: {logMessage}, Receiver: {receiver}");
                     await SendMail(model, receiver);
                     Logger.Info(typeof(ContactController), "Processed contact form");
                     return Ok();
@@ -47,7 +52,7 @@ namespace CncSolutions.Export.Controllers
             }
         }
 
-        private string GetReceiver()
+        private string GetContactPageValue(string propertyAlias)
         {
             var contactContentType = UmbracoContext.Content.GetContentType("contact");
             var contactPage = this.UmbracoContext.Content.GetByContentType(contactContentType).FirstOrDefault();
@@ -56,16 +61,34 @@ namespace CncSolutions.Export.Controllers
                 throw new Exception("No contact page exists");
             }
 
-            return contactPage.Value("formRecipient")?.ToString();
+            return contactPage.Value(propertyAlias)?.ToString();
+        }
+
+        private string GetReceiver()
+        {
+            return GetContactPageValue("formRecipient");
         }
 
         private async Task SendMail(ContactForm form, string receiver)
         {
-            var apiKey = ConfigurationManager.AppSettings["SendGrid"];
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("info@cncsolutions.be", "Website");
-            var subject = "Contact formulier op cncsolutions.be";
-            var to = new EmailAddress(receiver);
+            var tenantId = GetContactPageValue("tenantId");
+            var clientId = GetContactPageValue("clientId");
+            var clientSecret = GetContactPageValue("clientSecret");
+            var sender = GetContactPageValue("senderEmail");
+
+            // For Microsoft.Graph 3.x, create GraphServiceClient with authentication
+            var clientApp = ConfidentialClientApplicationBuilder
+                .Create(clientId)
+                .WithClientSecret(clientSecret)
+                .WithAuthority(new Uri($"https://login.microsoftonline.com/{tenantId}"))
+                .Build();
+
+            var authProvider = new ClientCredentialProvider(clientApp);
+            
+            // Create GraphServiceClient using the correct 3.x constructor
+            var graphClient = new GraphServiceClient(
+                "https://graph.microsoft.com/v1.0",
+                authProvider);
 
             var plainTextContentBuilder = new StringBuilder();
             plainTextContentBuilder.AppendLine($"Op {DateTime.Now:MM/dd/yyyy} werd het contact formulier ingevuld.");
@@ -85,9 +108,40 @@ namespace CncSolutions.Export.Controllers
             var plainContent = plainTextContentBuilder.ToString();
             var htmlContent = $"<pre>{plainContent}</pre>";
 
-            var msg = MailHelper.CreateSingleEmail(from, to, subject,plainContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
-            Logger.Debug(typeof(ContactController), $"Response from SendGrid: {response}");
+            var message = new Message
+            {
+                Subject = "Contact formulier op cncsolutions.be",
+                Body = new ItemBody
+                {
+                    ContentType = BodyType.Html,
+                    Content = htmlContent
+                },
+                ToRecipients = new List<Recipient>
+                {
+                    new Recipient
+                    {
+                        EmailAddress = new EmailAddress
+                        {
+                            Address = receiver
+                        }
+                    }
+                }
+            };
+
+            // Send the email using Microsoft Graph SDK 3.x API
+            try 
+            {
+                await graphClient.Users[sender]
+                    .SendMail(message, true)
+                    .Request()
+                    .PostAsync();
+                Logger.Debug(typeof(ContactController), $"Email sent successfully via Microsoft Graph");
+            }
+            catch (System.Exception ex)
+            {
+                Logger.Error(typeof(ContactController), $"Error sending email via Microsoft Graph: {ex.Message}");
+                throw;
+            }
         }
     }
 }

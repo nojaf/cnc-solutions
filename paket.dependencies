@@ -21,3 +21,7 @@ nuget UmbracoCms.Core 8.5.4
 nuget Newtonsoft.Json 12.0.1
 nuget FSharp.Core 4.7
 nuget Thoth.Json.Net 3.6.0
+nuget Azure.Identity 1.3.0
+nuget Microsoft.Graph 3.35.0
+nuget Microsoft.Graph.Auth 1.0.0-preview.7
+nuget Microsoft.Graph.Core 1.25.1
