@@ -8,7 +8,8 @@ using System.Web.Http.Cors;
 using Azure.Identity;
 using CncSolutions.Export.Models;
 using Microsoft.Graph;
-using Microsoft.Graph.Models;
+using Microsoft.Graph.Auth;
+using Microsoft.Identity.Client;
 using Umbraco.Web;
 
 namespace CncSolutions.Export.Controllers
@@ -75,8 +76,19 @@ namespace CncSolutions.Export.Controllers
             var clientSecret = GetContactPageValue("clientSecret");
             var sender = GetContactPageValue("senderEmail");
 
-            var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
-            var graphClient = new GraphServiceClient(credential);
+            // For Microsoft.Graph 3.x, create GraphServiceClient with authentication
+            var clientApp = ConfidentialClientApplicationBuilder
+                .Create(clientId)
+                .WithClientSecret(clientSecret)
+                .WithAuthority(new Uri($"https://login.microsoftonline.com/{tenantId}"))
+                .Build();
+
+            var authProvider = new ClientCredentialProvider(clientApp);
+            
+            // Create GraphServiceClient using the correct 3.x constructor
+            var graphClient = new GraphServiceClient(
+                "https://graph.microsoft.com/v1.0",
+                authProvider);
 
             var plainTextContentBuilder = new StringBuilder();
             plainTextContentBuilder.AppendLine($"Op {DateTime.Now:MM/dd/yyyy} werd het contact formulier ingevuld.");
@@ -108,7 +120,7 @@ namespace CncSolutions.Export.Controllers
                 {
                     new Recipient
                     {
-                        EmailAddress = new Microsoft.Graph.Models.EmailAddress
+                        EmailAddress = new EmailAddress
                         {
                             Address = receiver
                         }
@@ -116,16 +128,20 @@ namespace CncSolutions.Export.Controllers
                 }
             };
 
-            await graphClient
-                .Users[sender]
-                .SendMail
-                .PostAsync(new Microsoft.Graph.Users.Item.SendMail.SendMailPostRequestBody
-                {
-                    Message = message,
-                    SaveToSentItems = true
-                });
-
-            Logger.Debug(typeof(ContactController), $"Response from SendGrid: sent via Microsoft Graph");
+            // Send the email using Microsoft Graph SDK 3.x API
+            try 
+            {
+                await graphClient.Users[sender]
+                    .SendMail(message, true)
+                    .Request()
+                    .PostAsync();
+                Logger.Debug(typeof(ContactController), $"Email sent successfully via Microsoft Graph");
+            }
+            catch (System.Exception ex)
+            {
+                Logger.Error(typeof(ContactController), $"Error sending email via Microsoft Graph: {ex.Message}");
+                throw;
+            }
         }
     }
 }

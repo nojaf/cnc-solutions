@@ -3,5 +3,3 @@ UmbracoCms.Core
 Newtonsoft.Json
 FSharp.Core
 Thoth.Json.Net
-Azure.Identity
-Microsoft.Graph
