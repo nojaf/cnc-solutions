@@ -18,5 +18,7 @@ namespace CncSolutions.Export.Models
         [Required]
         public string Telephone { get; set; }
         public string Message { get; set; }
+        [Required]
+        public string TurnstileToken { get; set; }
     }
 }
