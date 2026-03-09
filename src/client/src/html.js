@@ -15,6 +15,7 @@ export default function HTML(props) {
           src="https://kit.fontawesome.com/aadbaa5e13.js"
           crossOrigin="anonymous"
         ></script>
+        <link rel="preconnect" href="https://challenges.cloudflare.com" />
         {props.headComponents}
       </head>
       <body {...props.bodyAttributes}>
@@ -41,6 +42,10 @@ export default function HTML(props) {
         ></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
         <script src="/scripts/lightbox.js"></script>
+        <script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          defer={true}
+        ></script>
         {props.postBodyComponents}
       </body>
     </html>

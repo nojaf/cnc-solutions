@@ -41,6 +41,7 @@ const ContactForm = ({
   successText,
   errorText,
   aboveForm,
+  turnstileSiteKey,
 }) => {
   const [form, setForm] = React.useState({
     name: "",
@@ -57,6 +58,34 @@ const ContactForm = ({
   const [didSubmit, setDidSubmit] = React.useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = React.useState(false)
   const [showErrorMessage, setShowErrorMessage] = React.useState(false)
+  const turnstileRef = React.useRef(null)
+
+  React.useEffect(() => {
+    let widgetId
+    let timeoutId
+    const renderWidget = () => {
+      if (turnstileRef.current && window.turnstile) {
+        turnstileRef.current.innerHTML = ""
+        const sitekey =
+          typeof window !== "undefined" &&
+          window.location.hostname === "localhost"
+            ? "1x00000000000000000000AA"
+            : turnstileSiteKey
+        widgetId = window.turnstile.render(turnstileRef.current, {
+          sitekey,
+        })
+      } else {
+        timeoutId = setTimeout(renderWidget, 100)
+      }
+    }
+    renderWidget()
+    return () => {
+      clearTimeout(timeoutId)
+      if (widgetId !== undefined && window.turnstile) {
+        window.turnstile.remove(widgetId)
+      }
+    }
+  }, [])
 
   const updateValue = (key) => (ev) => {
     const value = ev.target.value
@@ -71,6 +100,9 @@ const ContactForm = ({
     setShowSuccessMessage(false)
     setShowErrorMessage(false)
     if (requiredFields.every((rf) => !!form[rf])) {
+      const turnstileResponse = window.turnstile
+        ? window.turnstile.getResponse()
+        : ""
       fetch(
         "https://cncsolutions-backend.azurewebsites.net/umbraco/api/contact/post",
         {
@@ -78,7 +110,10 @@ const ContactForm = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(form),
+          body: JSON.stringify({
+            ...form,
+            turnstileToken: turnstileResponse,
+          }),
         }
       )
         .then((respone) => {
@@ -209,6 +244,9 @@ const ContactForm = ({
               defaultValue={form.message}
               onChange={updateValue("message")}
             />
+          </div>
+          <div className="form-group">
+            <div ref={turnstileRef}></div>
           </div>
           <div className="submit-container">
             <button type="submit" className="btn-cnc">
@@ -443,6 +481,11 @@ export const query = graphql`
         fr
       }
       errorText {
+        en
+        nl
+        fr
+      }
+      turnstileSiteKey {
         en
         nl
         fr

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -10,6 +11,7 @@ using CncSolutions.Export.Models;
 using Microsoft.Graph;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
+using Newtonsoft.Json;
 using Umbraco.Web;
 
 namespace CncSolutions.Export.Controllers
@@ -23,7 +25,7 @@ namespace CncSolutions.Export.Controllers
         }
 
         [HttpPost]
-        [EnableCors("http://localhost:8000,http://localhost:9000,http://www.cncsolutions.be,https://cncsolutions.be", "*", "POST")]
+        [EnableCors("http://localhost:8000,http://localhost:9000,http://localhost:4321,http://www.cncsolutions.be,https://cncsolutions.be", "*", "POST")]
         public async Task<IHttpActionResult> Post(ContactForm model)
         {
             try
@@ -35,6 +37,13 @@ namespace CncSolutions.Export.Controllers
                 }
                 else
                 {
+                    var turnstileValid = await ValidateTurnstileToken(model.TurnstileToken);
+                    if (!turnstileValid)
+                    {
+                        Logger.Warn(typeof(ContactController), "Turnstile validation failed");
+                        return BadRequest("Turnstile validation failed");
+                    }
+
                     var receiver = GetReceiver();
                     if (string.IsNullOrWhiteSpace(receiver)) throw new Exception("Receiver is not set!");
                     var logMessage = model.Message?.Replace("\r", "").Replace("\n", " ") ?? "";
@@ -50,6 +59,32 @@ namespace CncSolutions.Export.Controllers
                 Logger.Error(typeof(ContactController), e);
                 return BadRequest();
             }
+        }
+
+        private async Task<bool> ValidateTurnstileToken(string token)
+        {
+            var secretKey = GetContactPageValue("turnstileSecretKey");
+            using (var client = new HttpClient())
+            {
+                var response = await client.PostAsync(
+                    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+                    new FormUrlEncodedContent(new Dictionary<string, string>
+                    {
+                        { "secret", secretKey },
+                        { "response", token }
+                    })
+                );
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<TurnstileVerifyResponse>(responseBody);
+                return result?.Success == true;
+            }
+        }
+
+        private class TurnstileVerifyResponse
+        {
+            [JsonProperty("success")]
+            public bool Success { get; set; }
         }
 
         private string GetContactPageValue(string propertyAlias)
@@ -84,7 +119,7 @@ namespace CncSolutions.Export.Controllers
                 .Build();
 
             var authProvider = new ClientCredentialProvider(clientApp);
-            
+
             // Create GraphServiceClient using the correct 3.x constructor
             var graphClient = new GraphServiceClient(
                 "https://graph.microsoft.com/v1.0",
@@ -129,7 +164,7 @@ namespace CncSolutions.Export.Controllers
             };
 
             // Send the email using Microsoft Graph SDK 3.x API
-            try 
+            try
             {
                 await graphClient.Users[sender]
                     .SendMail(message, true)
