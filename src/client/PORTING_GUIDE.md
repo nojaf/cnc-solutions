@@ -92,6 +92,7 @@ Common translations:
 
 When a pattern repeats 3+ times, extract it into an Astro component. Examples:
 
+- `SolutionSlideshow.astro` — the cnc-block image carousel: sliding track, dots overlapping the text block, triangle arrows, and a `<dialog>` lightbox replacing ekko-lightbox.
 - `NavDropdown.astro` — handles both desktop (hover) and mobile (click-toggle) dropdown in one component, with props for:
   - `label`: display text
   - `href?`: optional link URL (omit for non-link labels like language switcher)
@@ -273,7 +274,10 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 - **Bootstrap carousels resize to the active slide** because inactive slides are `display: none`. A sliding track keeps the tallest slide's height, so the probe shows a taller list on mobile whenever the first slide is not the tallest. Accepted, since a fixed height avoids the page jumping between slides.
 - **A `display: contents` wrapper lets one list be a flex track on mobile and a grid from md up.** The wrapper is the 100%-wide slide below md and disappears at md, so the card itself becomes the grid item and `m-auto` centers it in the row like the old site. The track's `overflow-hidden` must become `md:overflow-visible`, or the last card of a row, which overflows the container by 10px at lg like the old site, loses its right border.
 - **`compare` reports Tailwind shadows as a five-part string** (`shadow-*` composes ring and inset variables). When only the last part matches the Gatsby value, the shadow is identical.
+- **Tailwind v4 translate utilities set the `translate` property, not `transform`.** A probe that reads `transform` sees `none` even though the element moved. Compare positions (rect top) instead.
+- **Bootstrap carousel indicators sit 1rem above the bottom edge** (`margin-bottom: 1rem`) and each dot carries 10px transparent borders top and bottom, so the list box is 30px tall while the visible dot is 10px. Reproduce with `bottom-4 py-2.5` and compare the visible dot, not the list.
 - **Old-site bugs are not always worth copying.** The Gatsby footer container was left-aligned between sm and lg. Reproduce, flag it, and let the user decide.
+- **Long single words in the 40px solution heading overflow the 370px text column** between lg and xl on both sites ("isolatieonderdelen"). Fixed with `lg:break-words`; below lg the heading is a 66% box that may overflow into the column without harm, and a plain `break-words` there split "mogelijkheden" at 375px.
 
 ## Checklist for each component port
 

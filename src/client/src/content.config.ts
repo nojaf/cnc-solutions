@@ -106,6 +106,34 @@ const localizedProductThumbnail = z.object({
   fr: productThumbnail,
 });
 
+// Solution slideshow images use: mobile-portrait, mobile-landscape, tablet, desktop, large-desktop
+const slideshowResponsiveImage = z.object({
+  "mobile-portrait": z.string(),
+  "mobile-landscape": z.string(),
+  tablet: z.string(),
+  desktop: z.string(),
+  "large-desktop": z.string(),
+});
+
+const localizedSlideshowImage = z.object({
+  nl: slideshowResponsiveImage,
+  en: slideshowResponsiveImage,
+  fr: slideshowResponsiveImage,
+});
+
+const localizedNumber = z.object({
+  nl: z.number(),
+  en: z.number(),
+  fr: z.number(),
+});
+
+// Shared fields of every block on a solution detail page
+const solutionBlockFields = {
+  row: localizedNumber,
+  isRight: localizedBoolean,
+  color: localizedOptionalString,
+};
+
 const localizedKeywords = z.object({
   nl: z.array(z.string()).nullable().optional(),
   en: z.array(z.string()).nullable().optional(),
@@ -275,6 +303,39 @@ export const collections = {
         navigationText: localizedOptionalString.optional(),
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: localizedKeywords.optional(),
+      })
+      .passthrough(),
+  }),
+  solutionSlideshow: defineCollection({
+    loader: umbracoLoader("solutionSlideshow"),
+    schema: baseSchema.extend(solutionBlockFields).passthrough(),
+  }),
+  solutionSlideshowImage: defineCollection({
+    loader: umbracoLoader("solutionSlideshowImage"),
+    schema: baseSchema
+      .extend({
+        image: localizedSlideshowImage,
+        altText: localizedOptionalString.optional(),
+      })
+      .passthrough(),
+  }),
+  solutionText: defineCollection({
+    loader: umbracoLoader("solutionText"),
+    schema: baseSchema
+      .extend({
+        ...solutionBlockFields,
+        aboveTitle: localizedOptionalString.optional(),
+        title: localizedString,
+        lead: localizedOptionalString.optional(),
+      })
+      .passthrough(),
+  }),
+  solutionVideo: defineCollection({
+    loader: umbracoLoader("solutionVideo"),
+    schema: baseSchema
+      .extend({
+        ...solutionBlockFields,
+        videoId: localizedOptionalString.optional(),
       })
       .passthrough(),
   }),

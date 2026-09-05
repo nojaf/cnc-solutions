@@ -81,3 +81,8 @@ body {
 .cms-content ol {
   @apply list-decimal;
 }
+
+/* Bootstrap links: primary colour, underlined. */
+.cms-content a {
+  @apply text-primary underline;
+}

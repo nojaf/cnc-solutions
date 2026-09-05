@@ -5,6 +5,7 @@ import { cultures } from "../lib/umbraco";
 
 import Home from "../templates/Home.astro";
 import Solutions from "../templates/Solutions.astro";
+import Solution from "../templates/Solution.astro";
 import Products from "../templates/Products.astro";
 import Cases from "../templates/Cases.astro";
 import About from "../templates/About.astro";
@@ -16,6 +17,7 @@ import Contact from "../templates/Contact.astro";
 const templateMap: Record<string, any> = {
   home: Home,
   solutions: Solutions,
+  solution: Solution,
   products: Products,
   cases: Cases,
   about: About,
@@ -29,6 +31,7 @@ export async function getStaticPaths() {
   const pageCollections = [
     "home",
     "solutions",
+    "solution",
     "products",
     "cases",
     "about",
