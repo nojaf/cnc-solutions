@@ -30,7 +30,7 @@ export default () => {
       const h2 = text.querySelector("h2");
       const bar = text.querySelector("img");
       const body = bar.nextElementSibling;
-      const carousel = media.querySelector(".carousel, .solution-slideshow");
+      const carousel = media.querySelector(".carousel");
       const activeImg = carousel
         ? [...carousel.querySelectorAll("img")].find(
             (el) =>
@@ -38,18 +38,18 @@ export default () => {
           )
         : null;
       const indicators = carousel?.querySelector(
-        ".carousel-indicators, .slideshow-dots",
+        ".carousel-indicators, .carousel-dots",
       );
       const dot = indicators?.children[0];
       const activeDot = indicators?.querySelector(
-        ".active div, .slideshow-dot > .block",
+        ".active div, .carousel-dot > .block",
       );
       const prev = carousel?.querySelector(
-        ".carousel-control-prev, .slideshow-prev",
+        ".carousel-control-prev, .carousel-prev",
       );
       const prevIcon = prev?.firstElementChild;
       const next = carousel?.querySelector(
-        ".carousel-control-next, .slideshow-next",
+        ".carousel-control-next, .carousel-next",
       );
       const iframe = media.querySelector("iframe");
       const prevSection = rows[i - 1];

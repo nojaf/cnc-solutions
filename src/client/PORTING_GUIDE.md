@@ -92,7 +92,7 @@ Common translations:
 
 When a pattern repeats 3+ times, extract it into an Astro component. Examples:
 
-- `SolutionSlideshow.astro` — the cnc-block image carousel: sliding track, dots overlapping the text block, triangle arrows, and a `<dialog>` lightbox replacing ekko-lightbox.
+- `Carousel.astro` — every Bootstrap carousel on the site (home cases, home news, mobile solutions, solution slideshows): sliding track, dots overlapping the content below, 15% control strips with triangle arrows. `lightbox` opens the desktop crop in a `<dialog>` gallery (replacing ekko-lightbox) instead of following the slide's `href`.
 - `NavDropdown.astro` — handles both desktop (hover) and mobile (click-toggle) dropdown in one component, with props for:
   - `label`: display text
   - `href?`: optional link URL (omit for non-link labels like language switcher)
@@ -276,6 +276,7 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 - **`compare` reports Tailwind shadows as a five-part string** (`shadow-*` composes ring and inset variables). When only the last part matches the Gatsby value, the shadow is identical.
 - **Tailwind v4 translate utilities set the `translate` property, not `transform`.** A probe that reads `transform` sees `none` even though the element moved. Compare positions (rect top) instead.
 - **Bootstrap carousel indicators sit 1rem above the bottom edge** (`margin-bottom: 1rem`) and each dot carries 10px transparent borders top and bottom, so the list box is 30px tall while the visible dot is 10px. Reproduce with `bottom-4 py-2.5` and compare the visible dot, not the list.
+- **Every Bootstrap carousel on the old site shares one chrome** (10px dots 50px below the image, 15% control strips, 15x20 triangle icons). The first home page port approximated it with in-flow dots and chevrons, which made the carousel 59px taller. Use `Carousel.astro` for all of them and check with `scripts/probes/carousel.mjs`.
 - **Old-site bugs are not always worth copying.** The Gatsby footer container was left-aligned between sm and lg. Reproduce, flag it, and let the user decide.
 - **Long single words in the 40px solution heading overflow the 370px text column** between lg and xl on both sites ("isolatieonderdelen"). Fixed with `lg:break-words`; below lg the heading is a 66% box that may overflow into the column without harm, and a plain `break-words` there split "mogelijkheden" at 375px.
 

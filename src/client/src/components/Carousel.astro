@@ -1,8 +1,11 @@
 ---
 export interface Slide {
-  href: string;
+  /** Page to open on click. Ignored when `lightbox` is set. */
+  href?: string;
   altText: string;
   phone: string;
+  /** Crop for the 34em source. Falls back to `tablet`, as the old home page did. */
+  mobileLandscape?: string;
   tablet?: string;
   desktop?: string;
   largeDesktop?: string;
@@ -18,20 +21,39 @@ interface Props {
   theme?: "dark" | "light";
   slides: Slide[];
   showIndicators?: boolean;
+  /** Open the desktop crop in a modal gallery instead of following `href`. */
+  lightbox?: boolean;
 }
 
-const { id, theme = "dark", slides, showIndicators = true } = Astro.props;
+const {
+  id,
+  theme = "dark",
+  slides,
+  showIndicators = true,
+  lightbox = false,
+} = Astro.props;
+
+// Bootstrap drew the arrows and dots in white on a dark row and in the
+// primary colour on a light row.
+const dark = theme === "dark";
+const arrow = "w-0 h-0 border-y-10 border-transparent";
 ---
 
-<div class="carousel relative" id={id}>
-  {/* Slides */}
-  <div class="overflow-hidden relative">
+<div class="carousel relative" id={id} data-lightbox={lightbox || undefined}>
+  <div class="overflow-hidden">
     <div
-      class="carousel-track flex transition-transform duration-500 ease-in-out"
+      class="carousel-track flex transition-transform duration-600 ease-in-out"
     >
       {
         slides.map((s) => (
-          <a href={s.href} class="min-w-full w-full shrink-0 relative block">
+          <a
+            href={lightbox ? (s.desktop ?? s.phone) : s.href}
+            class:list={[
+              "carousel-slide block w-full shrink-0 relative",
+              lightbox && "cursor-zoom-in",
+            ]}
+            data-alt={lightbox ? s.altText : undefined}
+          >
             <picture>
               {s.largeDesktop && (
                 <source media="(min-width: 75em)" srcset={s.largeDesktop} />
@@ -42,8 +64,11 @@ const { id, theme = "dark", slides, showIndicators = true } = Astro.props;
               {s.tablet && (
                 <source media="(min-width: 48em)" srcset={s.tablet} />
               )}
-              {s.tablet && (
-                <source media="(min-width: 34em)" srcset={s.tablet} />
+              {(s.mobileLandscape ?? s.tablet) && (
+                <source
+                  media="(min-width: 34em)"
+                  srcset={s.mobileLandscape ?? s.tablet}
+                />
               )}
               <img
                 src={s.phone}
@@ -72,110 +97,151 @@ const { id, theme = "dark", slides, showIndicators = true } = Astro.props;
     </div>
   </div>
 
-  {/* Indicators */}
+  {
+    /* Bootstrap's indicators sit 1rem above the bottom edge, pushed 50px down,
+       with 10px transparent borders around each 10px dot. */
+  }
   {
     showIndicators && (
-      <div class="flex justify-center gap-3 mt-12">
+      <div class="carousel-dots absolute inset-x-0 bottom-4 flex justify-center gap-2.5 py-2.5 translate-y-12.5">
         {slides.map((_, i) => (
           <button
             class:list={[
-              "carousel-dot w-3 h-3 cursor-pointer relative",
-              theme === "dark" ? "bg-white" : "bg-dark",
+              "carousel-dot relative w-2.5 h-2.5 cursor-pointer",
+              dark ? "bg-white" : "bg-dark",
             ]}
             data-slide-to={i}
             aria-label={`Slide ${i + 1}`}
           >
-            <svg
+            <span
               class:list={[
-                "absolute inset-0 w-3 h-3",
+                "absolute inset-0 w-0 h-0 border-b-10 border-l-10 border-transparent border-b-primary",
                 i === 0 ? "block" : "hidden",
               ]}
-              viewBox="0 0 12 12"
-            >
-              <polygon points="0,0 12,12 0,12" fill="var(--color-primary)" />
-            </svg>
+            />
           </button>
         ))}
       </div>
     )
   }
 
-  {/* Controls */}
   <button
-    class="carousel-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 p-4 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+    class="carousel-prev absolute inset-y-0 left-0 z-10 flex w-3/20 items-center justify-center opacity-50 hover:opacity-90 cursor-pointer"
     aria-label="Previous"
   >
-    <svg
-      class="w-4 h-5"
-      viewBox="0 0 8 8"
-      fill={theme === "dark" ? "white" : "var(--color-primary)"}
-    >
-      <path d="M5.25 0l-4 4 4 4 1.5-1.5L4.25 4l2.5-2.5L5.25 0z"></path>
-    </svg>
+    <span
+      class:list={[
+        arrow,
+        "border-l-0 border-r-15",
+        dark ? "border-r-white" : "border-r-primary",
+      ]}></span>
   </button>
   <button
-    class="carousel-next absolute right-0 top-1/2 -translate-y-1/2 z-10 p-4 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+    class="carousel-next absolute inset-y-0 right-0 z-10 flex w-3/20 items-center justify-center opacity-50 hover:opacity-90 cursor-pointer"
     aria-label="Next"
   >
-    <svg
-      class="w-4 h-5"
-      viewBox="0 0 8 8"
-      fill={theme === "dark" ? "white" : "var(--color-primary)"}
-    >
-      <path d="M2.75 0l-1.5 1.5L3.75 4l-2.5 2.5L2.75 8l4-4-4-4z"></path>
-    </svg>
+    <span
+      class:list={[
+        arrow,
+        "border-r-0 border-l-15",
+        dark ? "border-l-white" : "border-l-primary",
+      ]}></span>
   </button>
 </div>
 
 <script>
-  function initCarousel(id: string) {
-    const container = document.getElementById(id);
-    if (!container) return;
-    const track = container.querySelector<HTMLElement>(".carousel-track");
-    const dots = container.querySelectorAll<HTMLElement>(".carousel-dot");
-    const slideCount = track?.children.length ?? 0;
-    if (!track || slideCount === 0) return;
+  function initCarousel(root: HTMLElement) {
+    const track = root.querySelector<HTMLElement>(".carousel-track");
+    const slides = [
+      ...root.querySelectorAll<HTMLAnchorElement>(".carousel-slide"),
+    ];
+    const dots = root.querySelectorAll<HTMLElement>(".carousel-dot");
+    const count = slides.length;
+    if (!track || count === 0) return;
     let current = 0;
-    let timer: ReturnType<typeof setInterval>;
+    let timer: ReturnType<typeof setInterval> | undefined;
 
     function show(index: number) {
-      track!.style.transform = `translateX(-${index * 100}%)`;
+      current = (index + count) % count;
+      track!.style.transform = `translateX(-${current * 100}%)`;
       dots.forEach((d, i) => {
-        const triangle = d.querySelector("svg");
-        if (triangle) {
-          triangle.classList.toggle("block", i === index);
-          triangle.classList.toggle("hidden", i !== index);
-        }
+        d.firstElementChild?.classList.toggle("block", i === current);
+        d.firstElementChild?.classList.toggle("hidden", i !== current);
       });
-      current = index;
     }
 
-    function resetTimer() {
-      clearInterval(timer);
-      timer = setInterval(() => show((current + 1) % slideCount), 5000);
+    function restart() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => show(current + 1), 5000);
     }
 
-    container.querySelector(".carousel-prev")?.addEventListener("click", () => {
-      show((current - 1 + slideCount) % slideCount);
-      resetTimer();
+    root.querySelector(".carousel-prev")?.addEventListener("click", () => {
+      show(current - 1);
+      restart();
     });
-    container.querySelector(".carousel-next")?.addEventListener("click", () => {
-      show((current + 1) % slideCount);
-      resetTimer();
+    root.querySelector(".carousel-next")?.addEventListener("click", () => {
+      show(current + 1);
+      restart();
     });
-    dots.forEach((dot, i) => {
+    dots.forEach((dot, i) =>
       dot.addEventListener("click", () => {
         show(i);
-        resetTimer();
-      });
-    });
+        restart();
+      }),
+    );
 
-    resetTimer();
+    if (root.dataset.lightbox) {
+      slides.forEach((slide, i) =>
+        slide.addEventListener("click", (e) => {
+          e.preventDefault();
+          openLightbox(slides, i);
+        }),
+      );
+    }
+
+    restart();
+  }
+
+  // Replaces ekko-lightbox: the desktop crop in a modal gallery.
+  function openLightbox(slides: HTMLAnchorElement[], start: number) {
+    let index = start;
+    const dialog = document.createElement("dialog");
+    dialog.className =
+      "m-auto max-w-[90vw] p-0 bg-transparent backdrop:bg-black/70 outline-none";
+    dialog.innerHTML = `
+      <img class="block max-h-[90vh] max-w-full" />
+      <button class="lightbox-prev absolute inset-y-0 left-0 w-1/4 cursor-pointer" aria-label="Previous"></button>
+      <button class="lightbox-next absolute inset-y-0 right-0 w-1/4 cursor-pointer" aria-label="Next"></button>
+    `;
+    const img = dialog.querySelector("img")!;
+    function render() {
+      img.src = slides[index].href;
+      img.alt = slides[index].dataset.alt ?? "";
+    }
+    function step(delta: number) {
+      index = (index + delta + slides.length) % slides.length;
+      render();
+    }
+    dialog.querySelector(".lightbox-prev")!.addEventListener("click", (e) => {
+      e.stopPropagation();
+      step(-1);
+    });
+    dialog.querySelector(".lightbox-next")!.addEventListener("click", (e) => {
+      e.stopPropagation();
+      step(1);
+    });
+    dialog.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") step(-1);
+      if (e.key === "ArrowRight") step(1);
+    });
+    dialog.addEventListener("close", () => dialog.remove());
+    render();
+    document.body.append(dialog);
+    dialog.showModal();
   }
 
   document.addEventListener("astro:page-load", () => {
-    document.querySelectorAll(".carousel").forEach((el) => {
-      if (el.id) initCarousel(el.id);
-    });
+    document.querySelectorAll<HTMLElement>(".carousel").forEach(initCarousel);
   });
 </script>

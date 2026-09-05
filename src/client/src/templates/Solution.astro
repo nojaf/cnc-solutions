@@ -3,12 +3,13 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import PageIntroduction from "../components/PageIntroduction.astro";
-import SolutionSlideshow from "../components/SolutionSlideshow.astro";
+import Carousel from "../components/Carousel.astro";
+import { getImage } from "astro:assets";
 import Video from "../components/Video.astro";
 import underlineDark from "../assets/underline-dark.png";
 import underlineWhite from "../assets/underline-white.png";
 import type { Culture } from "../lib/umbraco";
-import { pageInCulture } from "../lib/umbraco";
+import { pageInCulture, getImageParams } from "../lib/umbraco";
 
 interface Props {
   culture: Culture;
@@ -51,6 +52,28 @@ const blocks = [
     ...pageInCulture(culture, b.data),
   })),
 ];
+// Slideshow crops go through the image pipeline and become Carousel slides.
+const slideshowSlides = new Map<number, any[]>();
+for (const b of blocks) {
+  if (b.kind !== "slideshow") continue;
+  slideshowSlides.set(
+    b.umbracoId,
+    await Promise.all(
+      b.slides.map(async (s: any) => {
+        const src = async (key: string) =>
+          (await getImage(getImageParams(s.image[key]))).src;
+        return {
+          altText: s.altText ?? "",
+          phone: await src("mobile-portrait"),
+          mobileLandscape: await src("mobile-landscape"),
+          tablet: await src("tablet"),
+          desktop: await src("desktop"),
+          largeDesktop: await src("large-desktop"),
+        };
+      }),
+    ),
+  );
+}
 const rowNumbers = [...new Set(blocks.map((b) => b.row as number))].sort(
   (a, b) => a - b,
 );
@@ -90,10 +113,11 @@ const rows = rowNumbers.map((n) => {
                 ]}
               >
                 {media.kind === "slideshow" && (
-                  <SolutionSlideshow
+                  <Carousel
                     id={`block${media.umbracoId}Carousel`}
-                    color={color}
-                    slides={media.slides}
+                    theme={color}
+                    lightbox
+                    slides={slideshowSlides.get(media.umbracoId)!}
                   />
                 )}
                 {media.kind === "video" && media.videoId && (
