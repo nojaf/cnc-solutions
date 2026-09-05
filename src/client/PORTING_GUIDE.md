@@ -102,22 +102,27 @@ The component renders **two** `<li>` elements — one with `hidden lg:block` for
 
 ### 6. Verify the result
 
-After porting, compare computed styles between both sites at each breakpoint:
+Use `scripts/compare.mjs`. It loads the same pages on both sites at 375, 600, 800, 992 and 1200px, runs a probe in each, and prints every value that differs by more than 2px. Both dev servers must already be running; the script never starts them.
 
-```js
-// Run on both sites, compare output
-() => {
-  const el = document.querySelector("nav");
-  const cs = getComputedStyle(el);
-  return { padding: cs.padding, height: cs.height, maxWidth: cs.maxWidth };
-};
+Generic mode reports rects and common computed styles for every element a selector matches:
+
+```sh
+bun run compare --selector "footer h4" --pages /solutions/,/team/
 ```
 
-Acceptable deviations:
+For anything with structure (gaps between siblings, a lead column, a grid) write a probe under `scripts/probes/` and pass it. The probe is a default-exported function that runs inside the page and returns a plain object. See `scripts/probes/intro.mjs`.
+
+```sh
+bun run compare --probe scripts/probes/intro.mjs --pages /over-ons/,/team/,/solutions/
+```
+
+Paste the diff in the summary. Acceptable deviations:
 
 - 1-2px on spacing (due to 4px grid snapping)
 - 2-3px on computed height (cascading from snapped child sizes)
 - Exact match expected on: font-size, font-weight, color, text-transform, max-width
+
+Measure what the old site renders, not what its stylesheet says. More than once a Sass rule was overridden by a more specific one and the rendered value was the one to copy.
 
 ### 7. Interaction behavior
 
@@ -250,6 +255,21 @@ Defined in `src/styles/global.css`:
 }
 ```
 
+## Lessons
+
+Things that were wrong once. Add to this list whenever the user corrects a port or a comparison surprises you.
+
+- **Bootstrap container caps at every breakpoint**: 540px at sm, 720px at md, 960px at lg, 1140px at xl. Use `sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285`. Leaving out sm or md makes content wider than the old site on tablets.
+- **Bootstrap rows cancel the container padding** with negative margins. A `.row` inside `.container` needs `-mx-4` on the flex wrapper, or the columns start 16px too far in.
+- **Bootstrap spacing scale is not the Tailwind one.** `mb-4` is 1.5rem (24px) in Bootstrap, so it maps to `mb-6`. `mb-3` is 1rem, `mb-5` is 3rem.
+- **Unscoped rules hide in page stylesheets.** `products-overview.sass` sets `#lead` to 50% width and 55px bottom margin from lg up, and that applies to every page with a lead. Grep all Sass files for an id or class before assuming a rule is page-local.
+- **The intro lead is left-aligned** and half width from lg. The above-title is lowercased everywhere except the contact page.
+- **Tailwind's reset removes list markers.** CMS content needs `list-disc` / `list-decimal` and `pl-10`, or bullets vanish.
+- **CMS text uses Bootstrap's 1.1rem / 1.7rem.** Rounding to 18px / 28px changes where lines wrap and adds whole lines on narrow containers.
+- **Bootstrap sets `ul` margin-bottom to 1rem** and `li` line-height comes from the global 1.7rem rule. A list ported as `m-0` with `leading-6` loses about 35px over six items.
+- **NavDropdown renders a desktop and a mobile `<li>` per use**, so the desktop list also contains hidden mobile items. Scope DOM queries to `#nav-mobile-menu` or the probe hits the hidden copy.
+- **Old-site bugs are not always worth copying.** The Gatsby footer container was left-aligned between sm and lg. Reproduce, flag it, and let the user decide.
+
 ## Checklist for each component port
 
 - [ ] Inspect Gatsby component at mobile, lg, and xl breakpoints
@@ -259,6 +279,8 @@ Defined in `src/styles/global.css`:
 - [ ] Extract repeated patterns into sub-components
 - [ ] Verify desktop hover behavior
 - [ ] Verify mobile click/toggle behavior
-- [ ] Compare computed styles between both sites at all breakpoints
+- [ ] Run `scripts/compare.mjs` at 375, 600, 800, 992 and 1200 and paste the diff
+- [ ] Re-verify every page that uses any shared component you changed
 - [ ] Process all CMS images through `getImage()` — no plain `<img src={remoteUrl}>`
 - [ ] Check for Tailwind warnings (prefer built-in classes over bracket notation)
+- [ ] Add anything that surprised you to the Lessons section
