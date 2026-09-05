@@ -74,6 +74,31 @@ const localizedSlideImage = z.object({
   fr: slideResponsiveImage.nullable(),
 });
 
+// Overview thumbnails (solutions / cases) provide homepage and overview crops
+const overviewThumbnail = z.object({
+  "homepage mobile": z.string(),
+  "homepage tablet": z.string(),
+  "homepage desktop": z.string(),
+  "homepage large desktop": z.string(),
+  "overview mobile": z.string(),
+  "overview tablet portrait": z.string(),
+  "overview tablet landscape": z.string(),
+  "overview desktop": z.string(),
+  "overview large desktop": z.string(),
+});
+
+const localizedOverviewThumbnail = z.object({
+  nl: overviewThumbnail,
+  en: overviewThumbnail,
+  fr: overviewThumbnail,
+});
+
+const localizedKeywords = z.object({
+  nl: z.array(z.string()).nullable().optional(),
+  en: z.array(z.string()).nullable().optional(),
+  fr: z.array(z.string()).nullable().optional(),
+});
+
 // Shared fields present on every page-level node
 const baseSchema = z.object({
   umbracoId: z.number(),
@@ -209,11 +234,36 @@ export const collections = {
   }),
   solutions: defineCollection({
     loader: umbracoLoader("solutions"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        lead: localizedString,
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: localizedKeywords.optional(),
+      })
+      .passthrough(),
   }),
   solution: defineCollection({
     loader: umbracoLoader("solution"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        lead: localizedString,
+        thumbnail: localizedOverviewThumbnail,
+        thumbnailAlt: localizedString,
+        icon: localizedString,
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: localizedKeywords.optional(),
+      })
+      .passthrough(),
   }),
   products: defineCollection({
     loader: umbracoLoader("products"),

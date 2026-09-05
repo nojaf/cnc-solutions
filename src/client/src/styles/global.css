@@ -58,11 +58,27 @@ body {
 .cms-content p,
 .cms-content ul li,
 .cms-content ol li {
-  font-size: 18px;
-  line-height: 28px;
+  /* Bootstrap site used 1.1rem / 1.7rem; kept exact so text wraps identically */
+  font-size: 1.1rem;
+  line-height: 1.7rem;
 }
 
 .cms-content p {
   margin-bottom: 16px;
   margin-top: 0;
+}
+
+.cms-content ul,
+.cms-content ol {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 40px;
+}
+
+.cms-content ul {
+  list-style-type: disc;
+}
+
+.cms-content ol {
+  list-style-type: decimal;
 }

@@ -1,17 +1,58 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import OverviewTile from "../components/OverviewTile.astro";
+import BottomEdge from "../components/BottomEdge.astro";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
 
 interface Props {
-  culture: string;
+  culture: Culture;
   umbracoId: number;
   urls: { nl: string; en: string; fr: string };
   seo: { title: string; description: string; keywords: any; lang: string };
 }
 
 const { culture, umbracoId, urls, seo } = Astro.props;
+
+const allSolutions = await getCollection("solutions");
+const solutionsEntry = allSolutions.find((s) => s.data.umbracoId === umbracoId);
+const solutions = pageInCulture(culture, solutionsEntry!.data);
+
+const allSolution = await getCollection("solution");
+const items = allSolution
+  .filter((s) => s.data.parentId === umbracoId)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((s) => pageInCulture(culture, s.data));
 ---
 
 <BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
-  <h1>Solutions</h1>
-  <p>Culture: {culture} | Umbraco ID: {umbracoId}</p>
+  <Header currentPage={solutions} />
+  <PageIntroduction
+    aboveTitle={solutions.aboveTitle}
+    title={solutions.title}
+    lead={solutions.lead}
+  />
+  <section>
+    <div
+      class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285"
+    >
+      <div class="grid grid-cols-2 gap-x-2.5 gap-y-5 mb-4 lg:mb-12">
+        {
+          items.map((s) => (
+            <OverviewTile
+              href={s.url}
+              title={s.title}
+              thumbnail={s.thumbnail}
+              thumbnailAlt={s.thumbnailAlt}
+              icon={s.icon}
+            />
+          ))
+        }
+      </div>
+    </div>
+    <BottomEdge fullWidth />
+  </section>
 </BaseLayout>

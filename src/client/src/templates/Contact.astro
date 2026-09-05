@@ -26,7 +26,11 @@ const contactPostUrl =
 
 <BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
   <Header currentPage={contact} />
-  <PageIntroduction aboveTitle={contact.aboveTitle} title={contact.title} />
+  <PageIntroduction
+    aboveTitle={contact.aboveTitle}
+    title={contact.title}
+    lowercase={false}
+  />
   <section class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285 pb-12">
     <div class="flex flex-wrap">
       {/* Contact info */}

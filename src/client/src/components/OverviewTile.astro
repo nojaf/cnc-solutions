@@ -1,0 +1,65 @@
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+
+export interface OverviewThumbnail {
+  "overview mobile": string;
+  "overview tablet portrait": string;
+  "overview tablet landscape": string;
+  "overview desktop": string;
+  "overview large desktop": string;
+}
+
+interface Props {
+  href: string;
+  title: string;
+  thumbnail: OverviewThumbnail;
+  thumbnailAlt?: string;
+  icon?: string;
+}
+
+const { href, title, thumbnail, thumbnailAlt = "", icon } = Astro.props;
+
+const [mobile, tabletPortrait, tabletLandscape, desktop, largeDesktop] =
+  await Promise.all(
+    [
+      thumbnail["overview mobile"],
+      thumbnail["overview tablet portrait"],
+      thumbnail["overview tablet landscape"],
+      thumbnail["overview desktop"],
+      thumbnail["overview large desktop"],
+    ].map((src) => getImage(getImageParams(src))),
+  );
+const processedIcon = icon ? await getImage(getImageParams(icon)) : null;
+---
+
+<a
+  href={href}
+  class="group block shadow-[0_5px_10px_rgba(0,0,0,0.16)] lg:max-h-70 no-underline"
+>
+  <div class="relative w-full">
+    <picture>
+      <source media="(min-width: 75em)" srcset={largeDesktop.src} />
+      <source media="(min-width: 62em)" srcset={desktop.src} />
+      <source media="(min-width: 48em)" srcset={tabletLandscape.src} />
+      <source media="(min-width: 34em)" srcset={tabletPortrait.src} />
+      <img src={mobile.src} alt={thumbnailAlt} class="w-full lg:h-50" />
+    </picture>
+    {
+      processedIcon && (
+        <img
+          src={processedIcon.src}
+          alt=""
+          class="absolute z-5 top-1/2 left-1/4 w-1/2 -translate-y-1/2 md:left-1/2 md:size-38 md:-translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        />
+      )
+    }
+  </div>
+  <div class="flex w-full min-h-15 p-3 bg-primary group-hover:bg-dark">
+    <h3
+      class="m-auto text-xs leading-3.5 font-bold uppercase text-center text-dark whitespace-normal group-hover:text-primary"
+    >
+      {title}
+    </h3>
+  </div>
+</a>

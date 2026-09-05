@@ -5,22 +5,29 @@ interface Props {
   aboveTitle?: string;
   title: string;
   lead?: string;
+  /** Gatsby lowercased the above-title on every page except contact. */
+  lowercase?: boolean;
 }
 
-const { aboveTitle, title, lead } = Astro.props;
+const { aboveTitle, title, lead, lowercase = true } = Astro.props;
 ---
 
 <section>
-  <div class="mx-auto px-4 lg:max-w-240 xl:max-w-285">
+  <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
     <div class="text-center mt-12 mb-2">
       {
         aboveTitle && (
-          <h2 class="text-sm lg:text-2xl lg:leading-10 lg:font-light font-thin p-0 m-0 lowercase">
+          <h2
+            class:list={[
+              "text-sm leading-4 lg:text-2xl lg:leading-10 lg:font-light font-thin p-0 m-0",
+              { lowercase },
+            ]}
+          >
             {aboveTitle}
           </h2>
         )
       }
-      <div class="inline-block text-center">
+      <div class="text-center">
         <h1
           class="uppercase text-[30px] leading-9 lg:text-5xl lg:leading-12 font-bold mb-0"
         >
@@ -29,12 +36,17 @@ const { aboveTitle, title, lead } = Astro.props;
         <img
           src={underlineWhite.src}
           alt=""
-          class:list={[
-            "intro-underline block mx-auto w-6 opacity-0 transition-opacity duration-600 ease-in",
-            lead ? "mb-8" : "mb-0",
-          ]}
+          class="intro-underline block mx-auto w-6 mb-8 opacity-0 transition-opacity duration-600 ease-in"
         />
-        {lead && <div id="lead" class="cms-content" set:html={lead} />}
+        {
+          lead && (
+            <div
+              id="lead"
+              class="cms-content text-left lg:w-1/2 lg:mx-auto lg:mb-14"
+              set:html={lead}
+            />
+          )
+        }
       </div>
     </div>
   </div>
