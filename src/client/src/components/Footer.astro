@@ -45,8 +45,10 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
 ---
 
 <footer class="bg-dark text-white py-6">
-  <div class="mx-auto px-4 lg:max-w-240 xl:max-w-285 xl:pb-21">
-    <div class="flex flex-wrap">
+  <div
+    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 lg:pb-21 xl:max-w-285"
+  >
+    <div class="flex flex-wrap -mx-4">
       <div class="w-1/2 lg:w-1/4 px-4">
         <a
           href={solutionsPage.url}
@@ -56,10 +58,10 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
             {solutionsPage.navigationText}
           </h4>
         </a>
-        <ul class="list-none p-0 m-0">
+        <ul class="list-none p-0 mt-0 mb-4">
           {
             solutions.map((s) => (
-              <li class="mt-4">
+              <li class="mt-4 leading-7">
                 <a
                   href={s.url}
                   class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
@@ -80,10 +82,10 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
             {productsPage.navigationText}
           </h4>
         </a>
-        <ul class="list-none p-0 m-0">
+        <ul class="list-none p-0 mt-0 mb-4">
           {
             products.map((p) => (
-              <li class="mt-4">
+              <li class="mt-4 leading-7">
                 <a
                   href={p.url}
                   class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
@@ -98,7 +100,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           href={casesPage.url}
           class="text-white no-underline hover:text-primary hover:underline"
         >
-          <h4 class="uppercase text-xl leading-6 font-bold mb-0 mt-4">
+          <h4 class="uppercase text-xl leading-6 font-bold mb-0">
             {casesPage.navigationText}
           </h4>
         </a>
@@ -108,7 +110,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           href={aboutPage.url}
           class="text-white no-underline hover:text-primary hover:underline"
         >
-          <h4 class="uppercase text-xl leading-6 font-bold mb-4">
+          <h4 class="uppercase text-xl leading-6 font-bold mb-6">
             {aboutPage.navigationText}
           </h4>
         </a>

@@ -62,9 +62,10 @@ The Astro site uses `--spacing: 4px`, so all Tailwind spacing utilities are mult
 **Rules:**
 
 - Prefer the nearest 4px value. A 1-2px deviation is acceptable.
-- Avoid arbitrary values like `p-[25px]` — use `p-6` (24px) instead.
-- Only use bracket notation `[value]` when there is no reasonable Tailwind equivalent and the value matters precisely (rare).
+- **Do not use fixed units in Tailwind classes.** No `p-[25px]`, no `leading-[1.7rem]`, no `w-[150px]`. Use the scale: `p-6`, `leading-7`, `w-38`. This is a hard rule, not a preference.
+- Bracket notation `[value]` is only allowed when the value is not a length at all (a `calc()`, a `clip-path`, a shadow) or when Tailwind has no utility for the property. A 0.8px difference is never a reason, and neither is that difference adding up over a list. Accept the drift and note it in the summary instead.
 - When Tailwind has a built-in class (e.g. `border-l-8` for 8px), use it instead of `border-l-[8px]`.
+- The one place exact Gatsby values are kept is the `.cms-content` typography in `global.css`, because font size decides where CMS text wraps. That is plain CSS, not a utility class, and it is the only exception.
 
 ### 3. Map Bootstrap patterns to Tailwind
 

@@ -54,31 +54,30 @@ body {
 }
 
 /* Scoped to .cms-content so these styles only apply to dynamic CMS content (set:html).
-   Without this scope, they clash with Tailwind utility classes. */
+   Without this scope, they clash with Tailwind utility classes.
+   Use @apply with scale utilities wherever one exists. */
 .cms-content p,
 .cms-content ul li,
 .cms-content ol li {
-  /* Bootstrap site used 1.1rem / 1.7rem; kept exact so text wraps identically */
+  /* No utility matches Bootstrap's 1.1rem / 1.7rem, and the size decides
+     where CMS text wraps, so these two stay as plain CSS. */
   font-size: 1.1rem;
   line-height: 1.7rem;
 }
 
 .cms-content p {
-  margin-bottom: 16px;
-  margin-top: 0;
+  @apply mt-0 mb-4;
 }
 
 .cms-content ul,
 .cms-content ol {
-  margin-top: 0;
-  margin-bottom: 16px;
-  padding-left: 40px;
+  @apply mt-0 mb-4 pl-10;
 }
 
 .cms-content ul {
-  list-style-type: disc;
+  @apply list-disc;
 }
 
 .cms-content ol {
-  list-style-type: decimal;
+  @apply list-decimal;
 }
