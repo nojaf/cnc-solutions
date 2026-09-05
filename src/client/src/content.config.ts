@@ -371,9 +371,42 @@ export const collections = {
         variants: localizedString,
         application: localizedString,
         thumbnail: localizedProductThumbnail,
+        aboveFeature: localizedString,
+        featureTitle: localizedString,
+        aboveMoreInfo: localizedString,
+        moreInfoTitle: localizedString,
+        moreInfoLead: localizedOptionalString.optional(),
+        fileDownloadFile: localizedOptionalString.optional(),
+        fileDownloadText: localizedOptionalString.optional(),
+        contactPageLink: localizedNumber.nullable().optional(),
+        contactPageText: localizedOptionalString.optional(),
         navigationText: localizedOptionalString.optional(),
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: localizedKeywords.optional(),
+      })
+      .passthrough(),
+  }),
+  productRow: defineCollection({
+    loader: umbracoLoader("productRow"),
+    schema: baseSchema
+      .extend({
+        image: localizedThumbnailImage,
+        altText: localizedOptionalString.optional(),
+        isMediaRight: localizedBoolean,
+        videoId: localizedOptionalString.optional(),
+        aboveTitle: localizedOptionalString.optional(),
+        title: localizedString,
+        lead: localizedOptionalString.optional(),
+      })
+      .passthrough(),
+  }),
+  productFeature: defineCollection({
+    loader: umbracoLoader("productFeature"),
+    schema: baseSchema
+      .extend({
+        icon: localizedString,
+        title: localizedString,
+        lead: localizedOptionalString.optional(),
       })
       .passthrough(),
   }),

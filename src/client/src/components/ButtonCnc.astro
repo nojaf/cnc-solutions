@@ -1,10 +1,10 @@
 ---
-interface Props {
+interface Props extends astroHTML.JSX.AnchorHTMLAttributes {
   href?: string;
   type?: "button" | "submit";
 }
 
-const { href, type } = Astro.props;
+const { href, type, ...rest } = Astro.props;
 const Tag = href ? "a" : "button";
 const clipPath =
   "polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%)";
@@ -13,6 +13,7 @@ const clipPath =
 <Tag
   href={href}
   type={!href ? type : undefined}
+  {...rest}
   class="btn-cnc group relative inline-block no-underline p-0.5"
   style={`clip-path: ${clipPath};`}
 >
