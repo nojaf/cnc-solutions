@@ -25,35 +25,43 @@ const contactPostUrl =
 ---
 
 <BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
+  <link slot="head" rel="preconnect" href="https://challenges.cloudflare.com" />
   <Header currentPage={contact} />
   <PageIntroduction
     aboveTitle={contact.aboveTitle}
     title={contact.title}
     lowercase={false}
   />
-  <section class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285 pb-12">
-    <div class="flex flex-wrap">
+  <section
+    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 pb-12"
+  >
+    <div class="flex flex-wrap -mx-4">
       {/* Contact info */}
       <div id="contact-info" class="w-full lg:w-4/12 px-4 mb-8 lg:mb-0">
         {
           contact.aboveAddress && (
-            <h2 class="text-xl font-bold mb-2">{contact.aboveAddress}</h2>
+            <h2 class="text-xl font-bold uppercase leading-6 lg:leading-12 mb-2">
+              {contact.aboveAddress}
+            </h2>
           )
         }
         {
           contact.address && (
             <address class="not-italic mb-4">
-              <pre class="font-body text-base whitespace-pre">
-                {contact.address}
-              </pre>
+              {/* set:text, not children: whitespace inside a <pre> is
+                  content, and the formatter re-indents children. */}
+              <pre
+                class="font-body text-base whitespace-pre text-[#212529] mb-4"
+                set:text={contact.address}
+              />
             </address>
           )
         }
-        <dl class="grid gap-y-1 grid-cols-[32px_1fr]">
+        <dl class="grid gap-y-1 grid-cols-[32px_1fr] mb-4">
           {
             contact.email && (
               <>
-                <dt class="text-primary">
+                <dt class="text-primary font-bold h-6">
                   <svg
                     class="w-5 h-5"
                     viewBox="0 0 24 24"
@@ -76,7 +84,7 @@ const contactPostUrl =
           {
             contact.phone && (
               <>
-                <dt class="text-primary">
+                <dt class="text-primary font-bold h-6">
                   <svg
                     class="w-5 h-5"
                     viewBox="0 0 24 24"
@@ -96,7 +104,7 @@ const contactPostUrl =
           {
             contact.linkedInUrl && (
               <>
-                <dt class="text-primary">
+                <dt class="text-primary font-bold h-6">
                   <a
                     href={contact.linkedInUrl}
                     target="_blank"
@@ -119,7 +127,7 @@ const contactPostUrl =
           {
             contact.facebookUrl && (
               <>
-                <dt class="text-primary">
+                <dt class="text-primary font-bold h-6">
                   <a
                     href={contact.facebookUrl}
                     target="_blank"
@@ -145,137 +153,159 @@ const contactPostUrl =
       {/* Contact form */}
       <div id="contact-form" class="w-full lg:w-8/12 px-4">
         {
-          contact.aboveForm && (
-            <h2 class="text-xl font-bold mb-2">{contact.aboveForm}</h2>
-          )
+          /* Gatsby nests a second .container inside this column, insetting the
+            form by another 15px. Its max-width never bites, so only the
+            padding is reproduced here. */
         }
-        <form id="contactForm" data-action={contactPostUrl}>
-          <div class="mb-4">
-            <label for="name" class="block text-sm mb-2"
-              >{contact.labelName}*</label
-            >
-            <input
-              type="text"
-              name="name"
-              id="name"
-              required
-              class="w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
-            />
-          </div>
-          <div class="mb-4">
-            <label for="company" class="block text-sm mb-2"
-              >{contact.labelCompany}*</label
-            >
-            <input
-              type="text"
-              name="company"
-              id="company"
-              required
-              class="w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
-            />
-          </div>
-          <div class="mb-4">
-            <label for="address" class="block text-sm mb-2"
-              >{contact.labelAddress}</label
-            >
-            <input
-              type="text"
-              name="address"
-              id="address"
-              class="w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
-            />
-          </div>
-          <div class="flex flex-wrap -mx-4">
-            <div class="mb-4 w-1/2 px-4">
-              <label for="zip" class="block text-sm mb-2"
-                >{contact.labelZip}</label
+        <div class="px-4">
+          {
+            contact.aboveForm && (
+              <h2 class="text-xl font-bold uppercase leading-6 lg:leading-12 mb-2">
+                {contact.aboveForm}
+              </h2>
+            )
+          }
+          <form id="contactForm" data-action={contactPostUrl}>
+            <div class="mb-4">
+              <label for="name" class="inline-block text-sm mb-2"
+                >{contact.labelName}*</label
               >
               <input
                 type="text"
-                name="zip"
-                id="zip"
-                class="w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+                name="name"
+                id="name"
+                required
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
               />
             </div>
-            <div class="mb-4 w-1/2 px-4">
-              <label for="city" class="block text-sm mb-2"
-                >{contact.labelCity}</label
+            <div class="mb-4">
+              <label for="company" class="inline-block text-sm mb-2"
+                >{contact.labelCompany}*</label
               >
               <input
                 type="text"
-                name="city"
-                id="city"
-                class="w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+                name="company"
+                id="company"
+                required
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
               />
             </div>
+            <div class="mb-4">
+              <label for="address" class="inline-block text-sm mb-2"
+                >{contact.labelAddress}</label
+              >
+              <input
+                type="text"
+                name="address"
+                id="address"
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="flex flex-wrap -mx-4">
+              <div class="mb-4 w-1/2 px-4">
+                <label for="zip" class="inline-block text-sm mb-2"
+                  >{contact.labelZip}</label
+                >
+                <input
+                  type="text"
+                  name="zip"
+                  id="zip"
+                  class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+                />
+              </div>
+              <div class="mb-4 w-1/2 px-4">
+                <label for="city" class="inline-block text-sm mb-2"
+                  >{contact.labelCity}</label
+                >
+                <input
+                  type="text"
+                  name="city"
+                  id="city"
+                  class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+                />
+              </div>
+            </div>
+            <div class="mb-4">
+              <label for="country" class="inline-block text-sm mb-2"
+                >{contact.labelCountry}</label
+              >
+              <input
+                type="text"
+                name="country"
+                id="country"
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="email" class="inline-block text-sm mb-2"
+                >{contact.labelEmail}*</label
+              >
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="telephone" class="inline-block text-sm mb-2"
+                >{contact.labelPhone}*</label
+              >
+              <input
+                type="tel"
+                name="telephone"
+                id="telephone"
+                required
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="message" class="inline-block text-sm mb-2"
+                >{contact.labelMessage}</label
+              >
+              <textarea
+                name="message"
+                id="message"
+                cols={30}
+                rows={5}
+                class="block w-full border border-dark rounded-none py-2 px-3 text-base"
+              ></textarea>
+            </div>
+            <div class="mb-4">
+              <div
+                id="turnstile-widget"
+                data-sitekey={contact.turnstileSiteKey}
+              >
+              </div>
+            </div>
+            <div class="text-center lg:text-left">
+              <ButtonCnc type="submit">{contact.sendButtonText}</ButtonCnc>
+            </div>
+          </form>
+          <div
+            id="contact-success"
+            class="hidden mt-4 p-3 bg-green-100 text-green-800 border border-green-300"
+          >
+            {contact.successText}
           </div>
-          <div class="mb-4">
-            <label for="country" class="block text-sm mb-2"
-              >{contact.labelCountry}</label
-            >
-            <input
-              type="text"
-              name="country"
-              id="country"
-              class="w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
-            />
+          <div
+            id="contact-error"
+            class="hidden mt-4 p-3 bg-red-100 text-red-800 border border-red-300"
+          >
+            {contact.errorText}
           </div>
-          <div class="mb-4">
-            <label for="email" class="block text-sm mb-2"
-              >{contact.labelEmail}*</label
-            >
-            <input
-              type="email"
-              name="email"
-              id="email"
-              required
-              class="w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
-            />
-          </div>
-          <div class="mb-4">
-            <label for="telephone" class="block text-sm mb-2"
-              >{contact.labelPhone}*</label
-            >
-            <input
-              type="tel"
-              name="telephone"
-              id="telephone"
-              required
-              class="w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
-            />
-          </div>
-          <div class="mb-4">
-            <label for="message" class="block text-sm mb-2"
-              >{contact.labelMessage}</label
-            >
-            <textarea
-              name="message"
-              id="message"
-              cols={30}
-              rows={5}
-              class="w-full border border-dark rounded-none py-2 px-3 text-base"
-            ></textarea>
-          </div>
-          <div class="text-center lg:text-left">
-            <ButtonCnc type="submit">{contact.sendButtonText}</ButtonCnc>
-          </div>
-        </form>
-        <div
-          id="contact-success"
-          class="hidden mt-4 p-3 bg-green-100 text-green-800 border border-green-300"
-        >
-          {contact.successText}
-        </div>
-        <div
-          id="contact-error"
-          class="hidden mt-4 p-3 bg-red-100 text-red-800 border border-red-300"
-        >
-          {contact.errorText}
         </div>
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<script
+  is:inline
+  defer
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+></script>
 
 <script>
   document.addEventListener("astro:page-load", () => {
@@ -289,6 +319,54 @@ const contactPostUrl =
     const successEl = document.getElementById("contact-success");
     const errorEl = document.getElementById("contact-error");
     const requiredFields = ["name", "company", "email", "telephone"];
+
+    // Cloudflare's always-passing test key, so the form stays usable on the
+    // dev server, where the real key rejects the hostname. Its dummy token
+    // cannot verify against the real secret, so the backend answers 400 and
+    // no mail is sent.
+    //
+    // ?turnstile=live opts into the real key for a genuine end-to-end test.
+    // That needs "localhost" added to the widget's allowed hostnames in the
+    // Cloudflare dashboard, and it does send a real email to the contact
+    // page's formRecipient. Ignored off localhost, where the real key is
+    // always used.
+    const TEST_SITE_KEY = "1x00000000000000000000AA";
+    const useTestKey =
+      location.hostname === "localhost" &&
+      new URLSearchParams(location.search).get("turnstile") !== "live";
+    const turnstileEl = document.getElementById("turnstile-widget");
+    let widgetId: string | undefined;
+
+    // api.js is deferred, so it may not have run yet on first paint. Poll for
+    // it the way the Gatsby page did.
+    let renderTimeout: number | undefined;
+    function renderTurnstile() {
+      const turnstile = (window as any).turnstile;
+      if (!turnstileEl || !turnstile) {
+        renderTimeout = window.setTimeout(renderTurnstile, 100);
+        return;
+      }
+      turnstileEl.innerHTML = "";
+      widgetId = turnstile.render(turnstileEl, {
+        sitekey: useTestKey ? TEST_SITE_KEY : turnstileEl.dataset.sitekey,
+      });
+    }
+    renderTurnstile();
+
+    // ClientRouter swaps the DOM without a reload, so drop the widget on the
+    // way out or api.js keeps a handle to a detached node.
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        clearTimeout(renderTimeout);
+        const turnstile = (window as any).turnstile;
+        if (widgetId !== undefined && turnstile) {
+          turnstile.remove(widgetId);
+          widgetId = undefined;
+        }
+      },
+      { once: true },
+    );
 
     form.addEventListener("submit", async (ev) => {
       ev.preventDefault();
@@ -317,15 +395,35 @@ const contactPostUrl =
       }
       if (!valid) return;
 
+      const turnstile = (window as any).turnstile;
+      const token =
+        widgetId !== undefined && turnstile
+          ? turnstile.getResponse(widgetId)
+          : "";
+      // No token means the widget has not finished solving, or never loaded.
+      // The backend rejects such a post, so fail here instead of sending it.
+      if (!token) {
+        errorEl?.classList.remove("hidden");
+        return;
+      }
+      data.turnstileToken = token;
+
       try {
-        await fetch(actionUrl, {
+        const response = await fetch(actionUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        // Deviation from Gatsby, which left the filled-in form sitting above
+        // the thank-you message. There is nothing left to do with it, and
+        // leaving it invites a second submit on a spent token.
+        form.classList.add("hidden");
         successEl?.classList.remove("hidden");
       } catch {
         errorEl?.classList.remove("hidden");
+        // The token was spent on that attempt, so a retry needs a fresh one.
+        turnstile.reset(widgetId);
       }
     });
   });

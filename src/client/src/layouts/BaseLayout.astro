@@ -32,6 +32,7 @@ const { culture, currentPageId, urls, seo, mainClass = "" } = Astro.props;
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <SEO {...seo} />
+    <slot name="head" />
     <ClientRouter />
   </head>
   <body>

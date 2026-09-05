@@ -261,6 +261,7 @@ export const collections = {
         sendButtonText: localizedOptionalString.optional(),
         successText: localizedOptionalString.optional(),
         errorText: localizedOptionalString.optional(),
+        turnstileSiteKey: localizedString,
         navigationText: localizedOptionalString.optional(),
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: z

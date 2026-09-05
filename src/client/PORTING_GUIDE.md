@@ -225,6 +225,33 @@ Local assets (logos, icons, decorative images) imported via `import` statements 
 
 MediaPicker fields can hold files as well as images. PDFs go through `src/pages/downloads/[...file].pdf.ts`, a static endpoint that walks the tree with `collectPdfUrls()` and fetches each file at build time, so the built site does not call the backend for them. In templates, link with `mediaFileHref(remoteUrl)`, which maps `https://.../media/x/y.pdf` to `/downloads/x/y.pdf` and passes other URLs through. Same-origin links also make the `download` attribute work; browsers ignore it cross-origin.
 
+## Contact form (Cloudflare Turnstile)
+
+`ContactController.cs` rejects any post to `/umbraco/api/contact/post` whose
+`turnstileToken` does not verify, so the form only works with a Turnstile
+widget. Both keys live on the contact page in Umbraco: `turnstileSiteKey` is
+read by the template, `turnstileSecretKey` by the backend. Nothing is
+configured in the repo.
+
+`Contact.astro` loads `api.js?render=explicit` with `is:inline`, polls for
+`window.turnstile`, and renders the widget into `#turnstile-widget` on
+`astro:page-load`. On `localhost` it swaps in Cloudflare's always-passing test
+key `1x00000000000000000000AA`, because the real key rejects the hostname.
+The submit handler reads `getResponse(widgetId)`, refuses to post without a
+token, and calls `reset()` only after a failure, since a token is single use.
+
+The test key's dummy token cannot verify against the real secret, so a local
+submission always ends on the error text and never sends mail. To test the
+whole flow for real, open `/contacteer-ons/?turnstile=live`, which uses the
+real site key on localhost. That needs `localhost` added to the widget's
+allowed hostnames in the Cloudflare dashboard (without it Turnstile answers
+error `110200`, unknown domain) and it sends a real email to the contact
+page's `formRecipient`. The flag is ignored anywhere but localhost.
+
+`turnstileSecretKey` also lands in `.astro/data-store.json` because
+`nodeToEntry` keeps the whole Umbraco node. That file is gitignored and never
+reaches `dist/`, but do not render CMS fields blindly on this page.
+
 ## Missing CMS media
 
 A media file deleted from Umbraco makes `getImage()` throw during image generation and fails the whole build. `getTree()` in `src/lib/umbraco.ts` therefore checks every distinct media file once with a HEAD request (about 200, under two seconds) and rewrites any reference that returns 404 to `/media-missing.svg`, a grey placeholder in `public/`. Astro passes local public paths through `getImage()` untouched, so nothing downstream changes. The build log prints a `[umbraco]` warning listing the broken files; treat that as a bug to report to the content team, not as a fixed problem.
@@ -310,3 +337,10 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 - **A `class` prop on `ButtonCnc` is silently dropped** because the component sets `class` after spreading its props. Put spacing on a wrapper (the case page uses `pb-5` on the link container for Gatsby's 20px button margin).
 - **The old case page has no mobile image for a single-slide row.** `case.js` aliased the `mobile` crop away in its GraphQL query and then read `image.mobile`, so below md the `<img>` has no `src` and renders 24px tall. The port shows the mobile crop; the probe reports `rows.N.img` and the section height as differences at 375 and 600.
 - **`ButtonCnc` renders 16px/24px text, Gatsby's `.btn-cnc` is 1.1rem/1.7rem.** Every button is 3px shorter and about 10px narrower than the old site. On the English S-series page at 800px this makes the two more-info buttons fit on one line where Gatsby wraps them. Not fixed yet: it is a shared component and every page with a button needs re-verifying when it changes.
+- **Prettier re-indents element children, and inside a `<pre>` that indentation is content.** The contact address rendered with its first line pushed 16 spaces in, twice: once written that way, once after the formatter undid the fix. Use `set:text={value}` on a self-closing `<pre>` so there are no children to re-indent.
+- **`main.sass` sets `h1, h2` to uppercase, and to 48px/48px from lg up.** A page rule that only overrides `font-size` (contact.sass drops the h2 to 20px) keeps the 48px line-height. Port it as `text-xl leading-6 lg:leading-12 uppercase`, and check `textTransform` on every ported heading.
+- **A Bootstrap `.container` can be nested inside a column.** `contact.js` wraps the form in `.col-lg-8 > .container`, insetting it another 15px at every breakpoint. Its max-width never bites there, so only the padding needs reproducing (`px-4` on an inner div). Read the markup, not just the Sass, before matching a column's edge.
+- **Bootstrap's `.form-control` is `display: block` and its `label` is `inline-block`.** Ported the other way round, each field loses the label's 2px descender and gains an 8px baseline gap under the input. Over nine fields on the contact page that was a 50px difference in form height.
+- **The contact form is 26px shorter than Gatsby's and that is accepted.** `input.form-control` is 25px (`h-6` is 24) and the 14px label's line box is 21px (`text-sm` is 20). Both are 1px snaps, but nine fields accumulate. No bracket lengths to close it.
+- **Cloudflare's Turnstile test key renders a dummy widget with no iframe.** A probe that looks for `iframe[src*='challenges.cloudflare']` reports MISSING on both sites and the comparison passes while measuring nothing. Probe the hidden `input[name=cf-turnstile-response]` instead.
+- **The contact form hides itself after a successful submit.** Gatsby left the filled-in form sitting above the thank-you alert, which invites a second submit on a spent token. The port adds `hidden` to the `<form>` on a 200 only; a failure keeps it up so the visitor can retry. The `aboveForm` heading stays either way.
