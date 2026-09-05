@@ -12,7 +12,11 @@ interface Props {
   urls: { nl: string; en: string; fr: string };
 }
 
-const { culture, currentPageId, urls } = Astro.props;
+const { culture, urls } = Astro.props;
+
+// Navigation text is optional in Umbraco; the node name is the fallback.
+const navText = (page: { navigationText?: string | null; name: string }) =>
+  page.navigationText ?? page.name;
 
 // Fetch all navigation data at build time
 const [
@@ -68,26 +72,26 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
 
 const dropdowns = [
   {
-    label: solutionsPage.navigationText,
+    label: navText(solutionsPage),
     href: solutionsPage.url,
-    items: solutions.map((s) => ({ url: s.url, text: s.navigationText })),
+    items: solutions.map((s) => ({ url: s.url, text: navText(s) })),
   },
   {
-    label: productsPage.navigationText,
+    label: navText(productsPage),
     href: productsPage.url,
-    items: products.map((p) => ({ url: p.url, text: p.navigationText })),
+    items: products.map((p) => ({ url: p.url, text: navText(p) })),
   },
   {
-    label: casesPage.navigationText,
+    label: navText(casesPage),
     href: casesPage.url,
     items: cases.map((c) => ({ url: c.url, text: c.title })),
   },
   {
-    label: aboutPage.navigationText,
+    label: navText(aboutPage),
     href: aboutPage.url,
     items: [
-      { url: teamPage.url, text: teamPage.navigationText },
-      { url: newsPage.url, text: newsPage.navigationText },
+      { url: teamPage.url, text: navText(teamPage) },
+      { url: newsPage.url, text: navText(newsPage) },
     ],
   },
 ];
@@ -128,7 +132,7 @@ const dropdowns = [
             href={vacancyPage.url}
             class="text-dark text-base p-2 no-underline hover:text-primary"
           >
-            {vacancyPage.navigationText}
+            {navText(vacancyPage)}
           </a>
         </li>
       )
@@ -140,7 +144,7 @@ const dropdowns = [
         href={contactPage.url}
         class="text-dark text-base p-2 no-underline hover:text-primary"
       >
-        {contactPage.navigationText}
+        {navText(contactPage)}
       </a>
     </li>
 
@@ -174,7 +178,7 @@ const dropdowns = [
             href={vacancyPage.url}
             class="block uppercase font-semibold text-white text-xl leading-10 no-underline py-1"
           >
-            {vacancyPage.navigationText}
+            {navText(vacancyPage)}
           </a>
         </li>
       )
@@ -186,7 +190,7 @@ const dropdowns = [
         href={contactPage.url}
         class="block uppercase font-semibold text-white text-xl leading-10 no-underline py-1"
       >
-        {contactPage.navigationText}
+        {navText(contactPage)}
       </a>
     </li>
 

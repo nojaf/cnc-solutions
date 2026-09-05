@@ -78,7 +78,10 @@ const tree = await getTree();
 const contactUrl = product.contactPageLink
   ? getNodeById(tree.root, product.contactPageLink)?.url[culture]
   : undefined;
-const showDownload = product.fileDownloadFile && product.fileDownloadText;
+const downloadHref =
+  product.fileDownloadFile && product.fileDownloadText
+    ? mediaFileHref(product.fileDownloadFile)
+    : null;
 const showContact = contactUrl && product.contactPageText;
 
 const above =
@@ -212,10 +215,10 @@ const container =
         class="flex flex-col items-center md:flex-row md:flex-wrap md:justify-center"
       >
         {
-          showDownload && (
+          downloadHref && (
             <div class="flex mb-5 md:mr-5">
               <ButtonCnc
-                href={mediaFileHref(product.fileDownloadFile)}
+                href={downloadHref}
                 download
                 target="_blank"
                 rel="noopener noreferrer"

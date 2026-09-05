@@ -6,7 +6,7 @@ interface Props {
   lang?: string;
 }
 
-const { title, description = "", keywords = "", lang = "nl" } = Astro.props;
+const { title, description = "", keywords = "" } = Astro.props;
 const siteTitle = "CNC Solutions";
 const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 ---

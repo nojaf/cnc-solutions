@@ -27,7 +27,6 @@ export default () => {
   const h3 = box.querySelector("h3");
   const edge = grid.closest("section").lastElementChild;
   const firstTop = r(tile).top;
-  const hover = (el, props) => pick(el, props);
   return {
     container: pick(grid.parentElement, ["maxWidth", "paddingLeft"]),
     grid: pick(grid, [

@@ -2,9 +2,9 @@
 import underlineWhite from "../assets/underline-white.png";
 
 interface Props {
-  aboveTitle?: string;
+  aboveTitle?: string | null;
   title: string;
-  lead?: string;
+  lead?: string | null;
   /** Gatsby lowercased the above-title on every page except contact. */
   lowercase?: boolean;
 }
