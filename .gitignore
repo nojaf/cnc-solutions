@@ -712,3 +712,4 @@ secrets
 .config
 src/client/node_modules
 .idea/
+.playwright-mcp/

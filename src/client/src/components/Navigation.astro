@@ -104,6 +104,8 @@ const dropdowns = [
     id="nav-toggle"
     class="lg:hidden border-none bg-transparent p-0"
     aria-label="Toggle navigation"
+    aria-expanded="false"
+    aria-controls="nav-mobile-menu"
   >
     <img src={menuBar.src} class="h-8" alt="" />
   </button>
@@ -151,9 +153,13 @@ const dropdowns = [
   </ul>
 </nav>
 
-<!-- Mobile menu (hidden by default, toggled via JS) -->
-<div id="nav-mobile-menu" class="hidden lg:hidden bg-primary text-center">
-  <ul class="list-none m-0 p-0">
+<!-- Mobile menu: collapsed by default, JS swaps grid-rows-[0fr] for grid-rows-[1fr]
+     so the height animates from 0 to auto -->
+<div
+  id="nav-mobile-menu"
+  class="grid grid-rows-[0fr] lg:hidden bg-primary text-center transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none"
+>
+  <ul class="list-none m-0 p-0 min-h-0 overflow-hidden">
     {
       dropdowns.map((d) => (
         <NavDropdown label={d.label} href={d.href} items={d.items} />
@@ -197,8 +203,19 @@ const dropdowns = [
   document.addEventListener("astro:page-load", () => {
     const toggle = document.getElementById("nav-toggle");
     const menu = document.getElementById("nav-mobile-menu");
+    // Collapsible panels are CSS grids; toggling the row track between
+    // 0fr and 1fr animates the height without knowing it up front.
+    const toggleCollapse = (panel: Element) => {
+      const open = panel.classList.contains("grid-rows-[1fr]");
+      panel.classList.toggle("grid-rows-[1fr]", !open);
+      panel.classList.toggle("grid-rows-[0fr]", open);
+      return !open;
+    };
+
     toggle?.addEventListener("click", () => {
-      menu?.classList.toggle("hidden");
+      if (!menu) return;
+      const open = toggleCollapse(menu);
+      toggle.setAttribute("aria-expanded", String(open));
     });
 
     document.querySelectorAll(".mobile-submenu-toggle").forEach((btn) => {
@@ -206,7 +223,8 @@ const dropdowns = [
         const submenu = btn.closest("li")?.querySelector(".mobile-submenu");
         const arrow = btn.querySelector("span");
         if (submenu) {
-          submenu.classList.toggle("hidden");
+          const open = toggleCollapse(submenu);
+          btn.setAttribute("aria-expanded", String(open));
         }
         if (arrow) {
           arrow.classList.toggle("rotate-180");
