@@ -29,14 +29,71 @@ export interface UmbracoTree {
 
 // --- Cached tree fetch ---
 
-let cachedTree: UmbracoTree | null = null;
+// The promise is cached, not the result: every collection loader calls this
+// at the same time during content sync, and a result cache would fetch once
+// per collection.
+let cachedTree: Promise<UmbracoTree> | null = null;
 
-export async function getTree(): Promise<UmbracoTree> {
-  if (!cachedTree) {
+export function getTree(): Promise<UmbracoTree> {
+  cachedTree ??= (async () => {
     const response = await fetch(`${API_BASE}/graph/tree`);
-    cachedTree = await response.json();
+    const tree: UmbracoTree = await response.json();
+    await replaceMissingMedia(tree.root);
+    return tree;
+  })();
+  return cachedTree;
+}
+
+// --- Missing media ---
+
+const MEDIA_URL = /^https?:\/\/[^/]+\/media\//;
+export const MISSING_MEDIA = "/media-missing.svg";
+
+function mediaValues(root: UmbracoNode): Array<[Record<string, any>, string]> {
+  const found: Array<[Record<string, any>, string]> = [];
+  const walk = (holder: Record<string, any>) => {
+    for (const [key, value] of Object.entries(holder)) {
+      if (typeof value === "string" && MEDIA_URL.test(value)) {
+        found.push([holder, key]);
+      } else if (value && typeof value === "object") {
+        walk(value);
+      }
+    }
+  };
+  for (const node of flattenTree(root)) walk(node.properties);
+  return found;
+}
+
+/**
+ * A media file deleted from Umbraco would fail `getImage()` and stop the whole
+ * build. Check every distinct file once (about 200 HEAD requests) and point
+ * references to a 404 at a local placeholder instead, with a warning.
+ */
+async function replaceMissingMedia(root: UmbracoNode): Promise<void> {
+  const refs = mediaValues(root);
+  const files = [...new Set(refs.map(([h, k]) => h[k].split("?")[0]))];
+  const missing = new Set<string>();
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: 10 }, async () => {
+      while (next < files.length) {
+        const url = files[next++];
+        try {
+          const res = await fetch(url, { method: "HEAD" });
+          if (res.status === 404) missing.add(url);
+        } catch {
+          // Network trouble is not a missing file; let the build report it.
+        }
+      }
+    }),
+  );
+  if (missing.size === 0) return;
+  for (const [holder, key] of refs) {
+    if (missing.has(holder[key].split("?")[0])) holder[key] = MISSING_MEDIA;
   }
-  return cachedTree!;
+  console.warn(
+    `[umbraco] ${missing.size} media file(s) return 404 and were replaced by ${MISSING_MEDIA}:\n  ${[...missing].join("\n  ")}`,
+  );
 }
 
 export function clearTreeCache(): void {
@@ -111,6 +168,9 @@ export function getImageParams(src: string): {
   height?: number;
   inferSize?: boolean;
 } {
+  // The placeholder is a local public asset: no query string to parse and
+  // `inferSize` only works for remote images, so give its own dimensions.
+  if (src === MISSING_MEDIA) return { src, width: 1200, height: 600 };
   try {
     const url = new URL(src);
     const w = url.searchParams.get("width");

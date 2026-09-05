@@ -225,6 +225,10 @@ Local assets (logos, icons, decorative images) imported via `import` statements 
 
 MediaPicker fields can hold files as well as images. PDFs go through `src/pages/downloads/[...file].pdf.ts`, a static endpoint that walks the tree with `collectPdfUrls()` and fetches each file at build time, so the built site does not call the backend for them. In templates, link with `mediaFileHref(remoteUrl)`, which maps `https://.../media/x/y.pdf` to `/downloads/x/y.pdf` and passes other URLs through. Same-origin links also make the `download` attribute work; browsers ignore it cross-origin.
 
+## Missing CMS media
+
+A media file deleted from Umbraco makes `getImage()` throw during image generation and fails the whole build. `getTree()` in `src/lib/umbraco.ts` therefore checks every distinct media file once with a HEAD request (about 200, under two seconds) and rewrites any reference that returns 404 to `/media-missing.svg`, a grey placeholder in `public/`. Astro passes local public paths through `getImage()` untouched, so nothing downstream changes. The build log prints a `[umbraco]` warning listing the broken files; treat that as a bug to report to the content team, not as a fixed problem.
+
 ## Dynamic CMS Content (`.cms-content`)
 
 Global typography styles (`font-size`, `line-height`, `margin`) for `p`, `ul li`, and `ol li` are scoped under the `.cms-content` class in `global.css`. This prevents them from clashing with Tailwind utility classes.
