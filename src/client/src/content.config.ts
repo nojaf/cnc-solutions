@@ -318,11 +318,36 @@ export const collections = {
   }),
   cases: defineCollection({
     loader: umbracoLoader("cases"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        lead: localizedString,
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: localizedKeywords.optional(),
+      })
+      .passthrough(),
   }),
   case: defineCollection({
     loader: umbracoLoader("case"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        lead: localizedString,
+        thumbnail: localizedOverviewThumbnail,
+        thumbnailAlt: localizedString,
+        thumbnailText: localizedOptionalString.optional(),
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: localizedKeywords.optional(),
+      })
+      .passthrough(),
   }),
   team: defineCollection({
     loader: umbracoLoader("team"),

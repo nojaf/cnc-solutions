@@ -16,9 +16,18 @@ interface Props {
   thumbnail: OverviewThumbnail;
   thumbnailAlt?: string;
   icon?: string;
+  /** Dark tile with primary text; hover swaps them. Used by the cases overview. */
+  inverted?: boolean;
 }
 
-const { href, title, thumbnail, thumbnailAlt = "", icon } = Astro.props;
+const {
+  href,
+  title,
+  thumbnail,
+  thumbnailAlt = "",
+  icon,
+  inverted = false,
+} = Astro.props;
 
 const [mobile, tabletPortrait, tabletLandscape, desktop, largeDesktop] =
   await Promise.all(
@@ -55,9 +64,21 @@ const processedIcon = icon ? await getImage(getImageParams(icon)) : null;
       )
     }
   </div>
-  <div class="flex w-full min-h-15 p-3 bg-primary group-hover:bg-dark">
+  <div
+    class:list={[
+      "flex w-full min-h-15 p-3",
+      inverted
+        ? "bg-dark group-hover:bg-primary"
+        : "bg-primary group-hover:bg-dark",
+    ]}
+  >
     <h3
-      class="m-auto text-xs leading-3.5 font-bold uppercase text-center text-dark whitespace-normal group-hover:text-primary"
+      class:list={[
+        "m-auto text-xs leading-3.5 font-bold uppercase text-center whitespace-normal",
+        inverted
+          ? "text-primary group-hover:text-dark"
+          : "text-dark group-hover:text-primary",
+      ]}
     >
       {title}
     </h3>
