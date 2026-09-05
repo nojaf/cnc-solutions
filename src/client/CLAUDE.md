@@ -20,6 +20,9 @@ markup and Bootstrap styles map to Astro and Tailwind.
   resulting diff in your summary.
 - Check every viewport the script covers by default: 375, 600, 800, 992
   and 1200. A component that is right at 375 and 1200 is not done.
+- Run `bunx astro check` and fix every error in the files you touched.
+  `pageInCulture` returns a typed object, so a missing null check or a
+  wrong field name shows up there, not at build time.
 - A shared component (`PageIntroduction`, `Header`, `Footer`,
   `Navigation`, anything in `global.css`) must be re-verified on every
   page that uses it after a change.

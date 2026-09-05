@@ -137,10 +137,16 @@ export function buildUrlLookup(root: UmbracoNode): Map<number, UmbracoUrl> {
  * Fields that have {nl, en, fr} keys get resolved to the value for the given culture.
  * Other fields pass through unchanged.
  */
+/** A `{ nl, en, fr }` value reduced to one culture; anything else unchanged. */
+type Localized<V> = V extends object ? ("nl" extends keyof V ? V["nl"] : V) : V;
+
+/** `T` with every `{ nl, en, fr }` field replaced by the value for one culture. */
+export type InCulture<T> = { [K in keyof T]: Localized<T[K]> };
+
 export function pageInCulture<T extends Record<string, any>>(
   culture: Culture,
   page: T,
-): Record<string, any> {
+): InCulture<T> {
   const result: Record<string, any> = {};
   for (const [key, value] of Object.entries(page)) {
     if (
@@ -154,7 +160,7 @@ export function pageInCulture<T extends Record<string, any>>(
       result[key] = value;
     }
   }
-  return result;
+  return result as InCulture<T>;
 }
 
 /**

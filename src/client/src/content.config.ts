@@ -443,6 +443,44 @@ export const collections = {
       })
       .passthrough(),
   }),
+  caseRow: defineCollection({
+    loader: umbracoLoader("caseRow"),
+    schema: baseSchema
+      .extend({
+        aboveTitle: localizedOptionalString.optional(),
+        title: localizedString,
+        lead: localizedOptionalString.optional(),
+        isMediaRight: localizedBoolean,
+        videoId: localizedOptionalString.optional(),
+        linkUrl: z
+          .object({
+            nl: z.number().nullable().optional(),
+            en: z.number().nullable().optional(),
+            fr: z.number().nullable().optional(),
+          })
+          .optional(),
+        linkText: localizedOptionalString.optional(),
+      })
+      .passthrough(),
+  }),
+  caseSlideshowImage: defineCollection({
+    loader: umbracoLoader("caseSlideshowImage"),
+    schema: baseSchema
+      .extend({
+        image: localizedThumbnailImage,
+        altText: localizedOptionalString.optional(),
+      })
+      .passthrough(),
+  }),
+  quoteRow: defineCollection({
+    loader: umbracoLoader("quoteRow"),
+    schema: baseSchema
+      .extend({
+        quote: localizedString,
+        clientName: localizedOptionalString.optional(),
+      })
+      .passthrough(),
+  }),
   team: defineCollection({
     loader: umbracoLoader("team"),
     schema: baseSchema

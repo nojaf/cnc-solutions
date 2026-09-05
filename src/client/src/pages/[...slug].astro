@@ -9,6 +9,7 @@ import Solution from "../templates/Solution.astro";
 import Products from "../templates/Products.astro";
 import Product from "../templates/Product.astro";
 import Cases from "../templates/Cases.astro";
+import Case from "../templates/Case.astro";
 import About from "../templates/About.astro";
 import Team from "../templates/Team.astro";
 import News from "../templates/News.astro";
@@ -22,6 +23,7 @@ const templateMap: Record<string, any> = {
   products: Products,
   product: Product,
   cases: Cases,
+  case: Case,
   about: About,
   team: Team,
   news: News,
@@ -37,6 +39,7 @@ export async function getStaticPaths() {
     "products",
     "product",
     "cases",
+    "case",
     "about",
     "team",
     "news",
