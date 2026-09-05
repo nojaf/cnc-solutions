@@ -1,0 +1,102 @@
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+
+export interface ProductThumbnail {
+  mobile: string;
+  desktop: string;
+  "large-desktop": string;
+}
+
+interface Props {
+  href: string;
+  title: string;
+  thumbnail: ProductThumbnail;
+  typeLabel: string;
+  type: string;
+  variantsLabel: string;
+  variants: string;
+  applicationLabel: string;
+  application: string;
+  moreInfoText: string;
+}
+
+const {
+  href,
+  title,
+  thumbnail,
+  typeLabel,
+  type,
+  variantsLabel,
+  variants,
+  applicationLabel,
+  application,
+  moreInfoText,
+} = Astro.props;
+
+const [mobile, desktop, largeDesktop] = await Promise.all(
+  [thumbnail.mobile, thumbnail.desktop, thumbnail["large-desktop"]].map((src) =>
+    getImage(getImageParams(src)),
+  ),
+);
+
+const shadow = "shadow-[0_5px_10px_rgba(0,0,0,0.16)]";
+const cornerBase = "absolute right-0 bottom-0 w-0 h-0 border-t-0 border-r-0";
+---
+
+<div
+  class="product m-auto w-full max-w-79.5 md:w-auto md:max-w-none lg:w-75 xl:w-88"
+>
+  <a href={href} class:list={["header block no-underline", shadow]}>
+    <picture>
+      <source media="(min-width: 75em)" srcset={largeDesktop.src} />
+      <source media="(min-width: 48em)" srcset={desktop.src} />
+      <img src={mobile.src} alt="" class="block mx-auto w-full" />
+    </picture>
+    <h2
+      class:list={[
+        "title m-0 py-5 lg:py-4 bg-primary text-dark text-center text-xl leading-6 lg:text-[25px] lg:leading-12 font-bold uppercase",
+        shadow,
+      ]}
+    >
+      {title}
+    </h2>
+  </a>
+  <div
+    class="content relative mx-0.75 border border-primary p-5 lg:px-10 lg:py-8 md:min-h-75 lg:min-h-88"
+  >
+    <h3 class="text-lg lg:text-[22px] leading-5.5 font-medium mt-0 mb-2">
+      {typeLabel}
+    </h3>
+    <p class="text-base leading-relaxed mt-0 mb-5">{type}</p>
+    <h3 class="text-lg lg:text-[22px] leading-5.5 font-medium mt-0 mb-2">
+      {variantsLabel}
+    </h3>
+    <p class="text-base leading-relaxed mt-0 mb-5">{variants}</p>
+    <h3 class="text-lg lg:text-[22px] leading-5.5 font-medium mt-0 mb-2">
+      {applicationLabel}
+    </h3>
+    <p class="text-base leading-relaxed mt-0 mb-5">{application}</p>
+    <div
+      class:list={[
+        cornerBase,
+        "border-b-20 border-l-20 border-transparent border-b-primary",
+      ]}
+    >
+    </div>
+  </div>
+  <a
+    href={href}
+    class="more-info relative inline-block -top-5 left-1/2 -translate-x-1/2 border-2 border-primary bg-white py-2.5 px-5 text-xs leading-4.5 text-primary underline hover:text-[#6b9636]"
+  >
+    {moreInfoText}
+    <span
+      class:list={[
+        cornerBase,
+        "border-b-12 border-l-12 border-transparent border-b-primary",
+      ]}></span>
+    <span
+      class="inner-corner absolute -right-0.75 -bottom-0.75 z-2 w-0 h-0 border-t-0 border-r-0 border-b-15 border-l-15 border-transparent border-b-white"
+    ></span>
+  </a>
+</div>

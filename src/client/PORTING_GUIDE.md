@@ -268,6 +268,11 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 - **CMS text uses Bootstrap's 1.1rem / 1.7rem.** Rounding to 18px / 28px changes where lines wrap and adds whole lines on narrow containers.
 - **Bootstrap sets `ul` margin-bottom to 1rem** and `li` line-height comes from the global 1.7rem rule. A list ported as `m-0` with `leading-6` loses about 35px over six items.
 - **NavDropdown renders a desktop and a mobile `<li>` per use**, so the desktop list also contains hidden mobile items. Scope DOM queries to `#nav-mobile-menu` or the probe hits the hidden copy.
+- **Tailwind `grid-cols-N` is `repeat(N, minmax(0, 1fr))`, Bootstrap-era `1fr` is `minmax(auto, 1fr)`.** With fixed-width items (the 300px product cards at lg) the old site's tracks grow to the item width and overflow the container; Tailwind's tracks stay at 296px and the items overflow their track instead. Use `grid-cols-[repeat(3,minmax(auto,1fr))]` to reproduce it.
+- **Fractional scale steps are allowed when a whole line would wrap differently.** The 318px product card is `max-w-79.5` and its 98%-wide content box is `mx-0.75`, because snapping to 320px and 4px moved a line break on the French mobile page. Still no bracket lengths.
+- **Bootstrap carousels resize to the active slide** because inactive slides are `display: none`. A sliding track keeps the tallest slide's height, so the probe shows a taller list on mobile whenever the first slide is not the tallest. Accepted, since a fixed height avoids the page jumping between slides.
+- **A `display: contents` wrapper lets one list be a flex track on mobile and a grid from md up.** The wrapper is the 100%-wide slide below md and disappears at md, so the card itself becomes the grid item and `m-auto` centers it in the row like the old site. The track's `overflow-hidden` must become `md:overflow-visible`, or the last card of a row, which overflows the container by 10px at lg like the old site, loses its right border.
+- **`compare` reports Tailwind shadows as a five-part string** (`shadow-*` composes ring and inset variables). When only the last part matches the Gatsby value, the shadow is identical.
 - **Old-site bugs are not always worth copying.** The Gatsby footer container was left-aligned between sm and lg. Reproduce, flag it, and let the user decide.
 
 ## Checklist for each component port

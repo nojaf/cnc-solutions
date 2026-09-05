@@ -93,6 +93,19 @@ const localizedOverviewThumbnail = z.object({
   fr: overviewThumbnail,
 });
 
+// Product thumbnails provide mobile, desktop and large-desktop crops
+const productThumbnail = z.object({
+  mobile: z.string(),
+  desktop: z.string(),
+  "large-desktop": z.string(),
+});
+
+const localizedProductThumbnail = z.object({
+  nl: productThumbnail,
+  en: productThumbnail,
+  fr: productThumbnail,
+});
+
 const localizedKeywords = z.object({
   nl: z.array(z.string()).nullable().optional(),
   en: z.array(z.string()).nullable().optional(),
@@ -267,11 +280,41 @@ export const collections = {
   }),
   products: defineCollection({
     loader: umbracoLoader("products"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        lead: localizedString,
+        productDetailType: localizedString,
+        productDetailLinkText: localizedString,
+        variants: localizedString,
+        application: localizedString,
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: localizedKeywords.optional(),
+      })
+      .passthrough(),
   }),
   product: defineCollection({
     loader: umbracoLoader("product"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        headerImage: localizedHeaderImage,
+        headerImageAlt: localizedString,
+        aboveTitle: localizedString,
+        title: localizedString,
+        lead: localizedString,
+        type: localizedString,
+        variants: localizedString,
+        application: localizedString,
+        thumbnail: localizedProductThumbnail,
+        navigationText: localizedOptionalString.optional(),
+        seoMetaDescription: localizedOptionalString.optional(),
+        seoMetaKeywords: localizedKeywords.optional(),
+      })
+      .passthrough(),
   }),
   cases: defineCollection({
     loader: umbracoLoader("cases"),
