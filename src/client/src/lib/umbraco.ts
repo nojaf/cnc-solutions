@@ -172,3 +172,30 @@ export function nodeToEntry(node: UmbracoNode) {
     ...stripPropertyTypes(node.properties),
   };
 }
+
+// --- Media files (PDF brochures) ---
+
+const PDF_URL = /^https?:\/\/[^/]+\/media\/(.+)\.pdf$/i;
+
+/**
+ * Local path for a backend PDF, served by `src/pages/downloads/[...file].pdf.ts`
+ * so the built site does not depend on the backend. Other URLs pass through.
+ */
+export function mediaFileHref(remoteUrl: string): string {
+  const m = remoteUrl.match(PDF_URL);
+  return m ? `/downloads/${m[1]}.pdf` : remoteUrl;
+}
+
+/** Every distinct backend PDF referenced by any property in the tree. */
+export function collectPdfUrls(root: UmbracoNode): string[] {
+  const urls = new Set<string>();
+  for (const node of flattenTree(root)) {
+    for (const prop of Object.values(node.properties)) {
+      if (!prop || typeof prop !== "object") continue;
+      for (const value of Object.values(prop)) {
+        if (typeof value === "string" && PDF_URL.test(value)) urls.add(value);
+      }
+    }
+  }
+  return [...urls];
+}

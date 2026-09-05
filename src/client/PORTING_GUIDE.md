@@ -221,6 +221,10 @@ Plain `<img>` tags with remote URLs bypass Astro's pipeline entirely. The images
 
 Local assets (logos, icons, decorative images) imported via `import` statements are already handled by Astro's build — no changes needed for those.
 
+## CMS Files (PDF brochures)
+
+MediaPicker fields can hold files as well as images. PDFs go through `src/pages/downloads/[...file].pdf.ts`, a static endpoint that walks the tree with `collectPdfUrls()` and fetches each file at build time, so the built site does not call the backend for them. In templates, link with `mediaFileHref(remoteUrl)`, which maps `https://.../media/x/y.pdf` to `/downloads/x/y.pdf` and passes other URLs through. Same-origin links also make the `download` attribute work; browsers ignore it cross-origin.
+
 ## Dynamic CMS Content (`.cms-content`)
 
 Global typography styles (`font-size`, `line-height`, `margin`) for `p`, `ul li`, and `ol li` are scoped under the `.cms-content` class in `global.css`. This prevents them from clashing with Tailwind utility classes.

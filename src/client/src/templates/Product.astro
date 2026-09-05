@@ -13,6 +13,7 @@ import {
   getImageParams,
   getTree,
   getNodeById,
+  mediaFileHref,
 } from "../lib/umbraco";
 
 interface Props {
@@ -214,7 +215,7 @@ const container =
           showDownload && (
             <div class="flex mb-5 md:mr-5">
               <ButtonCnc
-                href={product.fileDownloadFile}
+                href={mediaFileHref(product.fileDownloadFile)}
                 download
                 target="_blank"
                 rel="noopener noreferrer"
