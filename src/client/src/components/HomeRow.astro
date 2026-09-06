@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import { getImage } from "astro:assets";
 import type { Culture } from "../lib/umbraco";
-import { pageInCulture, getImageParams } from "../lib/umbraco";
+import { pageInCulture, getImageParams, mediaFileHref } from "../lib/umbraco";
 import underlineDark from "../assets/underline-dark.png";
 import underlineWhite from "../assets/underline-white.png";
 import Video from "./Video.astro";
@@ -44,6 +44,11 @@ if (row.linkNode && row.linkText) {
     }
   }
 }
+
+const downloadHref =
+  row.linkText && row.fileDownloadFile
+    ? mediaFileHref(row.fileDownloadFile)
+    : null;
 
 // Process images
 const img = row.image
@@ -112,17 +117,16 @@ const img = row.image
             )
           }
           {
-            row.linkText && row.fileDownloadFile && (
+            downloadHref && (
               <div class="text-center lg:text-left mt-5">
-                <a
-                  href={row.fileDownloadFile}
+                <ButtonCnc
+                  href={downloadHref}
                   download
-                  rel="noreferrer"
                   target="_blank"
-                  class="btn-cnc"
+                  rel="noopener noreferrer"
                 >
                   {row.linkText}
-                </a>
+                </ButtonCnc>
               </div>
             )
           }

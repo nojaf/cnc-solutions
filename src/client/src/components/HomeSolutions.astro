@@ -75,6 +75,7 @@ const processed = await Promise.all(
         href: s.url,
         altText: s.thumbnailAlt,
         phone: processed[i].mobile.src,
+        mobileLandscape: processed[i].mobile.src,
         tablet: processed[i].tablet.src,
         imgClass: "max-w-[350px] md:max-w-[500px]",
         overlay: { icon: processed[i].icon.src, title: s.title },
