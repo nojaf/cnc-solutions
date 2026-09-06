@@ -33,7 +33,9 @@ const texts: Record<Culture, { title: string; body: string; home: string }> = {
   urls={urls}
   seo={{ title: texts.nl.title, lang: "nl" }}
 >
-  <div class="mx-auto max-w-240 xl:max-w-285 px-4 py-12 flex flex-col gap-8">
+  <div
+    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 py-12 flex flex-col gap-8"
+  >
     {
       (Object.keys(texts) as Culture[]).map((lang) => (
         <section lang={lang} data-lang={lang}>

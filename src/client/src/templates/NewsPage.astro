@@ -79,7 +79,7 @@ const nextNews = siblingPages.find(
     title={(newsPage as any).title}
     lead={(newsPage as any).lead}
   />
-  <div class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285">
+  <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
     {
       blocks.map((block: any) => {
         switch (block.kind) {
@@ -104,7 +104,7 @@ const nextNews = siblingPages.find(
   </div>
   <div
     id="news-detail-navigation"
-    class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285 flex justify-between items-center my-16"
+    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 flex justify-between items-center my-16"
   >
     {
       previousNews ? (

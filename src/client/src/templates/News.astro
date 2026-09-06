@@ -105,7 +105,9 @@ const processedThumbnails = await Promise.all(
     title={news.title}
     lead={news.lead}
   />
-  <div class="mx-auto px-4 md:max-w-180 lg:max-w-240 xl:max-w-285 my-16">
+  <div
+    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 my-16"
+  >
     {
       newsPages.map((np: any, i: number) => {
         const date = formatDate(np.publicationDate, culture);
