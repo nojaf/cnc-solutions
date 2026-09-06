@@ -249,9 +249,12 @@ allowed hostnames in the Cloudflare dashboard (without it Turnstile answers
 error `110200`, unknown domain) and it sends a real email to the contact
 page's `formRecipient`. The flag is ignored anywhere but localhost.
 
-`turnstileSecretKey` also lands in `.astro/data-store.json` because
-`nodeToEntry` keeps the whole Umbraco node. That file is gitignored and never
-reaches `dist/`, but do not render CMS fields blindly on this page.
+The backend's own contact settings (`tenantId`, `clientId`, `clientSecret`,
+`senderEmail`, `formRecipient`, `turnstileSecretKey`) are filtered out of the
+tree export in `Graph.fs`, because `/umbraco/api/graph/tree` is public. Until
+that backend build is deployed they still arrive in the tree and land in
+`.astro/data-store.json` (gitignored, never in `dist/`). Either way, do not
+render CMS fields blindly on this page.
 
 ## Missing CMS media
 

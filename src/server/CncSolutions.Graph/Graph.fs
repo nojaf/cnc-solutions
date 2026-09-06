@@ -89,10 +89,19 @@ let private exportProperty meta (node: IPublishedContent) (property: IPublishedP
     |> fun propertiesPerCulture -> ("type", Encode.string property.PropertyType.DataType.EditorAlias)::propertiesPerCulture
     |> Encode.object
 
+/// Properties the backend reads for itself (mail credentials, the Turnstile
+/// secret, the recipient). The tree endpoint is public, so they must never be
+/// exported. The front end only needs turnstileSiteKey.
+let private privateProperties =
+    set [ "tenantId"; "clientId"; "clientSecret"; "senderEmail"; "formRecipient"; "turnstileSecretKey" ]
+
 let private exportProperties meta (node: IPublishedContent) =
     node.Properties
-    |> Seq.map (fun property ->
-        property.Alias, exportProperty meta node property
+    |> Seq.choose (fun property ->
+        if privateProperties.Contains property.Alias then
+            None
+        else
+            Some(property.Alias, exportProperty meta node property)
     )
     |> Seq.toList
     |> Encode.object
