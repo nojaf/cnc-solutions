@@ -165,7 +165,13 @@ function umbracoLoader(alias: string) {
 export const collections = {
   home: defineCollection({
     loader: umbracoLoader("home"),
-    schema: baseSchema.passthrough(),
+    schema: baseSchema
+      .extend({
+        cookieDescription: localizedString,
+        cookieAccept: localizedString,
+        cookieReject: localizedString,
+      })
+      .passthrough(),
   }),
   about: defineCollection({
     loader: umbracoLoader("about"),

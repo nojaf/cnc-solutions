@@ -1,5 +1,7 @@
 ---
+import { getCollection } from "astro:content";
 import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
 
 interface Props {
   culture: Culture;
@@ -7,28 +9,14 @@ interface Props {
 
 const { culture } = Astro.props;
 
-const texts: Record<
-  string,
-  { description: string; accept: string; reject: string }
-> = {
-  nl: {
-    description: "Deze website gebruikt cookies voor marketingdoeleinden.",
-    accept: "Accepteer",
-    reject: "Weiger",
-  },
-  en: {
-    description: "This website uses cookies for marketing purposes.",
-    accept: "Accept",
-    reject: "Reject",
-  },
-  fr: {
-    description: "Ce site web utilise des cookies à des fins de marketing.",
-    accept: "Accepter",
-    reject: "Refuser",
-  },
+// The banner copy lives on the home node in Umbraco, as it did for Gatsby.
+const [homeEntry] = await getCollection("home");
+const home = pageInCulture(culture, homeEntry.data);
+const t = {
+  description: home.cookieDescription,
+  accept: home.cookieAccept,
+  reject: home.cookieReject,
 };
-
-const t = texts[culture];
 ---
 
 <div
@@ -45,7 +33,7 @@ const t = texts[culture];
     </button>
     <button
       id="cookie-reject"
-      class="mx-2 px-3 py-1.5 text-base bg-[rgb(224,29,49)] text-white border border-[rgb(224,29,49)] rounded cursor-pointer"
+      class="mx-2 px-3 py-1.5 text-base bg-danger text-white border border-danger rounded cursor-pointer"
     >
       {t.reject}
     </button>
