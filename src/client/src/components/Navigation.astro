@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import type { Culture } from "../lib/umbraco";
-import { pageInCulture, cultures } from "../lib/umbraco";
+import { pageInCulture, cultures, navText } from "../lib/umbraco";
 import logo from "../assets/CNC-CMYK.png";
 import menuBar from "../assets/menu-bar@2X.png";
 import NavDropdown from "./NavDropdown.astro";
@@ -13,10 +13,6 @@ interface Props {
 }
 
 const { culture, urls } = Astro.props;
-
-// Navigation text is optional in Umbraco; the node name is the fallback.
-const navText = (page: { navigationText?: string | null; name: string }) =>
-  page.navigationText ?? page.name;
 
 // Fetch all navigation data at build time
 const [

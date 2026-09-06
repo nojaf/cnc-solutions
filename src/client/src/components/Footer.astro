@@ -1,6 +1,6 @@
 ---
 import type { Culture } from "../lib/umbraco";
-import { pageInCulture } from "../lib/umbraco";
+import { pageInCulture, navText } from "../lib/umbraco";
 import { getCollection } from "astro:content";
 import flandersInvestment from "../assets/FIT_Label_Subsidie_Liggend.jpg";
 
@@ -55,7 +55,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           class="text-white no-underline hover:text-primary hover:underline"
         >
           <h4 class="uppercase text-xl leading-6 font-bold mb-0">
-            {solutionsPage.navigationText}
+            {navText(solutionsPage)}
           </h4>
         </a>
         <ul class="list-none p-0 mt-0 mb-4">
@@ -66,7 +66,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
                   href={s.url}
                   class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
                 >
-                  {s.navigationText}
+                  {navText(s)}
                 </a>
               </li>
             ))
@@ -79,7 +79,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           class="text-white no-underline hover:text-primary hover:underline"
         >
           <h4 class="uppercase text-xl leading-6 font-bold mb-0">
-            {productsPage.navigationText}
+            {navText(productsPage)}
           </h4>
         </a>
         <ul class="list-none p-0 mt-0 mb-4">
@@ -90,7 +90,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
                   href={p.url}
                   class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
                 >
-                  {p.navigationText}
+                  {navText(p)}
                 </a>
               </li>
             ))
@@ -101,7 +101,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           class="text-white no-underline hover:text-primary hover:underline"
         >
           <h4 class="uppercase text-xl leading-6 font-bold mb-0">
-            {casesPage.navigationText}
+            {navText(casesPage)}
           </h4>
         </a>
       </div>
@@ -111,7 +111,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           class="text-white no-underline hover:text-primary hover:underline"
         >
           <h4 class="uppercase text-xl leading-6 font-bold mb-6">
-            {aboutPage.navigationText}
+            {navText(aboutPage)}
           </h4>
         </a>
         <a
@@ -119,7 +119,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           class="text-white no-underline hover:text-primary hover:underline"
         >
           <h4 class="uppercase text-xl leading-6 font-bold mb-0">
-            {contactPage.navigationText}
+            {navText(contactPage)}
           </h4>
         </a>
         <img

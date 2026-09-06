@@ -337,14 +337,13 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 
 ## TODO before deploying
 
-Open findings from the full review of 6 September 2026, most important first. Already fixed and therefore not listed: the GitHub Actions deploy, the cookie banner reading its copy from Umbraco, the Turnstile script placement, and the tablet container caps (`sm:max-w-135`) on the news, team, home and 404 containers, and the home row download button (now `ButtonCnc` with `mediaFileHref()`).
+Open findings from the full review of 6 September 2026, most important first. Already fixed and therefore not listed: the GitHub Actions deploy, the cookie banner reading its copy from Umbraco, the Turnstile script placement, and the tablet container caps (`sm:max-w-135`) on the news, team, home and 404 containers, and the home row download button (now `ButtonCnc` with `mediaFileHref()`), and the footer headings falling back to the node name through the shared `navText()` in `umbraco.ts`.
 
-1. **Footer has no navigation-text fallback** (`Footer.astro`). `Navigation.astro` falls back to the node name with `navText()`; the footer renders an empty heading when the optional `navigationText` is blank. Share the helper.
-2. **Bracket lengths that break the hard rule in step 2.** `text-[30px]` (nine uses) is exactly `text-3xl`. `max-w-[350px] md:max-w-[500px]` in `HomeSolutions.astro` is a plain length. The font sizes with no scale step (`lg:text-[22px]`, `lg:text-[25px]`, `sm:text-[32px]`, `lg:text-[40px]`) need a decision: either add a font-size exemption to the rule, or accept the drift and note it.
-3. **The container row in the Bootstrap mapping table contradicts the Lessons.** It still says `mx-auto max-w-240 lg:max-w-240 xl:max-w-285`; the lesson says `sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285`. Fix the table, since future ports copy it.
-4. **Solution rows keep one media and one text block** (`Solution.astro`, the `rows` mapping). Gatsby rendered every block in a row. Only matters if content ever has two media blocks in one row.
-5. **Undocumented improvement.** The previous-news link on `NewsPage.astro` points at the nearest older article; Gatsby pointed at the oldest (`news-page.js` used `find` on an ascending list). Add a line to the Lessons.
-6. **Cosmetic.** Bracket colours `text-[#212529]` (Contact), `text-[rgb(108,117,125)]` (News) and `hover:text-[#6b9636]` (ProductCard) could become theme tokens. `Navigation.astro` takes an unused `currentPageId` prop. `astro check` shows one harmless hint on `Analytics.astro` for `gtagId` inside `define:vars`.
+1. **Bracket lengths that break the hard rule in step 2.** `text-[30px]` (nine uses) is exactly `text-3xl`. `max-w-[350px] md:max-w-[500px]` in `HomeSolutions.astro` is a plain length. The font sizes with no scale step (`lg:text-[22px]`, `lg:text-[25px]`, `sm:text-[32px]`, `lg:text-[40px]`) need a decision: either add a font-size exemption to the rule, or accept the drift and note it.
+2. **The container row in the Bootstrap mapping table contradicts the Lessons.** It still says `mx-auto max-w-240 lg:max-w-240 xl:max-w-285`; the lesson says `sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285`. Fix the table, since future ports copy it.
+3. **Solution rows keep one media and one text block** (`Solution.astro`, the `rows` mapping). Gatsby rendered every block in a row. Only matters if content ever has two media blocks in one row.
+4. **Undocumented improvement.** The previous-news link on `NewsPage.astro` points at the nearest older article; Gatsby pointed at the oldest (`news-page.js` used `find` on an ascending list). Add a line to the Lessons.
+5. **Cosmetic.** Bracket colours `text-[#212529]` (Contact), `text-[rgb(108,117,125)]` (News) and `hover:text-[#6b9636]` (ProductCard) could become theme tokens. `Navigation.astro` takes an unused `currentPageId` prop. `astro check` shows one harmless hint on `Analytics.astro` for `gtagId` inside `define:vars`.
 
 ## Checklist for each component port
 

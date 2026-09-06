@@ -163,6 +163,14 @@ export function pageInCulture<T extends Record<string, any>>(
   return result as InCulture<T>;
 }
 
+/** Navigation text is optional in Umbraco; the node name is the fallback. */
+export function navText(page: {
+  navigationText?: string | null;
+  name: string;
+}): string {
+  return page.navigationText || page.name;
+}
+
 /**
  * Build `getImage()` params from a CMS image URL.
  * Extracts `width` and `height` from the query string when available,
