@@ -5,6 +5,7 @@ import SEO from "../components/SEO.astro";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
 import CookieConsent from "../components/CookieConsent.astro";
+import Analytics from "../components/Analytics.astro";
 import type { Culture } from "../lib/umbraco";
 
 interface Props {
@@ -31,7 +32,20 @@ const { culture, currentPageId, urls, seo, mainClass = "" } = Astro.props;
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    {import.meta.env.PROD && <Analytics />}
     <SEO {...seo} />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" />
+    <link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous" />
+    <meta name="theme-color" content="#92C256" />
+    {
+      [48, 72, 96, 144, 192, 256, 384, 512].map((size) => (
+        <link
+          rel="apple-touch-icon"
+          sizes={`${size}x${size}`}
+          href={`/icons/icon-${size}x${size}.png`}
+        />
+      ))
+    }
     <slot name="head" />
     <ClientRouter />
   </head>
@@ -42,5 +56,11 @@ const { culture, currentPageId, urls, seo, mainClass = "" } = Astro.props;
     </main>
     <Footer culture={culture} />
     <CookieConsent culture={culture} />
+    <script>
+      import { pickNotFoundLang } from "../scripts/not-found-lang";
+      document.addEventListener("astro:before-swap", (e) => {
+        pickNotFoundLang(e.newDocument, e.to.pathname);
+      });
+    </script>
   </body>
 </html>
