@@ -25,7 +25,14 @@ const contactPostUrl =
 ---
 
 <BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
-  <link slot="head" rel="preconnect" href="https://challenges.cloudflare.com" />
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://challenges.cloudflare.com" />
+    <script
+      is:inline
+      defer
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+    ></script>
+  </Fragment>
   <Header currentPage={contact} />
   <PageIntroduction
     aboveTitle={contact.aboveTitle}
@@ -300,12 +307,6 @@ const contactPostUrl =
     </div>
   </section>
 </BaseLayout>
-
-<script
-  is:inline
-  defer
-  src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-></script>
 
 <script>
   document.addEventListener("astro:page-load", () => {
