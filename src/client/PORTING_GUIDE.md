@@ -336,12 +336,9 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 - **`Carousel.astro` serves `tablet` at 34em when `mobileLandscape` is not set**, which the case and news carousels want, but the solutions carousel on the old home page only switched crops at 48em. Between 576 and 767px the tablet crop capped at 350px stuck out under the fixed 320x150 dark cover. Pass `mobileLandscape: mobile` there. Probe: `scripts/probes/solutions-carousel.mjs`.
 - **The mobile button under the home carousels starts 44px below the image**, not Bootstrap's `mt-4` (24px): the old `.link-container` adds 20px on top. With the dots translated 50px down, `mt-4` put the button over the dots. Use `mt-11` and check with `scripts/probes/carousel-button.mjs` (its `gapDotToBtn` is 10 on Gatsby and 20 on Astro for the same layout, because Gatsby's dot box includes its transparent borders).
 
-## TODO before deploying
+## Review of 6 September 2026
 
-Open findings from the full review of 6 September 2026, most important first. Already fixed and therefore not listed: the GitHub Actions deploy, the cookie banner reading its copy from Umbraco, the Turnstile script placement, and the tablet container caps (`sm:max-w-135`) on the news, team, home and 404 containers, and the home row download button (now `ButtonCnc` with `mediaFileHref()`), and the footer headings falling back to the node name through the shared `navText()` in `umbraco.ts`, and the bracket lengths (`text-3xl`, `max-w-87.5`, the `--text-22/25/32/40` tokens, `--spacing(8)` in the contact grid, `border-b-20` in `BottomEdge`), and the container row in the mapping table, and the solution rows rendering every block.
-
-1. **Undocumented improvement.** The previous-news link on `NewsPage.astro` points at the nearest older article; Gatsby pointed at the oldest (`news-page.js` used `find` on an ascending list). Add a line to the Lessons.
-2. **Cosmetic.** Bracket colours `text-[#212529]` (Contact), `text-[rgb(108,117,125)]` (News) and `hover:text-[#6b9636]` (ProductCard) could become theme tokens. `Navigation.astro` takes an unused `currentPageId` prop. `astro check` shows one harmless hint on `Analytics.astro` for `gtagId` inside `define:vars`.
+Every finding from the full pre-deploy review is closed: the GitHub Actions deploy, the cookie banner reading its copy from Umbraco, the Turnstile script placement, the tablet container caps, the home row download button, the footer heading fallback, the bracket lengths, the container row in the mapping table, the solution rows rendering every block, the bracket colours (now `text-gray-900`, `text-muted` and `hover:text-primary-dark` theme tokens), the unused `currentPageId` prop, and the `astro check` hint on `Analytics.astro`. One difference was kept on purpose: the previous-news link on `NewsPage.astro` points at the nearest older article, where Gatsby pointed at the oldest.
 
 ## Checklist for each component port
 

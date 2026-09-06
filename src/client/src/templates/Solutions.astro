@@ -28,7 +28,7 @@ const items = allSolution
   .map((s) => pageInCulture(culture, s.data));
 ---
 
-<BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
+<BaseLayout culture={culture} urls={urls} seo={seo}>
   <Header currentPage={solutions} />
   <PageIntroduction
     aboveTitle={solutions.aboveTitle}

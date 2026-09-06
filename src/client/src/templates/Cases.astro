@@ -28,7 +28,7 @@ const items = allCase
   .map((c) => pageInCulture(culture, c.data));
 ---
 
-<BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
+<BaseLayout culture={culture} urls={urls} seo={seo}>
   <Header currentPage={cases} />
   <PageIntroduction
     aboveTitle={cases.aboveTitle}

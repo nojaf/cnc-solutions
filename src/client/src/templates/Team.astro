@@ -33,13 +33,7 @@ const processedPhotos = await Promise.all(
 );
 ---
 
-<BaseLayout
-  culture={culture}
-  currentPageId={umbracoId}
-  urls={urls}
-  seo={seo}
-  mainClass="pb-12"
->
+<BaseLayout culture={culture} urls={urls} seo={seo} mainClass="pb-12">
   <Header currentPage={team} />
   <PageIntroduction
     aboveTitle={team.aboveTitle}

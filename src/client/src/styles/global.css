@@ -9,6 +9,11 @@
   --color-warning: #d69d36;
   --color-success: #66d4ac;
   --color-body: rgba(65, 64, 66, 1);
+  /* Bootstrap 4 greys the old site leaned on: $gray-900 (pre text) and .text-muted */
+  --color-gray-900: #212529;
+  --color-muted: #6c757d;
+  /* Bootstrap a:hover on the product card more-info link: darken($primary, 15%) */
+  --color-primary-dark: #6b9636;
   --font-body: "Hind", sans-serif;
 
   /* Override breakpoints to match Bootstrap 4 */

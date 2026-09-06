@@ -98,7 +98,7 @@ const processedThumbnails = await Promise.all(
 );
 ---
 
-<BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
+<BaseLayout culture={culture} urls={urls} seo={seo}>
   <Header currentPage={news} />
   <PageIntroduction
     aboveTitle={news.aboveTitle}
@@ -131,7 +131,7 @@ const processedThumbnails = await Promise.all(
                 {np.title}
               </h3>
               {np.overviewLead && (
-                <p class="mt-2 mb-4 text-lg whitespace-nowrap overflow-hidden text-ellipsis text-[rgb(108,117,125)]">
+                <p class="mt-2 mb-4 text-lg whitespace-nowrap overflow-hidden text-ellipsis text-muted">
                   {np.overviewLead}
                 </p>
               )}

@@ -21,7 +21,8 @@ const origin = "https://www.googletagmanager.com";
 <link rel="dns-prefetch" href={origin} />
 <script is:inline async src={`${origin}/gtag/js?id=${gtagId}`}></script>
 <script is:inline define:vars={{ gtagId }}>
-  var disableStr = "ga-disable-" + gtagId;
+  var id = gtagId;
+  var disableStr = "ga-disable-" + id;
   function gaOptout() {
     document.cookie =
       disableStr + "=true; expires=Thu, 31 Dec 2099 23:59:59 UTC;path=/";
@@ -38,7 +39,7 @@ const origin = "https://www.googletagmanager.com";
     }
     window.gtag = gtag;
     gtag("js", new Date());
-    gtag("config", gtagId, {
+    gtag("config", id, {
       anonymize_ip: true,
       cookie_expires: 0,
       send_page_view: false,

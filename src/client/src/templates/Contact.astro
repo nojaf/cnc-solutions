@@ -24,7 +24,7 @@ const contactPostUrl =
   "https://cncsolutions-backend.azurewebsites.net/umbraco/api/contact/post";
 ---
 
-<BaseLayout culture={culture} currentPageId={umbracoId} urls={urls} seo={seo}>
+<BaseLayout culture={culture} urls={urls} seo={seo}>
   <Fragment slot="head">
     <link rel="preconnect" href="https://challenges.cloudflare.com" />
     <script
@@ -58,7 +58,7 @@ const contactPostUrl =
               {/* set:text, not children: whitespace inside a <pre> is
                   content, and the formatter re-indents children. */}
               <pre
-                class="font-body text-base whitespace-pre text-[#212529] mb-4"
+                class="font-body text-base whitespace-pre text-gray-900 mb-4"
                 set:text={contact.address}
               />
             </address>
