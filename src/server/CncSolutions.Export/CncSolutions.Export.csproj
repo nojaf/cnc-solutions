@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>CncSolutions.Export</RootNamespace>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
@@ -26,12 +29,15 @@
     <ProjectReference Include="..\CncSolutions.Graph\CncSolutions.Graph.fsproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.2.7" />
     <PackageReference Include="SendGrid" Version="9.13.1" />
   </ItemGroup>
-  <Import Project="..\..\..\.paket\Paket.Restore.targets" />
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="XCOPY /s /y &quot;$(TargetDir)CncSolutions.Graph.dll&quot; &quot;C:\Users\nojaf\Projects\cnc-solutions\CncSolutions.Web\bin\&quot;" />
     <Exec Command="XCOPY /s /y &quot;$(TargetDir)CncSolutions.Export.dll&quot; &quot;C:\Users\nojaf\Projects\cnc-solutions\CncSolutions.Web\bin&quot;" />
   </Target>
+  <Import Project="..\..\..\.paket\Paket.Restore.targets" />
 </Project>
