@@ -65,7 +65,8 @@ The Astro site uses `--spacing: 4px`, so all Tailwind spacing utilities are mult
 - **Do not use fixed units in Tailwind classes.** No `p-[25px]`, no `leading-[1.7rem]`, no `w-[150px]`. Use the scale: `p-6`, `leading-7`, `w-38`. This is a hard rule, not a preference.
 - Bracket notation `[value]` is only allowed when the value is not a length at all (a `calc()`, a `clip-path`, a shadow) or when Tailwind has no utility for the property. A 0.8px difference is never a reason, and neither is that difference adding up over a list. Accept the drift and note it in the summary instead.
 - When Tailwind has a built-in class (e.g. `border-l-8` for 8px), use it instead of `border-l-[8px]`.
-- The one place exact Gatsby values are kept is the `.cms-content` typography in `global.css`, because font size decides where CMS text wraps. That is plain CSS, not a utility class, and it is the only exception.
+- Font-size is the one property kept exact, because it decides where text wraps. Tailwind's type ramp was never on the 4px grid (`text-lg` is 18px, `text-3xl` is 30px), so snapping does not apply to it. When the Gatsby size has no step in the ramp within 1px, add a `--text-<px>` token to `@theme` in `global.css` and use that (`lg:text-40`). The theme block is the inventory of every off-ramp size. Still no bracket lengths. `.cms-content` keeps its values in plain CSS for the same reason.
+- Inside a bracket that is allowed (a `calc()`, a grid template), write grid lengths as `--spacing(8)` rather than `32px`, so the value follows the scale.
 
 ### 3. Map Bootstrap patterns to Tailwind
 
@@ -337,13 +338,12 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 
 ## TODO before deploying
 
-Open findings from the full review of 6 September 2026, most important first. Already fixed and therefore not listed: the GitHub Actions deploy, the cookie banner reading its copy from Umbraco, the Turnstile script placement, and the tablet container caps (`sm:max-w-135`) on the news, team, home and 404 containers, and the home row download button (now `ButtonCnc` with `mediaFileHref()`), and the footer headings falling back to the node name through the shared `navText()` in `umbraco.ts`.
+Open findings from the full review of 6 September 2026, most important first. Already fixed and therefore not listed: the GitHub Actions deploy, the cookie banner reading its copy from Umbraco, the Turnstile script placement, and the tablet container caps (`sm:max-w-135`) on the news, team, home and 404 containers, and the home row download button (now `ButtonCnc` with `mediaFileHref()`), and the footer headings falling back to the node name through the shared `navText()` in `umbraco.ts`, and the bracket lengths (`text-3xl`, `max-w-87.5`, the `--text-22/25/32/40` tokens, `--spacing(8)` in the contact grid, `border-b-20` in `BottomEdge`).
 
-1. **Bracket lengths that break the hard rule in step 2.** `text-[30px]` (nine uses) is exactly `text-3xl`. `max-w-[350px] md:max-w-[500px]` in `HomeSolutions.astro` is a plain length. The font sizes with no scale step (`lg:text-[22px]`, `lg:text-[25px]`, `sm:text-[32px]`, `lg:text-[40px]`) need a decision: either add a font-size exemption to the rule, or accept the drift and note it.
-2. **The container row in the Bootstrap mapping table contradicts the Lessons.** It still says `mx-auto max-w-240 lg:max-w-240 xl:max-w-285`; the lesson says `sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285`. Fix the table, since future ports copy it.
-3. **Solution rows keep one media and one text block** (`Solution.astro`, the `rows` mapping). Gatsby rendered every block in a row. Only matters if content ever has two media blocks in one row.
-4. **Undocumented improvement.** The previous-news link on `NewsPage.astro` points at the nearest older article; Gatsby pointed at the oldest (`news-page.js` used `find` on an ascending list). Add a line to the Lessons.
-5. **Cosmetic.** Bracket colours `text-[#212529]` (Contact), `text-[rgb(108,117,125)]` (News) and `hover:text-[#6b9636]` (ProductCard) could become theme tokens. `Navigation.astro` takes an unused `currentPageId` prop. `astro check` shows one harmless hint on `Analytics.astro` for `gtagId` inside `define:vars`.
+1. **The container row in the Bootstrap mapping table contradicts the Lessons.** It still says `mx-auto max-w-240 lg:max-w-240 xl:max-w-285`; the lesson says `sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285`. Fix the table, since future ports copy it.
+2. **Solution rows keep one media and one text block** (`Solution.astro`, the `rows` mapping). Gatsby rendered every block in a row. Only matters if content ever has two media blocks in one row.
+3. **Undocumented improvement.** The previous-news link on `NewsPage.astro` points at the nearest older article; Gatsby pointed at the oldest (`news-page.js` used `find` on an ascending list). Add a line to the Lessons.
+4. **Cosmetic.** Bracket colours `text-[#212529]` (Contact), `text-[rgb(108,117,125)]` (News) and `hover:text-[#6b9636]` (ProductCard) could become theme tokens. `Navigation.astro` takes an unused `currentPageId` prop. `astro check` shows one harmless hint on `Analytics.astro` for `gtagId` inside `define:vars`.
 
 ## Checklist for each component port
 

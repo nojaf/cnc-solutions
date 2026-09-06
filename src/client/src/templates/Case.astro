@@ -103,7 +103,7 @@ const rows = [...caseRows, ...quoteRows].sort(
           row.kind === "quote" ? (
             <div class="quote-row flex flex-wrap my-8 bg-dark text-white">
               <div class="w-full mt-8 md:mt-0">
-                <blockquote class="block px-8 pt-8 mb-4 text-2xl leading-none uppercase sm:text-[32px] md:text-5xl">
+                <blockquote class="block px-8 pt-8 mb-4 text-2xl leading-none uppercase sm:text-32 md:text-5xl">
                   {row.quote}
                 </blockquote>
                 {row.clientName && (
@@ -168,7 +168,7 @@ const rows = [...caseRows, ...quoteRows].sort(
                   <p class="above text-sm leading-4 font-thin text-center m-0 lg:text-2xl lg:leading-10 lg:font-light">
                     {row.aboveTitle}
                   </p>
-                  <h2 class="uppercase text-center text-[30px] leading-8.5 font-bold m-0 mb-2 px-8">
+                  <h2 class="uppercase text-center text-3xl leading-8.5 font-bold m-0 mb-2 px-8">
                     {row.title}
                   </h2>
                   <img
