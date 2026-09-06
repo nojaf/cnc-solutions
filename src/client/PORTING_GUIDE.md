@@ -74,7 +74,7 @@ Common translations:
 
 | Bootstrap                | Tailwind                                                                  |
 | ------------------------ | ------------------------------------------------------------------------- |
-| `container`              | `mx-auto max-w-240 lg:max-w-240 xl:max-w-285` (with `px-4`)               |
+| `container`              | `mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285`        |
 | `navbar-expand-lg`       | Show/hide with `hidden lg:flex` / `lg:hidden`                             |
 | `navbar-light`           | Use `text-dark` on links                                                  |
 | `dropdown` (hover)       | `relative group` on `<li>`, `hidden group-hover:block` on menu            |
@@ -338,12 +338,11 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 
 ## TODO before deploying
 
-Open findings from the full review of 6 September 2026, most important first. Already fixed and therefore not listed: the GitHub Actions deploy, the cookie banner reading its copy from Umbraco, the Turnstile script placement, and the tablet container caps (`sm:max-w-135`) on the news, team, home and 404 containers, and the home row download button (now `ButtonCnc` with `mediaFileHref()`), and the footer headings falling back to the node name through the shared `navText()` in `umbraco.ts`, and the bracket lengths (`text-3xl`, `max-w-87.5`, the `--text-22/25/32/40` tokens, `--spacing(8)` in the contact grid, `border-b-20` in `BottomEdge`).
+Open findings from the full review of 6 September 2026, most important first. Already fixed and therefore not listed: the GitHub Actions deploy, the cookie banner reading its copy from Umbraco, the Turnstile script placement, and the tablet container caps (`sm:max-w-135`) on the news, team, home and 404 containers, and the home row download button (now `ButtonCnc` with `mediaFileHref()`), and the footer headings falling back to the node name through the shared `navText()` in `umbraco.ts`, and the bracket lengths (`text-3xl`, `max-w-87.5`, the `--text-22/25/32/40` tokens, `--spacing(8)` in the contact grid, `border-b-20` in `BottomEdge`), and the container row in the mapping table.
 
-1. **The container row in the Bootstrap mapping table contradicts the Lessons.** It still says `mx-auto max-w-240 lg:max-w-240 xl:max-w-285`; the lesson says `sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285`. Fix the table, since future ports copy it.
-2. **Solution rows keep one media and one text block** (`Solution.astro`, the `rows` mapping). Gatsby rendered every block in a row. Only matters if content ever has two media blocks in one row.
-3. **Undocumented improvement.** The previous-news link on `NewsPage.astro` points at the nearest older article; Gatsby pointed at the oldest (`news-page.js` used `find` on an ascending list). Add a line to the Lessons.
-4. **Cosmetic.** Bracket colours `text-[#212529]` (Contact), `text-[rgb(108,117,125)]` (News) and `hover:text-[#6b9636]` (ProductCard) could become theme tokens. `Navigation.astro` takes an unused `currentPageId` prop. `astro check` shows one harmless hint on `Analytics.astro` for `gtagId` inside `define:vars`.
+1. **Solution rows keep one media and one text block** (`Solution.astro`, the `rows` mapping). Gatsby rendered every block in a row. Only matters if content ever has two media blocks in one row.
+2. **Undocumented improvement.** The previous-news link on `NewsPage.astro` points at the nearest older article; Gatsby pointed at the oldest (`news-page.js` used `find` on an ascending list). Add a line to the Lessons.
+3. **Cosmetic.** Bracket colours `text-[#212529]` (Contact), `text-[rgb(108,117,125)]` (News) and `hover:text-[#6b9636]` (ProductCard) could become theme tokens. `Navigation.astro` takes an unused `currentPageId` prop. `astro check` shows one harmless hint on `Analytics.astro` for `gtagId` inside `define:vars`.
 
 ## Checklist for each component port
 
