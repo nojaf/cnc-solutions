@@ -34,9 +34,9 @@ const mobileBg = mobilePlaceholder
 
 <section
   id="hero"
-  class="relative box-border min-h-70 h-[calc(50vw+3rem)] sm:h-auto sm:max-h-[calc(100vh-5rem)] lg:max-h-[calc(100vh-7rem)] bg-cover text-white text-center flex flex-col"
+  class="relative box-border min-h-70 h-[calc(50vw+3rem)] sm:h-auto sm:min-h-[min(56.25vw,100vh-5rem)] sm:max-h-[calc(100vh-5rem)] lg:min-h-[min(56.25vw,100vh-7rem)] lg:max-h-[calc(100vh-7rem)] bg-cover text-white text-center flex flex-col"
 >
-  <div class="m-auto relative z-10 px-4 w-full sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 lg:text-left lg:box-content lg:min-h-150 lg:pt-48 lg:pb-48">
+  <div class="m-auto relative z-10 px-4 w-full sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 lg:text-left lg:my-0 lg:grow lg:min-h-150 lg:pt-48 lg:pb-48">
     <p class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light">
       {aboveSlogan}
     </p>
@@ -56,16 +56,22 @@ const mobileBg = mobilePlaceholder
     />
   )}
   <div class="hidden sm:block absolute inset-0 z-0 overflow-hidden">
+    {poster && (
+      <img
+        src={poster.src}
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+    )}
     <video
-      class="w-full h-full object-cover"
+      class="relative w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-out motion-reduce:transition-none"
       autoplay
       loop
       muted
       playsinline
-      poster={poster?.src}
     >
+      <source src="/videos/home.webm" type='video/webm; codecs="vp9, opus"' />
       <source src="/videos/home.mp4" type="video/mp4" />
-      <source src="/videos/home.webm" type="video/webm" />
     </video>
   </div>
   <div class="absolute inset-0 bg-black/50 z-1"></div>
@@ -75,23 +81,17 @@ const mobileBg = mobilePlaceholder
 </section>
 
 <script>
+  // The section already has the video's 16:9 aspect ratio in CSS, so nothing
+  // moves when the file arrives. The poster sits under the video and the
+  // video fades in once it is actually rendering frames.
   document.addEventListener("astro:page-load", () => {
-    const hero = document.getElementById("hero");
-    const video = hero?.querySelector("video");
-    if (hero && video) {
-      function updateHeight() {
-        const w = video!.videoWidth;
-        const h = video!.videoHeight;
-        if (w && h) {
-          const maxH =
-            parseFloat(getComputedStyle(hero!).maxHeight) || Infinity;
-          const videoH = hero!.offsetWidth * (h / w);
-          hero!.style.minHeight = `${Math.min(videoH, maxH)}px`;
-        }
-      }
-
-      video.addEventListener("loadedmetadata", updateHeight);
-      new ResizeObserver(updateHeight).observe(hero);
+    const video = document.querySelector<HTMLVideoElement>("#hero video");
+    if (!video) return;
+    const reveal = () => video.classList.replace("opacity-0", "opacity-100");
+    if (!video.paused && video.readyState >= 3) {
+      reveal();
+    } else {
+      video.addEventListener("playing", reveal, { once: true });
     }
   });
 </script>
