@@ -1,0 +1,149 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import HomeSolutions from "../components/HomeSolutions.astro";
+import HomeRow from "../components/HomeRow.astro";
+import HomeCarousel from "../components/HomeCarousel.astro";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+// Fetch home data
+const allHome = await getCollection("home");
+const homeEntry = allHome[0];
+const home = pageInCulture(culture, homeEntry.data) as Record<string, any>;
+
+// Fetch solutions
+const allSolutions = await getCollection("solution");
+const solutions = allSolutions
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((s) => pageInCulture(culture, s.data));
+
+// Fetch home rows
+const allHomeRows = await getCollection("homeRow");
+const homeRows = allHomeRows
+  .filter((r) => r.data.parentId === umbracoId)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((r) => pageInCulture(culture, r.data));
+
+// Fetch cases for carousel
+const allCases = await getCollection("case");
+const cases = allCases
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((c) => pageInCulture(culture, c.data));
+
+// Fetch latest 3 news pages for carousel
+const allNewsPages = await getCollection("newsPage");
+const newsPages = allNewsPages
+  .map((n) => pageInCulture(culture, n.data))
+  .sort(
+    (a: any, b: any) =>
+      new Date(b.publicationDate).getTime() -
+      new Date(a.publicationDate).getTime(),
+  )
+  .slice(0, 3);
+
+// Resolve link URLs by searching all collections
+async function resolveUrl(
+  nodeId: number | null | undefined,
+): Promise<string | null> {
+  if (!nodeId) return null;
+  const collections = await Promise.all([
+    getCollection("home"),
+    getCollection("solutions"),
+    getCollection("solution"),
+    getCollection("products"),
+    getCollection("product"),
+    getCollection("cases"),
+    getCollection("case"),
+    getCollection("about"),
+    getCollection("team"),
+    getCollection("news"),
+    getCollection("contact"),
+  ]);
+  for (const col of collections) {
+    const match = col.find((item: any) => item.data.umbracoId === nodeId);
+    if (match) {
+      const resolved = pageInCulture(culture, match.data);
+      return resolved.url as string;
+    }
+  }
+  return null;
+}
+
+const primaryLinkUrl = await resolveUrl(home.primaryLink);
+const casesLinkUrl = await resolveUrl(home.casesLink);
+const newsLinkUrl = await resolveUrl(home.newsLink);
+
+// Build slides for cases carousel
+const caseSlides = cases
+  .filter((c: any) => c.homePageSlide)
+  .map((c: any) => ({
+    href: c.url as string,
+    images: c.homePageSlide,
+    altText: c.title as string,
+  }));
+
+// Build slides for news carousel
+const newsSlides = newsPages
+  .filter((n: any) => n.homePageSlide)
+  .map((n: any) => ({
+    href: n.url as string,
+    images: n.homePageSlide,
+    altText: n.title as string,
+  }));
+---
+
+<BaseLayout culture={culture} urls={urls} seo={seo}>
+  <Hero
+    aboveSlogan={home.aboveSlogan}
+    slogan={home.slogan}
+    mobilePlaceholder={home.mobilePlaceholder?.mobile}
+    firstFrameVideo={home.firstFrameVideo?.scene}
+    primaryLinkUrl={primaryLinkUrl ?? undefined}
+    primaryLinkText={home.primaryLinkText}
+  />
+  <HomeSolutions
+    aboveSolutions={home.aboveSolutions}
+    solutionsTitle={home.solutionsTitle}
+    solutions={solutions as any[]}
+  />
+  {homeRows.map((row: any) => (
+    <HomeRow row={row} culture={culture} />
+  ))}
+  {caseSlides.length > 0 && casesLinkUrl && (
+    <HomeCarousel
+      id="CasesCarousel"
+      theme="dark"
+      aboveTitle={home.aboveCases}
+      title={home.casesTitle}
+      lead={home.casesLead}
+      linkHref={casesLinkUrl}
+      linkText={home.casesLinkText}
+      slides={caseSlides}
+      textPosition="right"
+    />
+  )}
+  {newsSlides.length > 0 && newsLinkUrl && (
+    <HomeCarousel
+      id="NewsCarousel"
+      theme="light"
+      aboveTitle={home.aboveNews}
+      title={home.newsTitle}
+      lead={home.newsLead}
+      linkHref={newsLinkUrl}
+      linkText={home.newsLinkText}
+      slides={newsSlides}
+      textPosition="left"
+    />
+  )}
+</BaseLayout>

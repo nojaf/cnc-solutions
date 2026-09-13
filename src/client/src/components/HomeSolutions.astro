@@ -1,0 +1,126 @@
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+import underlineDark from "../assets/underline-dark.png";
+import Carousel from "./Carousel.astro";
+
+interface SolutionData {
+  umbracoId: number;
+  url: string;
+  title: string;
+  navigationText: string;
+  thumbnailAlt: string;
+  icon: string;
+  thumbnail: {
+    "homepage mobile": string;
+    "homepage tablet": string;
+    "homepage desktop": string;
+    "homepage large desktop": string;
+  };
+}
+
+interface Props {
+  aboveSolutions: string;
+  solutionsTitle: string;
+  solutions: SolutionData[];
+}
+
+const { aboveSolutions, solutionsTitle, solutions } = Astro.props;
+
+// Process all images
+const processed = await Promise.all(
+  solutions.map(async (s) => {
+    const mobile = await getImage(
+      getImageParams(s.thumbnail["homepage mobile"]),
+    );
+    const tablet = await getImage(
+      getImageParams(s.thumbnail["homepage tablet"]),
+    );
+    const desktop = await getImage(
+      getImageParams(s.thumbnail["homepage desktop"]),
+    );
+    const largeDesktop = await getImage(
+      getImageParams(s.thumbnail["homepage large desktop"]),
+    );
+    const icon = await getImage(getImageParams(s.icon));
+    return { mobile, tablet, desktop, largeDesktop, icon };
+  }),
+);
+---
+
+<section id="solutions" class="bg-dark text-white text-center py-10">
+  <p class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light">
+    {aboveSolutions}
+  </p>
+  <div class="inline-block text-left mb-10">
+    <h2 class="m-0 text-3xl leading-11 lg:text-5xl lg:leading-14 uppercase font-bold">
+      {solutionsTitle}
+    </h2>
+    <img
+      src={underlineDark.src}
+      alt=""
+      class="block h-1 w-6 lg:h-2.5 lg:w-12"
+    />
+  </div>
+
+  {/* Mobile carousel (< lg) */}
+  <div class="lg:hidden mx-4">
+    <Carousel
+      id="solutionsCarousel"
+      theme="dark"
+      showIndicators={false}
+      slides={solutions.map((s, i) => ({
+        href: s.url,
+        altText: s.thumbnailAlt,
+        phone: processed[i].mobile.src,
+        mobileLandscape: processed[i].mobile.src,
+        tablet: processed[i].tablet.src,
+        imgClass: "max-w-87.5 md:max-w-125",
+        overlay: { icon: processed[i].icon.src, title: s.title },
+      }))}
+    />
+  </div>
+
+  {/* Desktop grid (lg+) */}
+  <div class="hidden lg:grid grid-cols-3 gap-5 mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 text-left py-10">
+    {solutions.map((s, i) => (
+      <a href={s.url} class="solution-tile relative block">
+        <picture>
+          <source
+            media="(min-width: 75em)"
+            srcset={processed[i].largeDesktop.src}
+          />
+          <img
+            src={processed[i].desktop.src}
+            alt={s.thumbnailAlt}
+            class="w-full"
+          />
+        </picture>
+        <img
+          src={processed[i].icon.src}
+          alt=""
+          class="absolute w-[40%] z-5 top-[15%] left-[30%]"
+        />
+        <div class="solution-overlay absolute inset-0 z-10 bg-dark/50 flex flex-col items-center justify-center opacity-0 invisible transition-opacity duration-400 hover:opacity-100 hover:visible">
+          <img src={processed[i].icon.src} alt="" class="h-25 w-25" />
+          <h3 class="uppercase text-white text-center text-2xl font-bold">
+            {s.navigationText}
+          </h3>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .solution-tile {
+    clip-path: polygon(0% 0%, 100% 0, 100% 80%, 85% 100%, 0% 100%);
+  }
+  .solution-tile:hover > img:nth-of-type(1) {
+    display: none;
+  }
+  .solution-tile:hover .solution-overlay {
+    visibility: visible;
+    opacity: 1;
+  }
+</style>

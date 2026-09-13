@@ -1,0 +1,85 @@
+---
+/**
+ * Google gtag (GTM-PX6K6L4) and the Facebook Pixel (570426677009391), ported
+ * from gatsby-plugin-google-gtag and gatsby-plugin-facebook-pixel.
+ *
+ * Both Gatsby plugins only render in production, so BaseLayout only
+ * includes this component when `import.meta.env.PROD` is set.
+ * The gtag snippet defines `window.gaOptout` and the pixel defines
+ * `window.fbq`; CookieConsent.astro calls both when the visitor rejects.
+ *
+ * Gatsby sent a `page_view` and a `ViewContent` on every route change.
+ * With Astro's ClientRouter that is `astro:page-load`, which also fires on
+ * the first load.
+ */
+const gtagId = "GTM-PX6K6L4";
+const pixelId = "570426677009391";
+const origin = "https://www.googletagmanager.com";
+---
+
+<link rel="preconnect" href={origin} />
+<link rel="dns-prefetch" href={origin} />
+<script is:inline async src={`${origin}/gtag/js?id=${gtagId}`}></script>
+<script is:inline define:vars={{ gtagId }}>
+  var id = gtagId;
+  var disableStr = "ga-disable-" + id;
+  function gaOptout() {
+    document.cookie =
+      disableStr + "=true; expires=Thu, 31 Dec 2099 23:59:59 UTC;path=/";
+    window[disableStr] = true;
+  }
+  window.gaOptout = gaOptout;
+  if (document.cookie.indexOf(disableStr + "=true") > -1) {
+    window[disableStr] = true;
+  }
+  if (!(navigator.doNotTrack == "1" || window.doNotTrack == "1")) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      window.dataLayer && window.dataLayer.push(arguments);
+    }
+    window.gtag = gtag;
+    gtag("js", new Date());
+    gtag("config", id, {
+      anonymize_ip: true,
+      cookie_expires: 0,
+      send_page_view: false,
+    });
+  }
+</script>
+<script is:inline define:vars={{ pixelId }}>
+  !(function (f, b, e, v, n, t, s) {
+    if (f.fbq) return;
+    n = f.fbq = function () {
+      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = !0;
+    n.version = "2.0";
+    n.queue = [];
+    t = b.createElement(e);
+    t.async = !0;
+    t.src = v;
+    s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s);
+  })(
+    window,
+    document,
+    "script",
+    "https://connect.facebook.net/en_US/fbevents.js",
+  );
+  fbq("init", pixelId);
+  fbq("track", "PageView");
+</script>
+<script is:inline>
+  document.addEventListener("astro:page-load", function () {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "page_view", {
+        page_path: location.pathname + location.search + location.hash,
+      });
+    }
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "ViewContent");
+    }
+  });
+</script>

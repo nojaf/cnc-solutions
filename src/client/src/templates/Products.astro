@@ -1,0 +1,139 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import ProductCard from "../components/ProductCard.astro";
+import BottomEdge from "../components/BottomEdge.astro";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+const allProducts = await getCollection("products");
+const productsEntry = allProducts.find((p) => p.data.umbracoId === umbracoId);
+const products = pageInCulture(culture, productsEntry!.data);
+
+const allProduct = await getCollection("product");
+const items = allProduct
+  .filter((p) => p.data.parentId === umbracoId)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((p) => pageInCulture(culture, p.data));
+
+const triangle = "w-0 h-0 border-y-10 border-transparent";
+---
+
+<BaseLayout culture={culture} urls={urls} seo={seo}>
+  <Header currentPage={products} />
+  <PageIntroduction
+    aboveTitle={products.aboveTitle}
+    title={products.title}
+    lead={products.lead}
+  />
+  <section>
+    <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
+      {/* One list: a sliding carousel below md, a grid from md up. */}
+      <div id="products" class="relative mb-8">
+        <div class="overflow-hidden md:overflow-visible">
+          <div
+            id="products-track"
+            class="flex transition-transform duration-600 ease-in-out md:grid md:grid-cols-2 md:gap-x-5 md:transition-none lg:grid-cols-[repeat(3,minmax(auto,1fr))]"
+          >
+            {items.map((p) => (
+              <div class="w-full shrink-0 md:contents">
+                <ProductCard
+                  href={p.url}
+                  title={p.aboveTitle}
+                  thumbnail={p.thumbnail}
+                  typeLabel={products.productDetailType}
+                  type={p.type}
+                  variantsLabel={products.variants}
+                  variants={p.variants}
+                  applicationLabel={products.application}
+                  application={p.application}
+                  moreInfoText={products.productDetailLinkText}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <button
+          class="products-prev absolute top-23 bottom-0 left-0 z-10 flex w-4 items-center justify-start opacity-50 hover:opacity-90 cursor-pointer md:hidden"
+          aria-label="Previous"
+        >
+          <span
+            class:list={[triangle, "border-l-0 border-r-15 border-r-dark"]}
+          ></span>
+        </button>
+        <button
+          class="products-next absolute top-23 bottom-0 right-0 z-10 flex w-4 items-center justify-end opacity-50 hover:opacity-90 cursor-pointer md:hidden"
+          aria-label="Next"
+        >
+          <span
+            class:list={[triangle, "border-r-0 border-l-15 border-l-dark"]}
+          ></span>
+        </button>
+      </div>
+    </div>
+    <BottomEdge fullWidth />
+  </section>
+</BaseLayout>
+
+<script>
+  function initProductsCarousel() {
+    const root = document.getElementById("products");
+    const track = document.getElementById("products-track");
+    if (!root || !track) return;
+    const count = track.children.length;
+    if (count === 0) return;
+    const mobile = window.matchMedia("(max-width: 767.98px)");
+    let current = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+
+    function show(index: number) {
+      current = (index + count) % count;
+      track!.style.transform = `translateX(-${current * 100}%)`;
+    }
+
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = undefined;
+    }
+
+    function start() {
+      stop();
+      if (!mobile.matches) return;
+      timer = setInterval(() => show(current + 1), 5000);
+    }
+
+    function apply() {
+      if (mobile.matches) {
+        show(current);
+        start();
+      } else {
+        stop();
+        track!.style.transform = "";
+      }
+    }
+
+    root.querySelector(".products-prev")?.addEventListener("click", () => {
+      show(current - 1);
+      start();
+    });
+    root.querySelector(".products-next")?.addEventListener("click", () => {
+      show(current + 1);
+      start();
+    });
+    mobile.addEventListener("change", apply);
+    apply();
+  }
+
+  document.addEventListener("astro:page-load", initProductsCarousel);
+</script>

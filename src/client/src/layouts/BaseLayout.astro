@@ -1,0 +1,63 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+import SEO from "../components/SEO.astro";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+import CookieConsent from "../components/CookieConsent.astro";
+import Analytics from "../components/Analytics.astro";
+import type { Culture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  urls: { nl: string; en: string; fr: string };
+  seo: {
+    title: string;
+    description?: string;
+    keywords?: string;
+    lang?: string;
+  };
+  mainClass?: string;
+}
+
+const { culture, urls, seo, mainClass = "" } = Astro.props;
+---
+
+<!doctype html>
+<html lang={seo.lang ?? culture}>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    {import.meta.env.PROD && <Analytics />}
+    <SEO {...seo} />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" />
+    <link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous" />
+    <meta name="theme-color" content="#92C256" />
+    {[48, 72, 96, 144, 192, 256, 384, 512].map((size) => (
+      <link
+        rel="apple-touch-icon"
+        sizes={`${size}x${size}`}
+        href={`/icons/icon-${size}x${size}.png`}
+      />
+    ))}
+    <slot name="head" />
+    <ClientRouter />
+  </head>
+  <body>
+    <Navigation culture={culture} urls={urls} />
+    <main class={mainClass}>
+      <slot />
+    </main>
+    <Footer culture={culture} />
+    <CookieConsent culture={culture} />
+    <script>
+      import { pickNotFoundLang } from "../scripts/not-found-lang";
+      document.addEventListener("astro:before-swap", (e) => {
+        pickNotFoundLang(e.newDocument, e.to.pathname);
+      });
+    </script>
+  </body>
+</html>

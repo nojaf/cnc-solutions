@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import AboutRow from "../components/AboutRow.astro";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+// Get the about page data and resolve to current culture
+const allAbout = await getCollection("about");
+const aboutEntry = allAbout.find((a) => a.data.umbracoId === umbracoId);
+const about = pageInCulture(culture, aboutEntry!.data);
+
+// Get child rows for this about page
+const allRows = await getCollection("aboutRow");
+const rows = allRows
+  .filter((r) => r.data.parentId === umbracoId)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+---
+
+<BaseLayout
+  culture={culture}
+  urls={urls}
+  seo={seo}
+  mainClass="about-page pb-12"
+>
+  <Header currentPage={about} />
+  <PageIntroduction
+    aboveTitle={about.aboveTitle}
+    title={about.title}
+    lead={about.lead}
+  />
+  {rows.map((r) => (
+    <AboutRow page={r.data} culture={culture} />
+  ))}
+</BaseLayout>

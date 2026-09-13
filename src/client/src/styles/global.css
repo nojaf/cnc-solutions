@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css?family=Hind:300,400,500,700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #92c256;
+  --color-dark: #414042;
+  --color-secondary: #6a8dde;
+  --color-danger: #e01d31;
+  --color-warning: #d69d36;
+  --color-success: #66d4ac;
+  --color-body: rgba(65, 64, 66, 1);
+  /* Bootstrap 4 greys the old site leaned on: $gray-900 (pre text) and .text-muted */
+  --color-gray-900: #212529;
+  --color-muted: #6c757d;
+  /* Bootstrap a:hover on the product card more-info link: darken($primary, 15%) */
+  --color-primary-dark: #6b9636;
+  --font-body: "Hind", sans-serif;
+
+  /* Override breakpoints to match Bootstrap 4 */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+
+  --spacing: 4px;
+
+  /* Restore Tailwind type scale (wiped by @theme override) */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: calc(1 / 0.75);
+  --text-sm: 0.875rem;
+  --text-sm--line-height: calc(1.25 / 0.875);
+  --text-base: 1rem;
+  --text-base--line-height: calc(1.5 / 1);
+  --text-lg: 1.125rem;
+  --text-lg--line-height: calc(1.75 / 1.125);
+  --text-xl: 1.25rem;
+  --text-xl--line-height: calc(1.75 / 1.25);
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: calc(2 / 1.5);
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: calc(2.25 / 1.875);
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: calc(2.5 / 2.25);
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1;
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 1;
+  --text-8xl: 6rem;
+  --text-8xl--line-height: 1;
+  --text-9xl: 8rem;
+  --text-9xl--line-height: 1;
+
+  /* Gatsby font sizes with no step in the ramp. Font-size stays exact
+     because it decides where text wraps; see PORTING_GUIDE.md step 2. */
+  --text-22: 22px;
+  --text-25: 25px;
+  --text-28: 28px;
+  --text-32: 32px;
+  --text-40: 40px;
+}
+
+body {
+  color: var(--color-body);
+  font-family: var(--font-body);
+}
+
+/* Scoped to .cms-content so these styles only apply to dynamic CMS content (set:html).
+   Without this scope, they clash with Tailwind utility classes.
+   Use @apply with scale utilities wherever one exists. */
+.cms-content p,
+.cms-content ul li,
+.cms-content ol li {
+  /* No utility matches Bootstrap's 1.1rem / 1.7rem, and the size decides
+     where CMS text wraps, so these two stay as plain CSS. */
+  font-size: 1.1rem;
+  line-height: 1.7rem;
+}
+
+.cms-content p {
+  @apply mt-0 mb-4;
+}
+
+.cms-content ul,
+.cms-content ol {
+  @apply mt-0 mb-4 pl-10;
+}
+
+.cms-content ul {
+  @apply list-disc;
+}
+
+.cms-content ol {
+  @apply list-decimal;
+}
+
+/* Bootstrap headings: 1.2 line-height, weight 500, 0.5rem bottom margin.
+   main.sass makes h1 and h2 bold uppercase, 30px/36px and 48px/48px from lg. */
+.cms-content h1,
+.cms-content h2 {
+  @apply text-3xl font-bold uppercase mt-0 mb-2 lg:text-5xl;
+}
+
+.cms-content h3,
+.cms-content h4,
+.cms-content h5,
+.cms-content h6 {
+  @apply font-medium leading-tight mt-0 mb-2;
+}
+
+.cms-content h3 {
+  @apply text-28;
+}
+
+.cms-content h4 {
+  @apply text-2xl;
+}
+
+.cms-content h5 {
+  @apply text-xl;
+}
+
+.cms-content h6 {
+  @apply text-base;
+}
+
+/* Bootstrap links: primary colour, underlined. */
+.cms-content a {
+  @apply text-primary underline;
+}

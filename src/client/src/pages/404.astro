@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import type { Culture } from "../lib/umbraco";
+
+// Gatsby's 404 was a bare <h1>Page FOUND</h1> without the site chrome.
+// The page is static, so it cannot know the requested URL at build time.
+// It renders all three languages and keeps only the one matching a /en/ or
+// /fr/ prefix; any other path shows all three. See src/scripts/not-found-lang.ts.
+const urls = { nl: "/", en: "/en/", fr: "/fr/" };
+
+const texts: Record<Culture, { title: string; body: string; home: string }> = {
+  nl: {
+    title: "Pagina niet gevonden",
+    body: "Deze pagina bestaat niet (meer). Ga terug naar de",
+    home: "homepagina",
+  },
+  en: {
+    title: "Page not found",
+    body: "This page does not exist (anymore). Go back to the",
+    home: "home page",
+  },
+  fr: {
+    title: "Page introuvable",
+    body: "Cette page n'existe pas (ou plus). Retournez à la",
+    home: "page d'accueil",
+  },
+};
+---
+
+<BaseLayout
+  culture="nl"
+  urls={urls}
+  seo={{ title: texts.nl.title, lang: "nl" }}
+>
+  <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 py-12 flex flex-col gap-8">
+    {(Object.keys(texts) as Culture[]).map((lang) => (
+      <section lang={lang} data-lang={lang}>
+        <h1 class="text-2xl leading-8 uppercase lg:text-5xl lg:leading-12">
+          {texts[lang].title}
+        </h1>
+        <p class="mt-4">
+          {texts[lang].body}
+          <a href={urls[lang]} class="text-primary underline">
+            {texts[lang].home}
+          </a>
+          .
+        </p>
+      </section>
+    ))}
+  </div>
+  <script is:inline>
+    // Hard loads. View transitions are handled in BaseLayout with
+    // src/scripts/not-found-lang.ts; keep the two in sync.
+    (function () {
+      var m = location.pathname.match(/^\/(en|fr)(\/|$)/);
+      var lang = m ? m[1] : null;
+      document.querySelectorAll("section[data-lang]").forEach(function (s) {
+        s.hidden = lang !== null && s.dataset.lang !== lang;
+      });
+      if (lang) document.documentElement.lang = lang;
+    })();
+  </script>
+</BaseLayout>
+
+<style is:global>
+  /* Only this page: the 404 has too little content to push the footer down. */
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    flex: 1;
+  }
+</style>

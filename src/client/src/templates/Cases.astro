@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import OverviewTile from "../components/OverviewTile.astro";
+import BottomEdge from "../components/BottomEdge.astro";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+const allCases = await getCollection("cases");
+const casesEntry = allCases.find((c) => c.data.umbracoId === umbracoId);
+const cases = pageInCulture(culture, casesEntry!.data);
+
+const allCase = await getCollection("case");
+const items = allCase
+  .filter((c) => c.data.parentId === umbracoId)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((c) => pageInCulture(culture, c.data));
+---
+
+<BaseLayout culture={culture} urls={urls} seo={seo}>
+  <Header currentPage={cases} />
+  <PageIntroduction
+    aboveTitle={cases.aboveTitle}
+    title={cases.title}
+    lead={cases.lead}
+  />
+  <section>
+    <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
+      <div
+        id="case-tiles"
+        class="grid grid-cols-2 gap-x-2.5 gap-y-5 mb-4 lg:mb-12"
+      >
+        {items.map((c) => (
+          <OverviewTile
+            href={c.url}
+            title={c.title}
+            thumbnail={c.thumbnail}
+            thumbnailAlt={c.thumbnailAlt}
+            inverted
+          />
+        ))}
+      </div>
+    </div>
+    <BottomEdge fullWidth />
+  </section>
+</BaseLayout>

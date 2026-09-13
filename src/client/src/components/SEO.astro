@@ -1,0 +1,22 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  keywords?: string;
+  lang?: string;
+}
+
+const { title, description = "", keywords = "" } = Astro.props;
+const siteTitle = "CNC Solutions";
+const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+---
+
+<title>{fullTitle}</title>
+{description && <meta name="description" content={description} />}
+{keywords && <meta name="keywords" content={keywords} />}
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+{description && <meta name="twitter:description" content={description} />}

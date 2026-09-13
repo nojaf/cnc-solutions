@@ -1,0 +1,123 @@
+---
+import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture, getImageParams, mediaFileHref } from "../lib/umbraco";
+import underlineDark from "../assets/underline-dark.png";
+import underlineWhite from "../assets/underline-white.png";
+import Video from "./Video.astro";
+import ButtonCnc from "./ButtonCnc.astro";
+
+interface Props {
+  row: Record<string, any>;
+  culture: Culture;
+}
+
+const { row, culture } = Astro.props;
+
+const theme = row.theme ?? "light";
+const underline = theme === "dark" ? underlineDark : underlineWhite;
+const imageRight = row.imageRight ?? false;
+
+// Resolve linkNode (umbraco ID) to URL
+let linkHref: string | null = null;
+if (row.linkNode && row.linkText) {
+  const collections = await Promise.all([
+    getCollection("home"),
+    getCollection("solutions"),
+    getCollection("solution"),
+    getCollection("products"),
+    getCollection("product"),
+    getCollection("cases"),
+    getCollection("case"),
+    getCollection("about"),
+    getCollection("team"),
+    getCollection("news"),
+    getCollection("contact"),
+  ]);
+  for (const col of collections) {
+    const match = col.find((item: any) => item.data.umbracoId === row.linkNode);
+    if (match) {
+      const resolved = pageInCulture(culture, match.data);
+      linkHref = resolved.url as string;
+      break;
+    }
+  }
+}
+
+const downloadHref =
+  row.linkText && row.fileDownloadFile
+    ? mediaFileHref(row.fileDownloadFile)
+    : null;
+
+// Process images
+const img = row.image
+  ? {
+      phone: await getImage(getImageParams(row.image.phone)),
+      tablet: await getImage(getImageParams(row.image.tablet)),
+      desktop: await getImage(getImageParams(row.image.desktop)),
+      largeDesktop: await getImage(getImageParams(row.image.largeDesktop)),
+    }
+  : null;
+---
+
+<section
+  class:list={["py-12", theme === "dark" ? "bg-dark text-white" : "bg-white"]}
+>
+  <div class="mx-auto p-0 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
+    <div class:list={["flex flex-wrap", imageRight && "lg:flex-row-reverse"]}>
+      <div class="w-full px-4 my-4 lg:w-7/12">
+        {img && (
+          <picture>
+            <source media="(min-width: 75em)" srcset={img.largeDesktop.src} />
+            <source media="(min-width: 62em)" srcset={img.desktop.src} />
+            <source media="(min-width: 48em)" srcset={img.tablet.src} />
+            <img class="w-full" src={img.phone.src} alt={row.altText || ""} />
+          </picture>
+        )}
+        {row.videoId && (
+          <Video
+            videoId={row.videoId}
+            altText={row.altText || "Video"}
+            controls={true}
+            mute={false}
+            autoplay={false}
+          />
+        )}
+      </div>
+      <div class="w-full px-4 my-4 lg:w-5/12">
+        <div class="text-center lg:text-left">
+          {row.aboveTitle && (
+            <h3 class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light m-0 mx-auto lg:mx-0 lowercase">
+              {row.aboveTitle}
+            </h3>
+          )}
+          <h2 class="uppercase text-3xl leading-9 lg:text-5xl lg:leading-12 font-bold m-0 mx-auto max-w-1/2 lg:max-w-none">
+            {row.title}
+          </h2>
+          <img src={underline.src} alt="" class="block mx-auto mb-7 h-1 w-6" />
+          {row.lead && (
+            <div class="cms-content text-left" set:html={row.lead} />
+          )}
+          {linkHref && row.linkText && (
+            <div class="text-center lg:text-left mt-5">
+              <ButtonCnc href={linkHref}>{row.linkText}</ButtonCnc>
+            </div>
+          )}
+          {downloadHref && (
+            <div class="text-center lg:text-left mt-5">
+              <ButtonCnc
+                href={downloadHref}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {row.linkText}
+              </ButtonCnc>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

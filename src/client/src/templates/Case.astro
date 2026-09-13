@@ -1,0 +1,202 @@
+---
+import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import Carousel from "../components/Carousel.astro";
+import Video from "../components/Video.astro";
+import ButtonCnc from "../components/ButtonCnc.astro";
+import BottomEdge from "../components/BottomEdge.astro";
+import underlineWhite from "../assets/underline-white.png";
+import type { Culture } from "../lib/umbraco";
+import {
+  pageInCulture,
+  getImageParams,
+  getTree,
+  getNodeById,
+} from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+const allCase = await getCollection("case");
+const caseEntry = allCase.find((c) => c.data.umbracoId === umbracoId);
+const casePage = pageInCulture(culture, caseEntry!.data);
+
+const ofThisPage = (e: { data: { parentId: number | null } }) =>
+  e.data.parentId === umbracoId;
+const bySortOrder = (
+  a: { data: { sortOrder: number } },
+  b: { data: { sortOrder: number } },
+) => a.data.sortOrder - b.data.sortOrder;
+
+const [allCaseRows, allQuoteRows, allSlides, tree] = await Promise.all([
+  getCollection("caseRow"),
+  getCollection("quoteRow"),
+  getCollection("caseSlideshowImage"),
+  getTree(),
+]);
+
+const src = async (url: string) => (await getImage(getImageParams(url))).src;
+
+// A case row shows its video when it has one, a carousel when it has more
+// than one slide, and otherwise the single slide as a picture. The link is
+// a content picker holding an Umbraco node id.
+const caseRows = await Promise.all(
+  allCaseRows.filter(ofThisPage).map(async (r) => {
+    const row = pageInCulture(culture, r.data);
+    const slides = row.videoId
+      ? []
+      : await Promise.all(
+          allSlides
+            .filter((s) => s.data.parentId === row.umbracoId)
+            .sort(bySortOrder)
+            .flatMap((s) => {
+              const slide = pageInCulture(culture, s.data);
+              return slide.image ? [{ ...slide, image: slide.image }] : [];
+            })
+            .map(async (slide) => ({
+              altText: slide.altText ?? "",
+              phone: await src(slide.image.mobile),
+              tablet: await src(slide.image.tablet),
+              desktop: await src(slide.image.desktop),
+            })),
+        );
+    const linkUrl = row.linkUrl
+      ? getNodeById(tree.root, row.linkUrl)?.url[culture]
+      : undefined;
+    return {
+      kind: "case" as const,
+      ...row,
+      slides,
+      link:
+        linkUrl && row.linkText ? { url: linkUrl, text: row.linkText } : null,
+    };
+  }),
+);
+const quoteRows = allQuoteRows
+  .filter(ofThisPage)
+  .map((r) => ({ kind: "quote" as const, ...pageInCulture(culture, r.data) }));
+const rows = [...caseRows, ...quoteRows].sort(
+  (a, b) => a.sortOrder - b.sortOrder,
+);
+---
+
+<BaseLayout culture={culture} urls={urls} seo={seo}>
+  <Header currentPage={casePage} />
+  <PageIntroduction
+    aboveTitle={casePage.aboveTitle}
+    title={casePage.title}
+    lead={casePage.lead}
+  />
+  <section id="case-rows" class="mb-8 md:my-12">
+    <div class="mx-auto xl:w-285">
+      {rows.map((row) =>
+        row.kind === "quote" ? (
+          <div class="quote-row flex flex-wrap my-8 bg-dark text-white">
+            <div class="w-full mt-8 md:mt-0">
+              <blockquote class="block px-8 pt-8 mb-4 text-2xl leading-none uppercase sm:text-32 md:text-5xl">
+                {row.quote}
+              </blockquote>
+              {row.clientName && (
+                <span class="block px-8 pb-8 leading-none sm:text-2xl">
+                  -&nbsp;{row.clientName}
+                </span>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div class="flex flex-wrap my-8">
+            <div class="w-full md:w-1/2">
+              <div class="case-image sm:h-full">
+                {row.videoId ? (
+                  <Video
+                    videoId={row.videoId}
+                    altText={row.title}
+                    mute={false}
+                    controls
+                    autoplay={false}
+                  />
+                ) : row.slides.length > 1 ? (
+                  <Carousel
+                    id={`block${row.umbracoId}Carousel`}
+                    theme="light"
+                    lightbox
+                    slides={row.slides.map((s) => ({
+                      ...s,
+                      mobileLandscape: s.phone,
+                      largeDesktop: s.desktop,
+                      imgClass: "w-full sm:object-cover",
+                    }))}
+                  />
+                ) : (
+                  row.slides[0] && (
+                    <picture>
+                      <source
+                        media="(min-width: 62em)"
+                        srcset={row.slides[0].desktop}
+                      />
+                      <source
+                        media="(min-width: 48em)"
+                        srcset={row.slides[0].tablet}
+                      />
+                      <img
+                        src={row.slides[0].phone}
+                        alt={row.slides[0].altText}
+                        class="w-full sm:h-full sm:object-cover"
+                      />
+                    </picture>
+                  )
+                )}
+              </div>
+            </div>
+            <div
+              class:list={[
+                "w-full mt-8 md:w-1/2 md:mt-0",
+                row.isMediaRight && "md:order-first",
+              ]}
+            >
+              <div class="case-info text-left">
+                <p class="above text-sm leading-4 font-thin text-center m-0 lg:text-2xl lg:leading-10 lg:font-light">
+                  {row.aboveTitle}
+                </p>
+                <h2 class="uppercase text-center text-3xl leading-8.5 font-bold m-0 mb-2 px-8">
+                  {row.title}
+                </h2>
+                <img
+                  src={underlineWhite.src}
+                  alt=""
+                  class="block mx-auto mb-8 w-6"
+                />
+                {row.lead && <div class="cms-content" set:html={row.lead} />}
+                {row.link && (
+                  <div class="link-container pt-4 px-2 pb-5 text-center sm:w-4/5 sm:mx-auto">
+                    <ButtonCnc href={row.link.url}>{row.link.text}</ButtonCnc>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ),
+      )}
+    </div>
+  </section>
+  <BottomEdge fullWidth />
+</BaseLayout>
+
+<style>
+  @reference "../styles/global.css";
+
+  /* Bootstrap-era paragraph rule for CMS text. Needs more specificity than
+     the unlayered `.cms-content p` rule in global.css. */
+  .case-info .cms-content :global(p) {
+    @apply pt-4 px-2 sm:w-4/5 sm:mx-auto sm:mb-0;
+  }
+</style>

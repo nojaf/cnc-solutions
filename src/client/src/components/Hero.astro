@@ -1,0 +1,119 @@
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+import BottomEdge from "./BottomEdge.astro";
+import ButtonCnc from "./ButtonCnc.astro";
+
+interface Props {
+  aboveSlogan: string;
+  slogan: string;
+  mobilePlaceholder?: string;
+  firstFrameVideo?: string;
+  primaryLinkUrl?: string;
+  primaryLinkText?: string;
+}
+
+const {
+  aboveSlogan,
+  slogan,
+  mobilePlaceholder,
+  firstFrameVideo,
+  primaryLinkUrl,
+  primaryLinkText,
+} = Astro.props;
+
+const showLink = primaryLinkText && primaryLinkUrl;
+
+const poster = firstFrameVideo
+  ? await getImage(getImageParams(firstFrameVideo))
+  : null;
+const mobileBg = mobilePlaceholder
+  ? await getImage(getImageParams(mobilePlaceholder))
+  : null;
+---
+
+<section
+  id="hero"
+  class="relative box-border min-h-70 h-[calc(50vw+3rem)] sm:h-auto sm:min-h-[min(56.25vw,100vh-5rem)] sm:max-h-[calc(100vh-5rem)] lg:min-h-[min(56.25vw,100vh-7rem)] lg:max-h-[calc(100vh-7rem)] bg-cover text-white text-center flex flex-col"
+>
+  <div class="m-auto relative z-10 px-4 w-full sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 lg:text-left lg:my-0 lg:grow lg:min-h-150 lg:pt-48 lg:pb-48">
+    <p class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light">
+      {aboveSlogan}
+    </p>
+    <h1 class="w-1/2 mx-auto text-3xl font-bold leading-9 uppercase lg:text-5xl lg:leading-14 lg:w-auto lg:mx-0 lg:text-left">
+      {slogan}
+    </h1>
+    {showLink && (
+      <div class="mt-2 lg:mt-8">
+        <ButtonCnc href={primaryLinkUrl}>{primaryLinkText}</ButtonCnc>
+      </div>
+    )}
+  </div>
+  {mobileBg && (
+    <div
+      class="block sm:hidden absolute inset-0 z-0 bg-cover bg-no-repeat"
+      style={`background-image: url(${mobileBg.src})`}
+    />
+  )}
+  <div class="hidden sm:block absolute inset-0 z-0 overflow-hidden">
+    {poster && (
+      <img
+        src={poster.src}
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+    )}
+    <video
+      class="relative w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-out motion-reduce:transition-none"
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="none"
+      data-webm="/videos/home.webm"
+      data-mp4="/videos/home.mp4"
+    ></video>
+  </div>
+  <div class="absolute inset-0 bg-black/50 z-1"></div>
+  <div class="absolute bottom-0 left-0 w-full z-20">
+    <BottomEdge variant="dark" />
+  </div>
+</section>
+
+<script>
+  // The section already has the video's 16:9 aspect ratio in CSS, so nothing
+  // moves when the file arrives. The poster sits under the video and the
+  // video fades in once it is actually rendering frames.
+  //
+  // The sources are attached from here, only from the sm breakpoint up: the
+  // video is hidden on phones and must not be downloaded there.
+  document.addEventListener("astro:page-load", () => {
+    const video = document.querySelector<HTMLVideoElement>("#hero video");
+    if (!video) return;
+    const reveal = () => video.classList.replace("opacity-0", "opacity-100");
+    video.addEventListener("playing", reveal, { once: true });
+
+    const attach = () => {
+      if (video.querySelector("source")) return;
+      const sources: [string, string][] = [
+        ['video/webm; codecs="vp9, opus"', video.dataset.webm ?? ""],
+        ["video/mp4", video.dataset.mp4 ?? ""],
+      ];
+      for (const [type, src] of sources) {
+        const source = document.createElement("source");
+        source.src = src;
+        source.type = type;
+        video.appendChild(source);
+      }
+      video.load();
+      video.play().catch(() => {});
+    };
+
+    const mq = matchMedia("(min-width: 576px)");
+    if (mq.matches) attach();
+    else
+      mq.addEventListener("change", () => mq.matches && attach(), {
+        once: true,
+      });
+  });
+</script>

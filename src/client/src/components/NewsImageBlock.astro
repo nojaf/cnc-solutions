@@ -1,0 +1,31 @@
+---
+import { getImage } from "astro:assets";
+import { getImageParams } from "../lib/umbraco";
+
+interface Props {
+  image: string;
+  altText?: string;
+  caption?: string;
+  isFullWidth?: boolean;
+}
+
+const { image, altText = "", caption, isFullWidth } = Astro.props;
+const processed = await getImage(getImageParams(image));
+const imgClass = [
+  "block mx-auto",
+  isFullWidth ? "max-w-full" : "max-w-full md:max-w-1/2",
+];
+---
+
+<div class="my-16 mx-auto">
+  {caption ? (
+    <figure class="bg-white">
+      <img class:list={imgClass} src={processed.src} alt={altText} />
+      <figcaption class="text-dark text-center mt-2 p-1 italic">
+        {caption}
+      </figcaption>
+    </figure>
+  ) : (
+    <img class:list={imgClass} src={processed.src} alt={altText} />
+  )}
+</div>

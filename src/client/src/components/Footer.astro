@@ -1,0 +1,127 @@
+---
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture, navText } from "../lib/umbraco";
+import { getCollection } from "astro:content";
+import flandersInvestment from "../assets/FIT_Label_Subsidie_Liggend.jpg";
+
+interface Props {
+  culture: Culture;
+}
+
+const { culture } = Astro.props;
+
+const [
+  solutionsItems,
+  solutionItems,
+  productsItems,
+  productItems,
+  casesItems,
+  aboutItems,
+  contactItems,
+] = await Promise.all([
+  getCollection("solutions"),
+  getCollection("solution"),
+  getCollection("products"),
+  getCollection("product"),
+  getCollection("cases"),
+  getCollection("about"),
+  getCollection("contact"),
+]);
+
+const solutionsPage = pageInCulture(culture, solutionsItems[0].data);
+const solutions = solutionItems
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((s) => pageInCulture(culture, s.data));
+const productsPage = pageInCulture(culture, productsItems[0].data);
+const products = productItems
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .map((p) => pageInCulture(culture, p.data));
+const casesPage = pageInCulture(culture, casesItems[0].data);
+const aboutPage = pageInCulture(
+  culture,
+  aboutItems.sort((a, b) => a.data.sortOrder - b.data.sortOrder)[0].data,
+);
+const contactPage = pageInCulture(culture, contactItems[0].data);
+---
+
+<footer class="bg-dark text-white py-6">
+  <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 lg:pb-21 xl:max-w-285">
+    <div class="flex flex-wrap -mx-4">
+      <div class="w-1/2 lg:w-1/4 px-4">
+        <a
+          href={solutionsPage.url}
+          class="text-white no-underline hover:text-primary hover:underline"
+        >
+          <h4 class="uppercase text-xl leading-6 font-bold mb-0">
+            {navText(solutionsPage)}
+          </h4>
+        </a>
+        <ul class="list-none p-0 mt-0 mb-4">
+          {solutions.map((s) => (
+            <li class="mt-4 leading-7">
+              <a
+                href={s.url}
+                class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
+              >
+                {navText(s)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="w-1/2 lg:w-1/4 px-4">
+        <a
+          href={productsPage.url}
+          class="text-white no-underline hover:text-primary hover:underline"
+        >
+          <h4 class="uppercase text-xl leading-6 font-bold mb-0">
+            {navText(productsPage)}
+          </h4>
+        </a>
+        <ul class="list-none p-0 mt-0 mb-4">
+          {products.map((p) => (
+            <li class="mt-4 leading-7">
+              <a
+                href={p.url}
+                class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
+              >
+                {navText(p)}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a
+          href={casesPage.url}
+          class="text-white no-underline hover:text-primary hover:underline"
+        >
+          <h4 class="uppercase text-xl leading-6 font-bold mb-0">
+            {navText(casesPage)}
+          </h4>
+        </a>
+      </div>
+      <div class="w-1/2 lg:w-1/4 px-4">
+        <a
+          href={aboutPage.url}
+          class="text-white no-underline hover:text-primary hover:underline"
+        >
+          <h4 class="uppercase text-xl leading-6 font-bold mb-6">
+            {navText(aboutPage)}
+          </h4>
+        </a>
+        <a
+          href={contactPage.url}
+          class="text-white no-underline hover:text-primary hover:underline"
+        >
+          <h4 class="uppercase text-xl leading-6 font-bold mb-0">
+            {navText(contactPage)}
+          </h4>
+        </a>
+        <img
+          src={flandersInvestment.src}
+          alt="Flanders Investment & Trade"
+          class="w-full mt-4"
+        />
+      </div>
+    </div>
+  </div>
+</footer>

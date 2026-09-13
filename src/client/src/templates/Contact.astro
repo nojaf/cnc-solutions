@@ -1,0 +1,404 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import ButtonCnc from "../components/ButtonCnc.astro";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+const allContact = await getCollection("contact");
+const contactEntry = allContact.find((c) => c.data.umbracoId === umbracoId);
+const contact = pageInCulture(culture, contactEntry!.data);
+
+const contactPostUrl =
+  "https://cncsolutions-backend.azurewebsites.net/umbraco/api/contact/post";
+---
+
+<BaseLayout culture={culture} urls={urls} seo={seo}>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://challenges.cloudflare.com" />
+    <script
+      is:inline
+      defer
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+    ></script>
+  </Fragment>
+  <Header currentPage={contact} />
+  <PageIntroduction
+    aboveTitle={contact.aboveTitle}
+    title={contact.title}
+    lowercase={false}
+  />
+  <section class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 pb-12">
+    <div class="flex flex-wrap -mx-4">
+      {/* Contact info */}
+      <div id="contact-info" class="w-full lg:w-4/12 px-4 mb-8 lg:mb-0">
+        {contact.aboveAddress && (
+          <h2 class="text-xl font-bold uppercase leading-6 lg:leading-12 mb-2">
+            {contact.aboveAddress}
+          </h2>
+        )}
+        {contact.address && (
+          <address class="not-italic mb-4">
+            {/* set:text, not children: whitespace inside a <pre> is
+                  content, and the formatter re-indents children. */}
+            <pre
+              class="font-body text-base whitespace-pre text-gray-900 mb-4"
+              set:text={contact.address}
+            ></pre>
+          </address>
+        )}
+        <dl class="grid gap-y-1 grid-cols-[--spacing(8)_1fr] mb-4">
+          {contact.email && (
+            <>
+              <dt class="text-primary font-bold h-6">
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <>
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </>
+                </svg>
+              </dt>
+              <dd class="m-0">{contact.email}</dd>
+            </>
+          )}
+          {contact.phone && (
+            <>
+              <dt class="text-primary font-bold h-6">
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </dt>
+              <dd class="m-0">{contact.phone}</dd>
+            </>
+          )}
+          {contact.linkedInUrl && (
+            <>
+              <dt class="text-primary font-bold h-6">
+                <a
+                  href={contact.linkedInUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary"
+                >
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                  </svg>
+                </a>
+              </dt>
+              <dd class="m-0" />
+            </>
+          )}
+          {contact.facebookUrl && (
+            <>
+              <dt class="text-primary font-bold h-6">
+                <a
+                  href={contact.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary"
+                >
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m13 2h-2.5A3.5 3.5 0 0 0 12 8.5V11h-2v3h2v7h3v-7h3v-3h-3V9a1 1 0 0 1 1-1h2V5z" />
+                  </svg>
+                </a>
+              </dt>
+              <dd class="m-0" />
+            </>
+          )}
+        </dl>
+      </div>
+
+      {/* Contact form */}
+      <div id="contact-form" class="w-full lg:w-8/12 px-4">
+        {/* Gatsby nests a second .container inside this column, insetting the
+            form by another 15px. Its max-width never bites, so only the
+            padding is reproduced here. */}
+        <div class="px-4">
+          {contact.aboveForm && (
+            <h2 class="text-xl font-bold uppercase leading-6 lg:leading-12 mb-2">
+              {contact.aboveForm}
+            </h2>
+          )}
+          <form id="contactForm" data-action={contactPostUrl}>
+            <div class="mb-4">
+              <label for="name" class="inline-block text-sm mb-2">
+                {contact.labelName}*
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                required
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="company" class="inline-block text-sm mb-2">
+                {contact.labelCompany}*
+              </label>
+              <input
+                type="text"
+                name="company"
+                id="company"
+                required
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="address" class="inline-block text-sm mb-2">
+                {contact.labelAddress}
+              </label>
+              <input
+                type="text"
+                name="address"
+                id="address"
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="flex flex-wrap -mx-4">
+              <div class="mb-4 w-1/2 px-4">
+                <label for="zip" class="inline-block text-sm mb-2">
+                  {contact.labelZip}
+                </label>
+                <input
+                  type="text"
+                  name="zip"
+                  id="zip"
+                  class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+                />
+              </div>
+              <div class="mb-4 w-1/2 px-4">
+                <label for="city" class="inline-block text-sm mb-2">
+                  {contact.labelCity}
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  id="city"
+                  class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+                />
+              </div>
+            </div>
+            <div class="mb-4">
+              <label for="country" class="inline-block text-sm mb-2">
+                {contact.labelCountry}
+              </label>
+              <input
+                type="text"
+                name="country"
+                id="country"
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="email" class="inline-block text-sm mb-2">
+                {contact.labelEmail}*
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="telephone" class="inline-block text-sm mb-2">
+                {contact.labelPhone}*
+              </label>
+              <input
+                type="tel"
+                name="telephone"
+                id="telephone"
+                required
+                class="block w-full h-6 border border-dark rounded-none py-2 px-3 text-base"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="message" class="inline-block text-sm mb-2">
+                {contact.labelMessage}
+              </label>
+              <textarea
+                name="message"
+                id="message"
+                cols={30}
+                rows={5}
+                class="block w-full border border-dark rounded-none py-2 px-3 text-base"
+              ></textarea>
+            </div>
+            <div class="mb-4">
+              <div
+                id="turnstile-widget"
+                data-sitekey={contact.turnstileSiteKey}
+              ></div>
+            </div>
+            <div class="text-center lg:text-left">
+              <ButtonCnc type="submit">{contact.sendButtonText}</ButtonCnc>
+            </div>
+          </form>
+          <div
+            id="contact-success"
+            class="hidden mt-4 p-3 bg-green-100 text-green-800 border border-green-300"
+          >
+            {contact.successText}
+          </div>
+          <div
+            id="contact-error"
+            class="hidden mt-4 p-3 bg-red-100 text-red-800 border border-red-300"
+          >
+            {contact.errorText}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const form = document.getElementById(
+      "contactForm",
+    ) as HTMLFormElement | null;
+    if (!form) return;
+
+    const actionUrl = form.dataset.action;
+    if (!actionUrl) return;
+    const successEl = document.getElementById("contact-success");
+    const errorEl = document.getElementById("contact-error");
+    const requiredFields = ["name", "company", "email", "telephone"];
+
+    // Cloudflare's always-passing test key, so the form stays usable on the
+    // dev server, where the real key rejects the hostname. Its dummy token
+    // cannot verify against the real secret, so the backend answers 400 and
+    // no mail is sent.
+    //
+    // ?turnstile=live opts into the real key for a genuine end-to-end test.
+    // That needs "localhost" added to the widget's allowed hostnames in the
+    // Cloudflare dashboard, and it does send a real email to the contact
+    // page's formRecipient. Ignored off localhost, where the real key is
+    // always used.
+    const TEST_SITE_KEY = "1x00000000000000000000AA";
+    const useTestKey =
+      location.hostname === "localhost" &&
+      new URLSearchParams(location.search).get("turnstile") !== "live";
+    const turnstileEl = document.getElementById("turnstile-widget");
+    let widgetId: string | undefined;
+
+    // api.js is deferred, so it may not have run yet on first paint. Poll for
+    // it the way the Gatsby page did.
+    let renderTimeout: number | undefined;
+    function renderTurnstile() {
+      const turnstile = (window as any).turnstile;
+      if (!turnstileEl || !turnstile) {
+        renderTimeout = window.setTimeout(renderTurnstile, 100);
+        return;
+      }
+      turnstileEl.innerHTML = "";
+      widgetId = turnstile.render(turnstileEl, {
+        sitekey: useTestKey ? TEST_SITE_KEY : turnstileEl.dataset.sitekey,
+      });
+    }
+    renderTurnstile();
+
+    // ClientRouter swaps the DOM without a reload, so drop the widget on the
+    // way out or api.js keeps a handle to a detached node.
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        clearTimeout(renderTimeout);
+        const turnstile = (window as any).turnstile;
+        if (widgetId !== undefined && turnstile) {
+          turnstile.remove(widgetId);
+          widgetId = undefined;
+        }
+      },
+      { once: true },
+    );
+
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      successEl?.classList.add("hidden");
+      errorEl?.classList.add("hidden");
+
+      // Clear previous validation
+      form.querySelectorAll("input, textarea").forEach((el) => {
+        el.classList.remove("border-red-500");
+      });
+
+      const data: Record<string, string> = {};
+      const formData = new FormData(form);
+      for (const [key, value] of formData.entries()) {
+        data[key] = value as string;
+      }
+
+      // Validate required fields
+      let valid = true;
+      for (const field of requiredFields) {
+        if (!data[field]) {
+          valid = false;
+          const input = form.querySelector(`[name="${field}"]`);
+          input?.classList.add("border-red-500");
+        }
+      }
+      if (!valid) return;
+
+      const turnstile = (window as any).turnstile;
+      const token =
+        widgetId !== undefined && turnstile
+          ? turnstile.getResponse(widgetId)
+          : "";
+      // No token means the widget has not finished solving, or never loaded.
+      // The backend rejects such a post, so fail here instead of sending it.
+      if (!token) {
+        errorEl?.classList.remove("hidden");
+        return;
+      }
+      data.turnstileToken = token;
+
+      try {
+        const response = await fetch(actionUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        // Deviation from Gatsby, which left the filled-in form sitting above
+        // the thank-you message. There is nothing left to do with it, and
+        // leaving it invites a second submit on a spent token.
+        form.classList.add("hidden");
+        successEl?.classList.remove("hidden");
+      } catch {
+        errorEl?.classList.remove("hidden");
+        // The token was spent on that attempt, so a retry needs a fresh one.
+        turnstile.reset(widgetId);
+      }
+    });
+  });
+</script>

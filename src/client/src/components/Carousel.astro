@@ -1,0 +1,235 @@
+---
+export interface Slide {
+  /** Page to open on click. Ignored when `lightbox` is set. */
+  href?: string;
+  altText: string;
+  phone: string;
+  /** Crop for the 34em source. Falls back to `tablet`, as the old home page did. */
+  mobileLandscape?: string;
+  tablet?: string;
+  desktop?: string;
+  largeDesktop?: string;
+  imgClass?: string;
+  overlay?: {
+    icon: string;
+    title: string;
+  };
+}
+
+interface Props {
+  id: string;
+  theme?: "dark" | "light";
+  slides: Slide[];
+  showIndicators?: boolean;
+  /** Open the desktop crop in a modal gallery instead of following `href`. */
+  lightbox?: boolean;
+}
+
+const {
+  id,
+  theme = "dark",
+  slides,
+  showIndicators = true,
+  lightbox = false,
+} = Astro.props;
+
+// Bootstrap drew the arrows and dots in white on a dark row and in the
+// primary colour on a light row.
+const dark = theme === "dark";
+const arrow = "w-0 h-0 border-y-10 border-transparent";
+---
+
+<div class="carousel relative" id={id} data-lightbox={lightbox || undefined}>
+  <div class="overflow-hidden">
+    <div class="carousel-track flex transition-transform duration-600 ease-in-out">
+      {slides.map((s) => (
+        <a
+          href={lightbox ? (s.desktop ?? s.phone) : s.href}
+          class:list={[
+            "carousel-slide block w-full shrink-0 relative",
+            lightbox && "cursor-zoom-in",
+          ]}
+          data-alt={lightbox ? s.altText : undefined}
+        >
+          <picture>
+            {s.largeDesktop && (
+              <source media="(min-width: 75em)" srcset={s.largeDesktop} />
+            )}
+            {s.desktop && (
+              <source media="(min-width: 62em)" srcset={s.desktop} />
+            )}
+            {s.tablet && <source media="(min-width: 48em)" srcset={s.tablet} />}
+            {(s.mobileLandscape ?? s.tablet) && (
+              <source
+                media="(min-width: 34em)"
+                srcset={s.mobileLandscape ?? s.tablet}
+              />
+            )}
+            <img
+              src={s.phone}
+              alt={s.altText}
+              class:list={["block mx-auto", s.imgClass ?? "w-full"]}
+            />
+          </picture>
+          {s.overlay && (
+            <Fragment>
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-38 md:w-125 md:h-59 bg-black/50 z-1" />
+              <div class="absolute inset-0 flex flex-col items-center pt-5 sm:pt-5 z-2">
+                <img src={s.overlay.icon} alt={s.overlay.title} class="w-25" />
+                <h5 class="uppercase font-bold text-base -mt-1">
+                  {s.overlay.title}
+                </h5>
+              </div>
+            </Fragment>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  {/* Bootstrap's indicators sit 1rem above the bottom edge, pushed 50px down,
+       with 10px transparent borders around each 10px dot. */}
+  {showIndicators && (
+    <div class="carousel-dots absolute inset-x-0 bottom-4 flex justify-center gap-2.5 py-2.5 translate-y-12.5">
+      {slides.map((_, i) => (
+        <button
+          class:list={[
+            "carousel-dot relative w-2.5 h-2.5 cursor-pointer",
+            dark ? "bg-white" : "bg-dark",
+          ]}
+          data-slide-to={i}
+          aria-label={`Slide ${i + 1}`}
+        >
+          <span
+            class:list={[
+              "absolute inset-0 w-0 h-0 border-b-10 border-l-10 border-transparent border-b-primary",
+              i === 0 ? "block" : "hidden",
+            ]}
+          />
+        </button>
+      ))}
+    </div>
+  )}
+
+  <button
+    class="carousel-prev absolute inset-y-0 left-0 z-10 flex w-3/20 items-center justify-center opacity-50 hover:opacity-90 cursor-pointer"
+    aria-label="Previous"
+  >
+    <span
+      class:list={[
+        arrow,
+        "border-l-0 border-r-15",
+        dark ? "border-r-white" : "border-r-primary",
+      ]}
+    ></span>
+  </button>
+  <button
+    class="carousel-next absolute inset-y-0 right-0 z-10 flex w-3/20 items-center justify-center opacity-50 hover:opacity-90 cursor-pointer"
+    aria-label="Next"
+  >
+    <span
+      class:list={[
+        arrow,
+        "border-r-0 border-l-15",
+        dark ? "border-l-white" : "border-l-primary",
+      ]}
+    ></span>
+  </button>
+</div>
+
+<script>
+  function initCarousel(root: HTMLElement) {
+    const track = root.querySelector<HTMLElement>(".carousel-track");
+    const slides = [
+      ...root.querySelectorAll<HTMLAnchorElement>(".carousel-slide"),
+    ];
+    const dots = root.querySelectorAll<HTMLElement>(".carousel-dot");
+    const count = slides.length;
+    if (!track || count === 0) return;
+    let current = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+
+    function show(index: number) {
+      current = (index + count) % count;
+      track!.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => {
+        d.firstElementChild?.classList.toggle("block", i === current);
+        d.firstElementChild?.classList.toggle("hidden", i !== current);
+      });
+    }
+
+    function restart() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => show(current + 1), 5000);
+    }
+
+    root.querySelector(".carousel-prev")?.addEventListener("click", () => {
+      show(current - 1);
+      restart();
+    });
+    root.querySelector(".carousel-next")?.addEventListener("click", () => {
+      show(current + 1);
+      restart();
+    });
+    dots.forEach((dot, i) =>
+      dot.addEventListener("click", () => {
+        show(i);
+        restart();
+      }),
+    );
+
+    if (root.dataset.lightbox) {
+      slides.forEach((slide, i) =>
+        slide.addEventListener("click", (e) => {
+          e.preventDefault();
+          openLightbox(slides, i);
+        }),
+      );
+    }
+
+    restart();
+  }
+
+  // Replaces ekko-lightbox: the desktop crop in a modal gallery.
+  function openLightbox(slides: HTMLAnchorElement[], start: number) {
+    let index = start;
+    const dialog = document.createElement("dialog");
+    dialog.className =
+      "m-auto max-w-[90vw] p-0 bg-transparent backdrop:bg-black/70 outline-none";
+    dialog.innerHTML = `
+      <img class="block max-h-[90vh] max-w-full" />
+      <button class="lightbox-prev absolute inset-y-0 left-0 w-1/4 cursor-pointer" aria-label="Previous"></button>
+      <button class="lightbox-next absolute inset-y-0 right-0 w-1/4 cursor-pointer" aria-label="Next"></button>
+    `;
+    const img = dialog.querySelector("img")!;
+    function render() {
+      img.src = slides[index].href;
+      img.alt = slides[index].dataset.alt ?? "";
+    }
+    function step(delta: number) {
+      index = (index + delta + slides.length) % slides.length;
+      render();
+    }
+    dialog.querySelector(".lightbox-prev")!.addEventListener("click", (e) => {
+      e.stopPropagation();
+      step(-1);
+    });
+    dialog.querySelector(".lightbox-next")!.addEventListener("click", (e) => {
+      e.stopPropagation();
+      step(1);
+    });
+    dialog.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") step(-1);
+      if (e.key === "ArrowRight") step(1);
+    });
+    dialog.addEventListener("close", () => dialog.remove());
+    render();
+    document.body.append(dialog);
+    dialog.showModal();
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>(".carousel").forEach(initCarousel);
+  });
+</script>

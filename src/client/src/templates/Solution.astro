@@ -1,0 +1,159 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import PageIntroduction from "../components/PageIntroduction.astro";
+import Carousel from "../components/Carousel.astro";
+import { getImage } from "astro:assets";
+import Video from "../components/Video.astro";
+import underlineDark from "../assets/underline-dark.png";
+import underlineWhite from "../assets/underline-white.png";
+import type { Culture } from "../lib/umbraco";
+import { pageInCulture, getImageParams } from "../lib/umbraco";
+
+interface Props {
+  culture: Culture;
+  umbracoId: number;
+  urls: { nl: string; en: string; fr: string };
+  seo: { title: string; description: string; keywords: any; lang: string };
+}
+
+const { culture, umbracoId, urls, seo } = Astro.props;
+
+const allSolution = await getCollection("solution");
+const solutionEntry = allSolution.find((s) => s.data.umbracoId === umbracoId);
+const solution = pageInCulture(culture, solutionEntry!.data);
+
+// Blocks are grouped by their row number. Within a row the old site listed
+// slideshows, then texts, then videos, and moved the text block last. The
+// row colour came from the first block in that original order.
+const ofThisPage = (e: { data: { parentId: number | null } }) =>
+  e.data.parentId === umbracoId;
+const [slideshows, texts, videos, slideImages] = await Promise.all([
+  getCollection("solutionSlideshow"),
+  getCollection("solutionText"),
+  getCollection("solutionVideo"),
+  getCollection("solutionSlideshowImage"),
+]);
+const blocks = [
+  ...slideshows.filter(ofThisPage).map((b) => ({
+    kind: "slideshow" as const,
+    ...pageInCulture(culture, b.data),
+    slides: slideImages
+      .filter((s) => s.data.parentId === b.data.umbracoId)
+      .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+      .map((s) => pageInCulture(culture, s.data)),
+  })),
+  ...texts
+    .filter(ofThisPage)
+    .map((b) => ({ kind: "text" as const, ...pageInCulture(culture, b.data) })),
+  ...videos.filter(ofThisPage).map((b) => ({
+    kind: "video" as const,
+    ...pageInCulture(culture, b.data),
+  })),
+];
+// Slideshow crops go through the image pipeline and become Carousel slides.
+const slideshowSlides = new Map<number, any[]>();
+for (const b of blocks) {
+  if (b.kind !== "slideshow") continue;
+  slideshowSlides.set(
+    b.umbracoId,
+    await Promise.all(
+      b.slides.map(async (s: any) => {
+        const src = async (key: string) =>
+          (await getImage(getImageParams(s.image[key]))).src;
+        return {
+          altText: s.altText ?? "",
+          phone: await src("mobile-portrait"),
+          mobileLandscape: await src("mobile-landscape"),
+          tablet: await src("tablet"),
+          desktop: await src("desktop"),
+          largeDesktop: await src("large-desktop"),
+        };
+      }),
+    ),
+  );
+}
+const rowNumbers = [...new Set(blocks.map((b) => b.row as number))].sort(
+  (a, b) => a - b,
+);
+// Every block in a row is rendered, like the old site. A stable sort keeps
+// the original order and only moves text blocks to the end.
+const rows = rowNumbers.map((n) => {
+  const inRow = blocks.filter((b) => b.row === n);
+  const color: "dark" | "light" = inRow[0]?.color === "dark" ? "dark" : "light";
+  const isText = (b: (typeof blocks)[number]) => b.kind === "text";
+  return {
+    color,
+    blocks: [...inRow.filter((b) => !isText(b)), ...inRow.filter(isText)],
+  };
+});
+---
+
+<BaseLayout culture={culture} urls={urls} seo={seo}>
+  <Header currentPage={solution} />
+  <PageIntroduction
+    aboveTitle={solution.aboveTitle}
+    title={solution.title}
+    lead={solution.lead}
+  />
+  {rows.map(({ color, blocks }) => (
+    <section
+      class:list={[
+        "cnc-block py-10",
+        color === "dark" ? "dark bg-dark text-white" : "light",
+      ]}
+    >
+      <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
+        <div class="flex flex-wrap -mx-4">
+          {blocks.map((block) =>
+            block.kind !== "text" ? (
+              <div
+                class:list={[
+                  "w-full px-4 lg:w-7/12",
+                  block.isRight ? "lg:order-1" : "lg:order-0",
+                ]}
+              >
+                {block.kind === "slideshow" && (
+                  <Carousel
+                    id={`block${block.umbracoId}Carousel`}
+                    theme={color}
+                    lightbox
+                    slides={slideshowSlides.get(block.umbracoId)!}
+                  />
+                )}
+                {block.kind === "video" && block.videoId && (
+                  <Video videoId={block.videoId} />
+                )}
+              </div>
+            ) : (
+              <div
+                class:list={[
+                  "text-block w-full px-4 mt-11 lg:w-5/12 lg:mt-0",
+                  block.isRight ? "lg:order-1" : "lg:order-0",
+                ]}
+              >
+                <p class="above text-sm leading-7 font-thin text-center m-0 lg:text-2xl lg:leading-10 lg:font-light lg:text-left">
+                  {block.aboveTitle}
+                </p>
+                <h2 class="uppercase lg:break-words text-3xl leading-9 font-bold text-center max-w-2/3 mx-auto m-0 lg:text-40 lg:leading-12 lg:text-left lg:max-w-full lg:mx-0">
+                  {block.title}
+                </h2>
+                <img
+                  src={
+                    color === "dark" ? underlineDark.src : underlineWhite.src
+                  }
+                  alt=""
+                  class="block mx-auto mb-8 w-6 lg:mx-0"
+                />
+                {block.lead && (
+                  <div class="cms-content text-left" set:html={block.lead} />
+                )}
+              </div>
+            ),
+          )}
+        </div>
+      </div>
+    </section>
+  ))}
+</BaseLayout>
