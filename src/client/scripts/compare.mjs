@@ -34,8 +34,8 @@ const args = Object.fromEntries(
 );
 
 const SITES = {
-  gatsby: "http://localhost:8000",
-  astro: "http://localhost:4321",
+  gatsby: process.env.GATSBY_URL ?? "http://localhost:8000",
+  astro: process.env.ASTRO_URL ?? "http://localhost:4321",
 };
 const pages = (args.pages ?? "/").split(",").filter(Boolean);
 const viewports = (args.viewports ?? "375,600,800,992,1200")

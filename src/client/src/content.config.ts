@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { getTree, getNodesByAlias, nodeToEntry } from "./lib/umbraco";
 
 const localizedString = z.object({
@@ -171,7 +172,7 @@ export const collections = {
         cookieAccept: localizedString,
         cookieReject: localizedString,
       })
-      .passthrough(),
+      .loose(),
   }),
   about: defineCollection({
     loader: umbracoLoader("about"),
@@ -192,7 +193,7 @@ export const collections = {
           })
           .optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   aboutRow: defineCollection({
     loader: umbracoLoader("aboutRow"),
@@ -214,7 +215,7 @@ export const collections = {
         altText: localizedOptionalString.optional(),
         videoId: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   homeRow: defineCollection({
     loader: umbracoLoader("homeRow"),
@@ -238,7 +239,7 @@ export const collections = {
         videoId: localizedOptionalString.optional(),
         fileDownloadFile: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   contact: defineCollection({
     loader: umbracoLoader("contact"),
@@ -278,7 +279,7 @@ export const collections = {
           })
           .optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   solutions: defineCollection({
     loader: umbracoLoader("solutions"),
@@ -293,7 +294,7 @@ export const collections = {
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: localizedKeywords.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   solution: defineCollection({
     loader: umbracoLoader("solution"),
@@ -311,11 +312,11 @@ export const collections = {
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: localizedKeywords.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   solutionSlideshow: defineCollection({
     loader: umbracoLoader("solutionSlideshow"),
-    schema: baseSchema.extend(solutionBlockFields).passthrough(),
+    schema: baseSchema.extend(solutionBlockFields).loose(),
   }),
   solutionSlideshowImage: defineCollection({
     loader: umbracoLoader("solutionSlideshowImage"),
@@ -324,7 +325,7 @@ export const collections = {
         image: localizedSlideshowImage,
         altText: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   solutionText: defineCollection({
     loader: umbracoLoader("solutionText"),
@@ -335,7 +336,7 @@ export const collections = {
         title: localizedString,
         lead: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   solutionVideo: defineCollection({
     loader: umbracoLoader("solutionVideo"),
@@ -344,7 +345,7 @@ export const collections = {
         ...solutionBlockFields,
         videoId: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   products: defineCollection({
     loader: umbracoLoader("products"),
@@ -363,7 +364,7 @@ export const collections = {
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: localizedKeywords.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   product: defineCollection({
     loader: umbracoLoader("product"),
@@ -391,7 +392,7 @@ export const collections = {
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: localizedKeywords.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   productRow: defineCollection({
     loader: umbracoLoader("productRow"),
@@ -405,7 +406,7 @@ export const collections = {
         title: localizedString,
         lead: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   productFeature: defineCollection({
     loader: umbracoLoader("productFeature"),
@@ -415,7 +416,7 @@ export const collections = {
         title: localizedString,
         lead: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   cases: defineCollection({
     loader: umbracoLoader("cases"),
@@ -430,7 +431,7 @@ export const collections = {
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: localizedKeywords.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   case: defineCollection({
     loader: umbracoLoader("case"),
@@ -448,7 +449,7 @@ export const collections = {
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: localizedKeywords.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   caseRow: defineCollection({
     loader: umbracoLoader("caseRow"),
@@ -468,7 +469,7 @@ export const collections = {
           .optional(),
         linkText: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   caseSlideshowImage: defineCollection({
     loader: umbracoLoader("caseSlideshowImage"),
@@ -477,7 +478,7 @@ export const collections = {
         image: localizedThumbnailImage,
         altText: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   quoteRow: defineCollection({
     loader: umbracoLoader("quoteRow"),
@@ -486,7 +487,7 @@ export const collections = {
         quote: localizedString,
         clientName: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   team: defineCollection({
     loader: umbracoLoader("team"),
@@ -507,7 +508,7 @@ export const collections = {
           })
           .optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   teamMember: defineCollection({
     loader: umbracoLoader("teamMember"),
@@ -522,7 +523,7 @@ export const collections = {
           fr: z.object({ main: z.string() }).nullable(),
         }),
       })
-      .passthrough(),
+      .loose(),
   }),
   news: defineCollection({
     loader: umbracoLoader("news"),
@@ -546,7 +547,7 @@ export const collections = {
           })
           .optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   newsPage: defineCollection({
     loader: umbracoLoader("newsPage"),
@@ -570,7 +571,7 @@ export const collections = {
           })
           .optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   newsText: defineCollection({
     loader: umbracoLoader("newsText"),
@@ -578,7 +579,7 @@ export const collections = {
       .extend({
         content: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   newsImage: defineCollection({
     loader: umbracoLoader("newsImage"),
@@ -589,7 +590,7 @@ export const collections = {
         caption: localizedOptionalString.optional(),
         isFullWidth: localizedBoolean.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   newsVideo: defineCollection({
     loader: umbracoLoader("newsVideo"),
@@ -597,6 +598,6 @@ export const collections = {
       .extend({
         videoId: localizedOptionalString.optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
 };

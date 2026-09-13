@@ -118,6 +118,12 @@ For anything with structure (gaps between siblings, a lead column, a grid) write
 bun run compare --probe scripts/probes/intro.mjs --pages /over-ons/,/team/,/solutions/
 ```
 
+`GATSBY_URL` and `ASTRO_URL` override the two servers. That turns the script into a regression check between two Astro builds, for instance the previous commit served with `astro preview --port 4323` against the working tree on 4322:
+
+```sh
+GATSBY_URL=http://localhost:4323 ASTRO_URL=http://localhost:4322 bun run compare --selector "body *" --limit 3000 --pages /,/team/
+```
+
 Paste the diff in the summary. Acceptable deviations:
 
 - 1-2px on spacing (due to 4px grid snapping)
@@ -213,7 +219,9 @@ const processedImages = await Promise.all(
 );
 ---
 
-{items.map((item, i) => <img src={processedImages[i]?.src} alt={item.title} />)}
+{items.map((item, i) => (
+  <img src={processedImages[i]?.src} alt={item.title} />
+))}
 ```
 
 ### Important: Do NOT use plain `<img src={remoteUrl}>`
@@ -340,6 +348,8 @@ Things that were wrong once. Add to this list whenever the user corrects a port 
 - **The mobile button under the home carousels starts 44px below the image**, not Bootstrap's `mt-4` (24px): the old `.link-container` adds 20px on top. With the dots translated 50px down, `mt-4` put the button over the dots. Use `mt-11` and check with `scripts/probes/carousel-button.mjs` (its `gapDotToBtn` is 10 on Gatsby and 20 on Astro for the same layout, because Gatsby's dot box includes its transparent borders).
 
 - **Tailwind's reset also strips CMS headings.** A `<h2>` inside `set:html` rendered as 16px regular text until `global.css` gained `.cms-content h1..h6` rules: h1/h2 are `text-3xl font-bold uppercase lg:text-5xl` (main.sass), h3 to h6 are Bootstrap's `font-medium leading-tight` at `text-28`, `text-2xl`, `text-xl`, `text-base`, all `mb-2`. `leading-tight` (1.25) is 0.8 to 1.4px off Bootstrap's 1.2 and accepted. `NewsTextBlock.astro` used to carry a scoped h3 rule at 30px with a 16px margin; the rendered Gatsby value was 28px and 8px, so it was dropped in favour of the global rules.
+
+- **Astro 7 defaults `compressHTML` to `'jsx'`**, which strips the whitespace around inline text, so `<a> Solutions </a>` renders as `<a>Solutions</a>` and inline layout shifts. `astro.config.mjs` sets `compressHTML: true` to keep the HTML-aware behaviour the port was measured with. The 5 to 7 upgrade (13 September 2026) was verified by serving the last Astro 5 build and the Astro 7 build side by side and diffing `body *` on twelve pages at all five viewports: no layout differences, only inline-script minifier output. Astro 7 also fixed the 5.18 loader that treated a 304 on image revalidation as a redirect. Zod 4 came with it: `z` is imported from `astro/zod` and `.passthrough()` became `.loose()`.
 
 ## Review of 6 September 2026
 
