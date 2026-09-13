@@ -8,11 +8,3 @@ const { content } = Astro.props;
 
 <div class="news-text cms-content my-12" set:html={content} />
 
-<style>
-  .news-text :global(h3) {
-    font-size: 1.875rem; /* text-3xl */
-    font-weight: 500;
-    line-height: 1.25; /* leading-tight */
-    margin-bottom: 16px; /* mb-2 */
-  }
-</style>

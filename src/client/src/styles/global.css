@@ -56,6 +56,7 @@
      because it decides where text wraps; see PORTING_GUIDE.md step 2. */
   --text-22: 22px;
   --text-25: 25px;
+  --text-28: 28px;
   --text-32: 32px;
   --text-40: 40px;
 }
@@ -92,6 +93,36 @@ body {
 
 .cms-content ol {
   @apply list-decimal;
+}
+
+/* Bootstrap headings: 1.2 line-height, weight 500, 0.5rem bottom margin.
+   main.sass makes h1 and h2 bold uppercase, 30px/36px and 48px/48px from lg. */
+.cms-content h1,
+.cms-content h2 {
+  @apply text-3xl font-bold uppercase mt-0 mb-2 lg:text-5xl;
+}
+
+.cms-content h3,
+.cms-content h4,
+.cms-content h5,
+.cms-content h6 {
+  @apply font-medium leading-tight mt-0 mb-2;
+}
+
+.cms-content h3 {
+  @apply text-28;
+}
+
+.cms-content h4 {
+  @apply text-2xl;
+}
+
+.cms-content h5 {
+  @apply text-xl;
+}
+
+.cms-content h6 {
+  @apply text-base;
 }
 
 /* Bootstrap links: primary colour, underlined. */
