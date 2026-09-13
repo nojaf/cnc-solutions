@@ -69,10 +69,10 @@ const mobileBg = mobilePlaceholder
       loop
       muted
       playsinline
-    >
-      <source src="/videos/home.webm" type='video/webm; codecs="vp9, opus"' />
-      <source src="/videos/home.mp4" type="video/mp4" />
-    </video>
+      preload="none"
+      data-webm="/videos/home.webm"
+      data-mp4="/videos/home.mp4"
+    ></video>
   </div>
   <div class="absolute inset-0 bg-black/50 z-1"></div>
   <div class="absolute bottom-0 left-0 w-full z-20">
@@ -84,14 +84,36 @@ const mobileBg = mobilePlaceholder
   // The section already has the video's 16:9 aspect ratio in CSS, so nothing
   // moves when the file arrives. The poster sits under the video and the
   // video fades in once it is actually rendering frames.
+  //
+  // The sources are attached from here, only from the sm breakpoint up: the
+  // video is hidden on phones and must not be downloaded there.
   document.addEventListener("astro:page-load", () => {
     const video = document.querySelector<HTMLVideoElement>("#hero video");
     if (!video) return;
     const reveal = () => video.classList.replace("opacity-0", "opacity-100");
-    if (!video.paused && video.readyState >= 3) {
-      reveal();
-    } else {
-      video.addEventListener("playing", reveal, { once: true });
-    }
+    video.addEventListener("playing", reveal, { once: true });
+
+    const attach = () => {
+      if (video.querySelector("source")) return;
+      const sources: [string, string][] = [
+        ['video/webm; codecs="vp9, opus"', video.dataset.webm ?? ""],
+        ["video/mp4", video.dataset.mp4 ?? ""],
+      ];
+      for (const [type, src] of sources) {
+        const source = document.createElement("source");
+        source.src = src;
+        source.type = type;
+        video.appendChild(source);
+      }
+      video.load();
+      video.play().catch(() => {});
+    };
+
+    const mq = matchMedia("(min-width: 576px)");
+    if (mq.matches) attach();
+    else
+      mq.addEventListener("change", () => mq.matches && attach(), {
+        once: true,
+      });
   });
 </script>
