@@ -23,8 +23,10 @@ const t = {
   id="cookies-banner"
   class="hidden fixed bottom-0 left-0 w-full bg-dark text-white z-1000 border-t border-white"
 >
-  <div class="flex items-center justify-end p-4">
-    <span class="mx-2">{t.description}</span>
+  <div class="flex flex-wrap sm:flex-nowrap items-center justify-end gap-y-2 p-4">
+    <p class="basis-full sm:basis-auto mx-2 my-0 text-lg leading-7">
+      {t.description}
+    </p>
     <button
       id="cookie-accept"
       class="mx-2 px-3 py-1.5 text-base bg-primary text-dark border border-primary rounded cursor-pointer"
