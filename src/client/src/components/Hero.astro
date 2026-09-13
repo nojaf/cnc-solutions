@@ -36,33 +36,25 @@ const mobileBg = mobilePlaceholder
   id="hero"
   class="relative box-border min-h-70 h-[calc(50vw+3rem)] sm:h-auto sm:max-h-[calc(100vh-5rem)] lg:max-h-[calc(100vh-7rem)] bg-cover text-white text-center flex flex-col"
 >
-  <div
-    class="m-auto relative z-10 px-4 w-full sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 lg:text-left lg:box-content lg:min-h-150 lg:pt-48 lg:pb-48"
-  >
+  <div class="m-auto relative z-10 px-4 w-full sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 lg:text-left lg:box-content lg:min-h-150 lg:pt-48 lg:pb-48">
     <p class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light">
       {aboveSlogan}
     </p>
-    <h1
-      class="w-1/2 mx-auto text-3xl font-bold leading-9 uppercase lg:text-5xl lg:leading-14 lg:w-auto lg:mx-0 lg:text-left"
-    >
+    <h1 class="w-1/2 mx-auto text-3xl font-bold leading-9 uppercase lg:text-5xl lg:leading-14 lg:w-auto lg:mx-0 lg:text-left">
       {slogan}
     </h1>
-    {
-      showLink && (
-        <div class="mt-2 lg:mt-8">
-          <ButtonCnc href={primaryLinkUrl}>{primaryLinkText}</ButtonCnc>
-        </div>
-      )
-    }
+    {showLink && (
+      <div class="mt-2 lg:mt-8">
+        <ButtonCnc href={primaryLinkUrl}>{primaryLinkText}</ButtonCnc>
+      </div>
+    )}
   </div>
-  {
-    mobileBg && (
-      <div
-        class="block sm:hidden absolute inset-0 z-0 bg-cover bg-no-repeat"
-        style={`background-image: url(${mobileBg.src})`}
-      />
-    )
-  }
+  {mobileBg && (
+    <div
+      class="block sm:hidden absolute inset-0 z-0 bg-cover bg-no-repeat"
+      style={`background-image: url(${mobileBg.src})`}
+    />
+  )}
   <div class="hidden sm:block absolute inset-0 z-0 overflow-hidden">
     <video
       class="w-full h-full object-cover"

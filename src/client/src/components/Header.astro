@@ -24,15 +24,11 @@ const largeDesktop = currentPage.headerImage?.["large-desktop"]
   : null;
 ---
 
-<header
-  class="relative min-h-[60vw] md:min-h-[41vw] md:h-[41vw] md:overflow-y-hidden lg:min-h-[30vw] lg:h-[30vw] xl:min-h-[20vw] xl:h-[20vw]"
->
+<header class="relative min-h-[60vw] md:min-h-[41vw] md:h-[41vw] md:overflow-y-hidden lg:min-h-[30vw] lg:h-[30vw] xl:min-h-[20vw] xl:h-[20vw]">
   <picture>
-    {
-      largeDesktop && (
-        <source media="(min-width: 75em)" srcset={largeDesktop.src} />
-      )
-    }
+    {largeDesktop && (
+      <source media="(min-width: 75em)" srcset={largeDesktop.src} />
+    )}
     {desktop && <source media="(min-width: 62em)" srcset={desktop.src} />}
     {tablet && <source media="(min-width: 48em)" srcset={tablet.src} />}
     {mobile && <source media="(min-width: 34em)" srcset={mobile.src} />}

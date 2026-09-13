@@ -32,25 +32,21 @@ const texts: Record<Culture, { title: string; body: string; home: string }> = {
   urls={urls}
   seo={{ title: texts.nl.title, lang: "nl" }}
 >
-  <div
-    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 py-12 flex flex-col gap-8"
-  >
-    {
-      (Object.keys(texts) as Culture[]).map((lang) => (
-        <section lang={lang} data-lang={lang}>
-          <h1 class="text-2xl leading-8 uppercase lg:text-5xl lg:leading-12">
-            {texts[lang].title}
-          </h1>
-          <p class="mt-4">
-            {texts[lang].body}
-            <a href={urls[lang]} class="text-primary underline">
-              {texts[lang].home}
-            </a>
-            .
-          </p>
-        </section>
-      ))
-    }
+  <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 py-12 flex flex-col gap-8">
+    {(Object.keys(texts) as Culture[]).map((lang) => (
+      <section lang={lang} data-lang={lang}>
+        <h1 class="text-2xl leading-8 uppercase lg:text-5xl lg:leading-12">
+          {texts[lang].title}
+        </h1>
+        <p class="mt-4">
+          {texts[lang].body}
+          <a href={urls[lang]} class="text-primary underline">
+            {texts[lang].home}
+          </a>
+          .
+        </p>
+      </section>
+    ))}
   </div>
   <script is:inline>
     // Hard loads. View transitions are handled in BaseLayout with

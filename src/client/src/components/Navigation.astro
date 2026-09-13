@@ -92,9 +92,7 @@ const dropdowns = [
 ];
 ---
 
-<nav
-  class="mx-auto flex items-center justify-between px-4 py-6 lg:max-w-240 lg:py-5 xl:max-w-285 xl:py-8"
->
+<nav class="mx-auto flex items-center justify-between px-4 py-6 lg:max-w-240 lg:py-5 xl:max-w-285 xl:py-8">
   <a href={homePage.url}>
     <img src={logo.src} alt="CNC Solutions" class="h-12" />
   </a>
@@ -113,25 +111,21 @@ const dropdowns = [
     id="nav-menu"
     class="hidden lg:flex items-center list-none m-0 p-0 ml-auto"
   >
-    {
-      dropdowns.map((d) => (
-        <NavDropdown label={d.label} href={d.href} items={d.items} />
-      ))
-    }
+    {dropdowns.map((d) => (
+      <NavDropdown label={d.label} href={d.href} items={d.items} />
+    ))}
 
     <!-- Vacancies (standalone link) -->
-    {
-      vacancyPage && (
-        <li class="mr-1 xl:mr-4">
-          <a
-            href={vacancyPage.url}
-            class="text-dark text-base p-2 no-underline hover:text-primary"
-          >
-            {navText(vacancyPage)}
-          </a>
-        </li>
-      )
-    }
+    {vacancyPage && (
+      <li class="mr-1 xl:mr-4">
+        <a
+          href={vacancyPage.url}
+          class="text-dark text-base p-2 no-underline hover:text-primary"
+        >
+          {navText(vacancyPage)}
+        </a>
+      </li>
+    )}
 
     <!-- Contact (standalone link) -->
     <li class="mr-1 xl:mr-4">
@@ -159,25 +153,21 @@ const dropdowns = [
   class="grid grid-rows-[0fr] lg:hidden bg-primary text-center transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none"
 >
   <ul class="list-none m-0 p-0 min-h-0 overflow-hidden">
-    {
-      dropdowns.map((d) => (
-        <NavDropdown label={d.label} href={d.href} items={d.items} />
-      ))
-    }
+    {dropdowns.map((d) => (
+      <NavDropdown label={d.label} href={d.href} items={d.items} />
+    ))}
 
     <!-- Vacancies (no submenu) -->
-    {
-      vacancyPage && (
-        <li class="border-b border-white">
-          <a
-            href={vacancyPage.url}
-            class="block uppercase font-semibold text-white text-xl leading-10 no-underline py-1"
-          >
-            {navText(vacancyPage)}
-          </a>
-        </li>
-      )
-    }
+    {vacancyPage && (
+      <li class="border-b border-white">
+        <a
+          href={vacancyPage.url}
+          class="block uppercase font-semibold text-white text-xl leading-10 no-underline py-1"
+        >
+          {navText(vacancyPage)}
+        </a>
+      </li>
+    )}
 
     <!-- Contact (no submenu) -->
     <li class="border-b border-white">

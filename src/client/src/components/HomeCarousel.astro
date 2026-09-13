@@ -76,25 +76,19 @@ const carouselSlides = await Promise.all(
         ]}
       >
         <div class="text-center lg:text-left">
-          <h3
-            class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light m-0 mx-auto lg:mx-0 lowercase"
-          >
+          <h3 class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light m-0 mx-auto lg:mx-0 lowercase">
             {aboveTitle}
           </h3>
-          <h2
-            class="uppercase text-3xl leading-9 lg:text-5xl lg:leading-12 font-bold m-0 mx-auto max-w-1/2 lg:max-w-none"
-          >
+          <h2 class="uppercase text-3xl leading-9 lg:text-5xl lg:leading-12 font-bold m-0 mx-auto max-w-1/2 lg:max-w-none">
             {title}
           </h2>
           <img src={underline.src} alt="" class="block mx-auto mb-7 h-1 w-6" />
           {lead && <div class="cms-content text-left" set:html={lead} />}
-          {
-            linkHref && linkText && (
-              <div class="hidden lg:block text-left mt-5">
-                <ButtonCnc href={linkHref}>{linkText}</ButtonCnc>
-              </div>
-            )
-          }
+          {linkHref && linkText && (
+            <div class="hidden lg:block text-left mt-5">
+              <ButtonCnc href={linkHref}>{linkText}</ButtonCnc>
+            </div>
+          )}
         </div>
       </div>
 
@@ -109,13 +103,11 @@ const carouselSlides = await Promise.all(
       </div>
 
       {/* Mobile button */}
-      {
-        linkHref && linkText && (
-          <div class="w-full lg:hidden text-center mt-11">
-            <ButtonCnc href={linkHref}>{linkText}</ButtonCnc>
-          </div>
-        )
-      }
+      {linkHref && linkText && (
+        <div class="w-full lg:hidden text-center mt-11">
+          <ButtonCnc href={linkHref}>{linkText}</ButtonCnc>
+        </div>
+      )}
     </div>
   </div>
 </section>

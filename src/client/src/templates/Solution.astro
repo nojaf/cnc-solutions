@@ -97,65 +97,63 @@ const rows = rowNumbers.map((n) => {
     title={solution.title}
     lead={solution.lead}
   />
-  {
-    rows.map(({ color, blocks }) => (
-      <section
-        class:list={[
-          "cnc-block py-10",
-          color === "dark" ? "dark bg-dark text-white" : "light",
-        ]}
-      >
-        <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
-          <div class="flex flex-wrap -mx-4">
-            {blocks.map((block) =>
-              block.kind !== "text" ? (
-                <div
-                  class:list={[
-                    "w-full px-4 lg:w-7/12",
-                    block.isRight ? "lg:order-1" : "lg:order-0",
-                  ]}
-                >
-                  {block.kind === "slideshow" && (
-                    <Carousel
-                      id={`block${block.umbracoId}Carousel`}
-                      theme={color}
-                      lightbox
-                      slides={slideshowSlides.get(block.umbracoId)!}
-                    />
-                  )}
-                  {block.kind === "video" && block.videoId && (
-                    <Video videoId={block.videoId} />
-                  )}
-                </div>
-              ) : (
-                <div
-                  class:list={[
-                    "text-block w-full px-4 mt-11 lg:w-5/12 lg:mt-0",
-                    block.isRight ? "lg:order-1" : "lg:order-0",
-                  ]}
-                >
-                  <p class="above text-sm leading-7 font-thin text-center m-0 lg:text-2xl lg:leading-10 lg:font-light lg:text-left">
-                    {block.aboveTitle}
-                  </p>
-                  <h2 class="uppercase lg:break-words text-3xl leading-9 font-bold text-center max-w-2/3 mx-auto m-0 lg:text-40 lg:leading-12 lg:text-left lg:max-w-full lg:mx-0">
-                    {block.title}
-                  </h2>
-                  <img
-                    src={
-                      color === "dark" ? underlineDark.src : underlineWhite.src
-                    }
-                    alt=""
-                    class="block mx-auto mb-8 w-6 lg:mx-0"
+  {rows.map(({ color, blocks }) => (
+    <section
+      class:list={[
+        "cnc-block py-10",
+        color === "dark" ? "dark bg-dark text-white" : "light",
+      ]}
+    >
+      <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
+        <div class="flex flex-wrap -mx-4">
+          {blocks.map((block) =>
+            block.kind !== "text" ? (
+              <div
+                class:list={[
+                  "w-full px-4 lg:w-7/12",
+                  block.isRight ? "lg:order-1" : "lg:order-0",
+                ]}
+              >
+                {block.kind === "slideshow" && (
+                  <Carousel
+                    id={`block${block.umbracoId}Carousel`}
+                    theme={color}
+                    lightbox
+                    slides={slideshowSlides.get(block.umbracoId)!}
                   />
-                  {block.lead && (
-                    <div class="cms-content text-left" set:html={block.lead} />
-                  )}
-                </div>
-              ),
-            )}
-          </div>
+                )}
+                {block.kind === "video" && block.videoId && (
+                  <Video videoId={block.videoId} />
+                )}
+              </div>
+            ) : (
+              <div
+                class:list={[
+                  "text-block w-full px-4 mt-11 lg:w-5/12 lg:mt-0",
+                  block.isRight ? "lg:order-1" : "lg:order-0",
+                ]}
+              >
+                <p class="above text-sm leading-7 font-thin text-center m-0 lg:text-2xl lg:leading-10 lg:font-light lg:text-left">
+                  {block.aboveTitle}
+                </p>
+                <h2 class="uppercase lg:break-words text-3xl leading-9 font-bold text-center max-w-2/3 mx-auto m-0 lg:text-40 lg:leading-12 lg:text-left lg:max-w-full lg:mx-0">
+                  {block.title}
+                </h2>
+                <img
+                  src={
+                    color === "dark" ? underlineDark.src : underlineWhite.src
+                  }
+                  alt=""
+                  class="block mx-auto mb-8 w-6 lg:mx-0"
+                />
+                {block.lead && (
+                  <div class="cms-content text-left" set:html={block.lead} />
+                )}
+              </div>
+            ),
+          )}
         </div>
-      </section>
-    ))
-  }
+      </div>
+    </section>
+  ))}
 </BaseLayout>

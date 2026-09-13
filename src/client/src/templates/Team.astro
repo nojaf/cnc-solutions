@@ -40,26 +40,22 @@ const processedPhotos = await Promise.all(
     title={team.title}
     lead={team.lead}
   />
-  <div
-    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 flex flex-col md:flex-row md:flex-wrap md:justify-around gap-10 whitespace-nowrap"
-  >
-    {
-      members.map((m: any, i: number) => (
-        <div class="text-center md:mb-10 md:basis-[calc(50%-20px)] md:max-w-[calc(50%-20px)] lg:basis-[calc(33%-20px)] lg:max-w-[calc(33%-20px)] xl:basis-[calc(25%-20px)] xl:max-w-[calc(25%-20px)]">
-          <img
-            src={processedPhotos[i].src}
-            alt={`${m.firstName} ${m.lastName}`}
-            class="w-4/5 sm:w-2/3 md:w-full mb-4 inline-block"
-          />
-          <h4 class="text-base font-thin lg:font-light leading-5 lg:leading-10 mb-2 m-0">
-            {m.function}
-          </h4>
-          <h3 class="text-3xl leading-8 font-medium m-0">
-            {m.firstName} {m.lastName}
-          </h3>
-          <img src={underlineWhite.src} alt="" class="inline-block my-2 w-6" />
-        </div>
-      ))
-    }
+  <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 flex flex-col md:flex-row md:flex-wrap md:justify-around gap-10 whitespace-nowrap">
+    {members.map((m: any, i: number) => (
+      <div class="text-center md:mb-10 md:basis-[calc(50%-20px)] md:max-w-[calc(50%-20px)] lg:basis-[calc(33%-20px)] lg:max-w-[calc(33%-20px)] xl:basis-[calc(25%-20px)] xl:max-w-[calc(25%-20px)]">
+        <img
+          src={processedPhotos[i].src}
+          alt={`${m.firstName} ${m.lastName}`}
+          class="w-4/5 sm:w-2/3 md:w-full mb-4 inline-block"
+        />
+        <h4 class="text-base font-thin lg:font-light leading-5 lg:leading-10 mb-2 m-0">
+          {m.function}
+        </h4>
+        <h3 class="text-3xl leading-8 font-medium m-0">
+          {m.firstName} {m.lastName}
+        </h3>
+        <img src={underlineWhite.src} alt="" class="inline-block my-2 w-6" />
+      </div>
+    ))}
   </div>
 </BaseLayout>

@@ -117,35 +117,33 @@ const newsSlides = newsPages
     solutionsTitle={home.solutionsTitle}
     solutions={solutions as any[]}
   />
-  {homeRows.map((row: any) => <HomeRow row={row} culture={culture} />)}
-  {
-    caseSlides.length > 0 && casesLinkUrl && (
-      <HomeCarousel
-        id="CasesCarousel"
-        theme="dark"
-        aboveTitle={home.aboveCases}
-        title={home.casesTitle}
-        lead={home.casesLead}
-        linkHref={casesLinkUrl}
-        linkText={home.casesLinkText}
-        slides={caseSlides}
-        textPosition="right"
-      />
-    )
-  }
-  {
-    newsSlides.length > 0 && newsLinkUrl && (
-      <HomeCarousel
-        id="NewsCarousel"
-        theme="light"
-        aboveTitle={home.aboveNews}
-        title={home.newsTitle}
-        lead={home.newsLead}
-        linkHref={newsLinkUrl}
-        linkText={home.newsLinkText}
-        slides={newsSlides}
-        textPosition="left"
-      />
-    )
-  }
+  {homeRows.map((row: any) => (
+    <HomeRow row={row} culture={culture} />
+  ))}
+  {caseSlides.length > 0 && casesLinkUrl && (
+    <HomeCarousel
+      id="CasesCarousel"
+      theme="dark"
+      aboveTitle={home.aboveCases}
+      title={home.casesTitle}
+      lead={home.casesLead}
+      linkHref={casesLinkUrl}
+      linkText={home.casesLinkText}
+      slides={caseSlides}
+      textPosition="right"
+    />
+  )}
+  {newsSlides.length > 0 && newsLinkUrl && (
+    <HomeCarousel
+      id="NewsCarousel"
+      theme="light"
+      aboveTitle={home.aboveNews}
+      title={home.newsTitle}
+      lead={home.newsLead}
+      linkHref={newsLinkUrl}
+      linkText={home.newsLinkText}
+      slides={newsSlides}
+      textPosition="left"
+    />
+  )}
 </BaseLayout>

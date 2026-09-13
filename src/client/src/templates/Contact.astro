@@ -39,144 +39,118 @@ const contactPostUrl =
     title={contact.title}
     lowercase={false}
   />
-  <section
-    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 pb-12"
-  >
+  <section class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 pb-12">
     <div class="flex flex-wrap -mx-4">
       {/* Contact info */}
       <div id="contact-info" class="w-full lg:w-4/12 px-4 mb-8 lg:mb-0">
-        {
-          contact.aboveAddress && (
-            <h2 class="text-xl font-bold uppercase leading-6 lg:leading-12 mb-2">
-              {contact.aboveAddress}
-            </h2>
-          )
-        }
-        {
-          contact.address && (
-            <address class="not-italic mb-4">
-              {/* set:text, not children: whitespace inside a <pre> is
+        {contact.aboveAddress && (
+          <h2 class="text-xl font-bold uppercase leading-6 lg:leading-12 mb-2">
+            {contact.aboveAddress}
+          </h2>
+        )}
+        {contact.address && (
+          <address class="not-italic mb-4">
+            {/* set:text, not children: whitespace inside a <pre> is
                   content, and the formatter re-indents children. */}
-              <pre
-                class="font-body text-base whitespace-pre text-gray-900 mb-4"
-                set:text={contact.address}
-              />
-            </address>
-          )
-        }
+            <pre
+              class="font-body text-base whitespace-pre text-gray-900 mb-4"
+              set:text={contact.address}
+            ></pre>
+          </address>
+        )}
         <dl class="grid gap-y-1 grid-cols-[--spacing(8)_1fr] mb-4">
-          {
-            contact.email && (
-              <>
-                <dt class="text-primary font-bold h-6">
-                  <svg
-                    class="w-5 h-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <>
-                      <rect x="2" y="4" width="20" height="16" rx="2" />
-                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                    </>
+          {contact.email && (
+            <>
+              <dt class="text-primary font-bold h-6">
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <>
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </>
+                </svg>
+              </dt>
+              <dd class="m-0">{contact.email}</dd>
+            </>
+          )}
+          {contact.phone && (
+            <>
+              <dt class="text-primary font-bold h-6">
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </dt>
+              <dd class="m-0">{contact.phone}</dd>
+            </>
+          )}
+          {contact.linkedInUrl && (
+            <>
+              <dt class="text-primary font-bold h-6">
+                <a
+                  href={contact.linkedInUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary"
+                >
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
                   </svg>
-                </dt>
-                <dd class="m-0">{contact.email}</dd>
-              </>
-            )
-          }
-          {
-            contact.phone && (
-              <>
-                <dt class="text-primary font-bold h-6">
-                  <svg
-                    class="w-5 h-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </a>
+              </dt>
+              <dd class="m-0" />
+            </>
+          )}
+          {contact.facebookUrl && (
+            <>
+              <dt class="text-primary font-bold h-6">
+                <a
+                  href={contact.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary"
+                >
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m13 2h-2.5A3.5 3.5 0 0 0 12 8.5V11h-2v3h2v7h3v-7h3v-3h-3V9a1 1 0 0 1 1-1h2V5z" />
                   </svg>
-                </dt>
-                <dd class="m-0">{contact.phone}</dd>
-              </>
-            )
-          }
-          {
-            contact.linkedInUrl && (
-              <>
-                <dt class="text-primary font-bold h-6">
-                  <a
-                    href={contact.linkedInUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-primary"
-                  >
-                    <svg
-                      class="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
-                    </svg>
-                  </a>
-                </dt>
-                <dd class="m-0" />
-              </>
-            )
-          }
-          {
-            contact.facebookUrl && (
-              <>
-                <dt class="text-primary font-bold h-6">
-                  <a
-                    href={contact.facebookUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-primary"
-                  >
-                    <svg
-                      class="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m13 2h-2.5A3.5 3.5 0 0 0 12 8.5V11h-2v3h2v7h3v-7h3v-3h-3V9a1 1 0 0 1 1-1h2V5z" />
-                    </svg>
-                  </a>
-                </dt>
-                <dd class="m-0" />
-              </>
-            )
-          }
+                </a>
+              </dt>
+              <dd class="m-0" />
+            </>
+          )}
         </dl>
       </div>
 
       {/* Contact form */}
       <div id="contact-form" class="w-full lg:w-8/12 px-4">
-        {
-          /* Gatsby nests a second .container inside this column, insetting the
+        {/* Gatsby nests a second .container inside this column, insetting the
             form by another 15px. Its max-width never bites, so only the
-            padding is reproduced here. */
-        }
+            padding is reproduced here. */}
         <div class="px-4">
-          {
-            contact.aboveForm && (
-              <h2 class="text-xl font-bold uppercase leading-6 lg:leading-12 mb-2">
-                {contact.aboveForm}
-              </h2>
-            )
-          }
+          {contact.aboveForm && (
+            <h2 class="text-xl font-bold uppercase leading-6 lg:leading-12 mb-2">
+              {contact.aboveForm}
+            </h2>
+          )}
           <form id="contactForm" data-action={contactPostUrl}>
             <div class="mb-4">
-              <label for="name" class="inline-block text-sm mb-2"
-                >{contact.labelName}*</label
-              >
+              <label for="name" class="inline-block text-sm mb-2">
+                {contact.labelName}*
+              </label>
               <input
                 type="text"
                 name="name"
@@ -186,9 +160,9 @@ const contactPostUrl =
               />
             </div>
             <div class="mb-4">
-              <label for="company" class="inline-block text-sm mb-2"
-                >{contact.labelCompany}*</label
-              >
+              <label for="company" class="inline-block text-sm mb-2">
+                {contact.labelCompany}*
+              </label>
               <input
                 type="text"
                 name="company"
@@ -198,9 +172,9 @@ const contactPostUrl =
               />
             </div>
             <div class="mb-4">
-              <label for="address" class="inline-block text-sm mb-2"
-                >{contact.labelAddress}</label
-              >
+              <label for="address" class="inline-block text-sm mb-2">
+                {contact.labelAddress}
+              </label>
               <input
                 type="text"
                 name="address"
@@ -210,9 +184,9 @@ const contactPostUrl =
             </div>
             <div class="flex flex-wrap -mx-4">
               <div class="mb-4 w-1/2 px-4">
-                <label for="zip" class="inline-block text-sm mb-2"
-                  >{contact.labelZip}</label
-                >
+                <label for="zip" class="inline-block text-sm mb-2">
+                  {contact.labelZip}
+                </label>
                 <input
                   type="text"
                   name="zip"
@@ -221,9 +195,9 @@ const contactPostUrl =
                 />
               </div>
               <div class="mb-4 w-1/2 px-4">
-                <label for="city" class="inline-block text-sm mb-2"
-                  >{contact.labelCity}</label
-                >
+                <label for="city" class="inline-block text-sm mb-2">
+                  {contact.labelCity}
+                </label>
                 <input
                   type="text"
                   name="city"
@@ -233,9 +207,9 @@ const contactPostUrl =
               </div>
             </div>
             <div class="mb-4">
-              <label for="country" class="inline-block text-sm mb-2"
-                >{contact.labelCountry}</label
-              >
+              <label for="country" class="inline-block text-sm mb-2">
+                {contact.labelCountry}
+              </label>
               <input
                 type="text"
                 name="country"
@@ -244,9 +218,9 @@ const contactPostUrl =
               />
             </div>
             <div class="mb-4">
-              <label for="email" class="inline-block text-sm mb-2"
-                >{contact.labelEmail}*</label
-              >
+              <label for="email" class="inline-block text-sm mb-2">
+                {contact.labelEmail}*
+              </label>
               <input
                 type="email"
                 name="email"
@@ -256,9 +230,9 @@ const contactPostUrl =
               />
             </div>
             <div class="mb-4">
-              <label for="telephone" class="inline-block text-sm mb-2"
-                >{contact.labelPhone}*</label
-              >
+              <label for="telephone" class="inline-block text-sm mb-2">
+                {contact.labelPhone}*
+              </label>
               <input
                 type="tel"
                 name="telephone"
@@ -268,9 +242,9 @@ const contactPostUrl =
               />
             </div>
             <div class="mb-4">
-              <label for="message" class="inline-block text-sm mb-2"
-                >{contact.labelMessage}</label
-              >
+              <label for="message" class="inline-block text-sm mb-2">
+                {contact.labelMessage}
+              </label>
               <textarea
                 name="message"
                 id="message"
@@ -283,8 +257,7 @@ const contactPostUrl =
               <div
                 id="turnstile-widget"
                 data-sitekey={contact.turnstileSiteKey}
-              >
-              </div>
+              ></div>
             </div>
             <div class="text-center lg:text-left">
               <ButtonCnc type="submit">{contact.sendButtonText}</ButtonCnc>

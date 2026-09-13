@@ -36,24 +36,20 @@ const items = allCase
     lead={cases.lead}
   />
   <section>
-    <div
-      class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285"
-    >
+    <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
       <div
         id="case-tiles"
         class="grid grid-cols-2 gap-x-2.5 gap-y-5 mb-4 lg:mb-12"
       >
-        {
-          items.map((c) => (
-            <OverviewTile
-              href={c.url}
-              title={c.title}
-              thumbnail={c.thumbnail}
-              thumbnailAlt={c.thumbnailAlt}
-              inverted
-            />
-          ))
-        }
+        {items.map((c) => (
+          <OverviewTile
+            href={c.url}
+            title={c.title}
+            thumbnail={c.thumbnail}
+            thumbnailAlt={c.thumbnailAlt}
+            inverted
+          />
+        ))}
       </div>
     </div>
     <BottomEdge fullWidth />

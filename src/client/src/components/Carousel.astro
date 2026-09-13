@@ -41,89 +41,75 @@ const arrow = "w-0 h-0 border-y-10 border-transparent";
 
 <div class="carousel relative" id={id} data-lightbox={lightbox || undefined}>
   <div class="overflow-hidden">
-    <div
-      class="carousel-track flex transition-transform duration-600 ease-in-out"
-    >
-      {
-        slides.map((s) => (
-          <a
-            href={lightbox ? (s.desktop ?? s.phone) : s.href}
-            class:list={[
-              "carousel-slide block w-full shrink-0 relative",
-              lightbox && "cursor-zoom-in",
-            ]}
-            data-alt={lightbox ? s.altText : undefined}
-          >
-            <picture>
-              {s.largeDesktop && (
-                <source media="(min-width: 75em)" srcset={s.largeDesktop} />
-              )}
-              {s.desktop && (
-                <source media="(min-width: 62em)" srcset={s.desktop} />
-              )}
-              {s.tablet && (
-                <source media="(min-width: 48em)" srcset={s.tablet} />
-              )}
-              {(s.mobileLandscape ?? s.tablet) && (
-                <source
-                  media="(min-width: 34em)"
-                  srcset={s.mobileLandscape ?? s.tablet}
-                />
-              )}
-              <img
-                src={s.phone}
-                alt={s.altText}
-                class:list={["block mx-auto", s.imgClass ?? "w-full"]}
-              />
-            </picture>
-            {s.overlay && (
-              <Fragment>
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-38 md:w-125 md:h-59 bg-black/50 z-1" />
-                <div class="absolute inset-0 flex flex-col items-center pt-5 sm:pt-5 z-2">
-                  <img
-                    src={s.overlay.icon}
-                    alt={s.overlay.title}
-                    class="w-25"
-                  />
-                  <h5 class="uppercase font-bold text-base -mt-1">
-                    {s.overlay.title}
-                  </h5>
-                </div>
-              </Fragment>
+    <div class="carousel-track flex transition-transform duration-600 ease-in-out">
+      {slides.map((s) => (
+        <a
+          href={lightbox ? (s.desktop ?? s.phone) : s.href}
+          class:list={[
+            "carousel-slide block w-full shrink-0 relative",
+            lightbox && "cursor-zoom-in",
+          ]}
+          data-alt={lightbox ? s.altText : undefined}
+        >
+          <picture>
+            {s.largeDesktop && (
+              <source media="(min-width: 75em)" srcset={s.largeDesktop} />
             )}
-          </a>
-        ))
-      }
+            {s.desktop && (
+              <source media="(min-width: 62em)" srcset={s.desktop} />
+            )}
+            {s.tablet && <source media="(min-width: 48em)" srcset={s.tablet} />}
+            {(s.mobileLandscape ?? s.tablet) && (
+              <source
+                media="(min-width: 34em)"
+                srcset={s.mobileLandscape ?? s.tablet}
+              />
+            )}
+            <img
+              src={s.phone}
+              alt={s.altText}
+              class:list={["block mx-auto", s.imgClass ?? "w-full"]}
+            />
+          </picture>
+          {s.overlay && (
+            <Fragment>
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-38 md:w-125 md:h-59 bg-black/50 z-1" />
+              <div class="absolute inset-0 flex flex-col items-center pt-5 sm:pt-5 z-2">
+                <img src={s.overlay.icon} alt={s.overlay.title} class="w-25" />
+                <h5 class="uppercase font-bold text-base -mt-1">
+                  {s.overlay.title}
+                </h5>
+              </div>
+            </Fragment>
+          )}
+        </a>
+      ))}
     </div>
   </div>
 
-  {
-    /* Bootstrap's indicators sit 1rem above the bottom edge, pushed 50px down,
-       with 10px transparent borders around each 10px dot. */
-  }
-  {
-    showIndicators && (
-      <div class="carousel-dots absolute inset-x-0 bottom-4 flex justify-center gap-2.5 py-2.5 translate-y-12.5">
-        {slides.map((_, i) => (
-          <button
+  {/* Bootstrap's indicators sit 1rem above the bottom edge, pushed 50px down,
+       with 10px transparent borders around each 10px dot. */}
+  {showIndicators && (
+    <div class="carousel-dots absolute inset-x-0 bottom-4 flex justify-center gap-2.5 py-2.5 translate-y-12.5">
+      {slides.map((_, i) => (
+        <button
+          class:list={[
+            "carousel-dot relative w-2.5 h-2.5 cursor-pointer",
+            dark ? "bg-white" : "bg-dark",
+          ]}
+          data-slide-to={i}
+          aria-label={`Slide ${i + 1}`}
+        >
+          <span
             class:list={[
-              "carousel-dot relative w-2.5 h-2.5 cursor-pointer",
-              dark ? "bg-white" : "bg-dark",
+              "absolute inset-0 w-0 h-0 border-b-10 border-l-10 border-transparent border-b-primary",
+              i === 0 ? "block" : "hidden",
             ]}
-            data-slide-to={i}
-            aria-label={`Slide ${i + 1}`}
-          >
-            <span
-              class:list={[
-                "absolute inset-0 w-0 h-0 border-b-10 border-l-10 border-transparent border-b-primary",
-                i === 0 ? "block" : "hidden",
-              ]}
-            />
-          </button>
-        ))}
-      </div>
-    )
-  }
+          />
+        </button>
+      ))}
+    </div>
+  )}
 
   <button
     class="carousel-prev absolute inset-y-0 left-0 z-10 flex w-3/20 items-center justify-center opacity-50 hover:opacity-90 cursor-pointer"
@@ -134,7 +120,8 @@ const arrow = "w-0 h-0 border-y-10 border-transparent";
         arrow,
         "border-l-0 border-r-15",
         dark ? "border-r-white" : "border-r-primary",
-      ]}></span>
+      ]}
+    ></span>
   </button>
   <button
     class="carousel-next absolute inset-y-0 right-0 z-10 flex w-3/20 items-center justify-center opacity-50 hover:opacity-90 cursor-pointer"
@@ -145,7 +132,8 @@ const arrow = "w-0 h-0 border-y-10 border-transparent";
         arrow,
         "border-r-0 border-l-15",
         dark ? "border-l-white" : "border-l-primary",
-      ]}></span>
+      ]}
+    ></span>
   </button>
 </div>
 

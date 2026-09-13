@@ -40,5 +40,7 @@ const rows = allRows
     title={about.title}
     lead={about.lead}
   />
-  {rows.map((r) => <AboutRow page={r.data} culture={culture} />)}
+  {rows.map((r) => (
+    <AboutRow page={r.data} culture={culture} />
+  ))}
 </BaseLayout>

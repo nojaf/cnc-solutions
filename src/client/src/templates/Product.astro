@@ -99,142 +99,122 @@ const container =
   />
   <section id="product-highlights" class="md:mt-12">
     <div class="mx-auto xl:w-285">
-      {
-        rows.map((row) => (
-          <div class="flex flex-wrap">
-            <div class="w-full md:w-1/2">
-              <div class="product-image sm:h-full">
-                {row.videoId ? (
-                  <Video
-                    videoId={row.videoId}
-                    altText={row.altText || undefined}
-                  />
-                ) : (
-                  row.image && (
-                    <picture>
-                      <source
-                        media="(min-width: 62em)"
-                        srcset={row.image.desktop}
-                      />
-                      <source
-                        media="(min-width: 48em)"
-                        srcset={row.image.tablet}
-                      />
-                      <img
-                        src={row.image.mobile}
-                        alt={row.altText ?? ""}
-                        class="w-full sm:h-full sm:object-cover"
-                      />
-                    </picture>
-                  )
-                )}
-              </div>
-            </div>
-            <div
-              class:list={[
-                "w-full md:w-1/2",
-                row.isMediaRight && "md:order-first",
-              ]}
-            >
-              <div class="product-info py-8 text-left">
-                <p class:list={[above, "text-center md:pl-8"]}>
-                  {row.aboveTitle}
-                </p>
-                <h2 class="uppercase text-center text-3xl leading-8.5 font-bold m-0 mb-2 px-8">
-                  {row.title}
-                </h2>
-                <img
-                  src={underlineWhite.src}
-                  alt=""
-                  class="block mx-auto mb-8 w-6"
+      {rows.map((row) => (
+        <div class="flex flex-wrap">
+          <div class="w-full md:w-1/2">
+            <div class="product-image sm:h-full">
+              {row.videoId ? (
+                <Video
+                  videoId={row.videoId}
+                  altText={row.altText || undefined}
                 />
-                {row.lead && <div class="cms-content" set:html={row.lead} />}
-              </div>
+              ) : (
+                row.image && (
+                  <picture>
+                    <source
+                      media="(min-width: 62em)"
+                      srcset={row.image.desktop}
+                    />
+                    <source
+                      media="(min-width: 48em)"
+                      srcset={row.image.tablet}
+                    />
+                    <img
+                      src={row.image.mobile}
+                      alt={row.altText ?? ""}
+                      class="w-full sm:h-full sm:object-cover"
+                    />
+                  </picture>
+                )
+              )}
             </div>
           </div>
-        ))
-      }
+          <div
+            class:list={[
+              "w-full md:w-1/2",
+              row.isMediaRight && "md:order-first",
+            ]}
+          >
+            <div class="product-info py-8 text-left">
+              <p class:list={[above, "text-center md:pl-8"]}>
+                {row.aboveTitle}
+              </p>
+              <h2 class="uppercase text-center text-3xl leading-8.5 font-bold m-0 mb-2 px-8">
+                {row.title}
+              </h2>
+              <img
+                src={underlineWhite.src}
+                alt=""
+                class="block mx-auto mb-8 w-6"
+              />
+              {row.lead && <div class="cms-content" set:html={row.lead} />}
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   </section>
   <section id="features" class="bg-dark text-white py-10 md:py-15">
     <div class={container}>
       <div class="heading text-center pb-5">
         <p class={above}>{product.aboveFeature}</p>
-        <h2
-          class="uppercase text-3xl leading-9 font-bold m-0 mb-2 lg:text-5xl lg:leading-12"
-        >
+        <h2 class="uppercase text-3xl leading-9 font-bold m-0 mb-2 lg:text-5xl lg:leading-12">
           {product.featureTitle}
         </h2>
       </div>
-      {
-        /* Icon column beside the text below md; a row of icons above a row of text from md up. */
-      }
-      <div
-        class="body grid grid-cols-[auto_1fr] gap-x-4 md:grid-cols-3 md:gap-x-0"
-      >
-        {
-          features.map((f) => (
-            <>
-              <img
-                src={f.icon}
-                alt=""
-                class="block w-20 md:row-start-1 md:h-25 md:w-auto md:m-auto"
-              />
-              <div class="md:row-start-2 md:text-center md:px-2.5">
-                <h4 class="uppercase text-lg leading-7.5 font-bold mt-2.5 mb-2 md:text-base">
-                  {f.title}
-                </h4>
-                {f.lead && (
-                  <div class="cms-content md:px-2.5" set:html={f.lead} />
-                )}
-              </div>
-            </>
-          ))
-        }
+      {/* Icon column beside the text below md; a row of icons above a row of text from md up. */}
+      <div class="body grid grid-cols-[auto_1fr] gap-x-4 md:grid-cols-3 md:gap-x-0">
+        {features.map((f) => (
+          <>
+            <img
+              src={f.icon}
+              alt=""
+              class="block w-20 md:row-start-1 md:h-25 md:w-auto md:m-auto"
+            />
+            <div class="md:row-start-2 md:text-center md:px-2.5">
+              <h4 class="uppercase text-lg leading-7.5 font-bold mt-2.5 mb-2 md:text-base">
+                {f.title}
+              </h4>
+              {f.lead && (
+                <div class="cms-content md:px-2.5" set:html={f.lead} />
+              )}
+            </div>
+          </>
+        ))}
       </div>
     </div>
   </section>
   <section id="more-info" class="py-10 md:w-1/2 md:mx-auto">
     <div class:list={[container, "text-center"]}>
       <p class={above}>{product.aboveMoreInfo}</p>
-      <h2
-        class="uppercase text-3xl leading-9 font-bold m-0 mb-2 lg:text-5xl lg:leading-12"
-      >
+      <h2 class="uppercase text-3xl leading-9 font-bold m-0 mb-2 lg:text-5xl lg:leading-12">
         {product.moreInfoTitle}
       </h2>
       <img src={underlineWhite.src} alt="" class="block mx-auto mb-8 w-6" />
-      {
-        product.moreInfoLead && (
-          <div
-            class="more-lead cms-content md:text-left xl:text-center"
-            set:html={product.moreInfoLead}
-          />
-        )
-      }
-      <div
-        class="flex flex-col items-center md:flex-row md:flex-wrap md:justify-center"
-      >
-        {
-          downloadHref && (
-            <div class="flex mb-5 md:mr-5">
-              <ButtonCnc
-                href={downloadHref}
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {product.fileDownloadText}
-              </ButtonCnc>
-            </div>
-          )
-        }
-        {
-          showContact && (
-            <div class="flex mb-5 md:mr-5">
-              <ButtonCnc href={contactUrl}>{product.contactPageText}</ButtonCnc>
-            </div>
-          )
-        }
+      {product.moreInfoLead && (
+        <div
+          class="more-lead cms-content md:text-left xl:text-center"
+          set:html={product.moreInfoLead}
+        />
+      )}
+      <div class="flex flex-col items-center md:flex-row md:flex-wrap md:justify-center">
+        {downloadHref && (
+          <div class="flex mb-5 md:mr-5">
+            <ButtonCnc
+              href={downloadHref}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {product.fileDownloadText}
+            </ButtonCnc>
+          </div>
+        )}
+        {showContact && (
+          <div class="flex mb-5 md:mr-5">
+            <ButtonCnc href={contactUrl}>{product.contactPageText}</ButtonCnc>
+          </div>
+        )}
       </div>
     </div>
   </section>

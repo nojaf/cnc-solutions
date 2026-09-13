@@ -36,24 +36,20 @@ const items = allSolution
     lead={solutions.lead}
   />
   <section>
-    <div
-      class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285"
-    >
+    <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
       <div
         id="solution-tiles"
         class="grid grid-cols-2 gap-x-2.5 gap-y-5 mb-4 lg:mb-12"
       >
-        {
-          items.map((s) => (
-            <OverviewTile
-              href={s.url}
-              title={s.title}
-              thumbnail={s.thumbnail}
-              thumbnailAlt={s.thumbnailAlt}
-              icon={s.icon}
-            />
-          ))
-        }
+        {items.map((s) => (
+          <OverviewTile
+            href={s.url}
+            title={s.title}
+            thumbnail={s.thumbnail}
+            thumbnailAlt={s.thumbnailAlt}
+            icon={s.icon}
+          />
+        ))}
       </div>
     </div>
     <BottomEdge fullWidth />

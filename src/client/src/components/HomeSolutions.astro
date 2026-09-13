@@ -53,9 +53,7 @@ const processed = await Promise.all(
     {aboveSolutions}
   </p>
   <div class="inline-block text-left mb-10">
-    <h2
-      class="m-0 text-3xl leading-11 lg:text-5xl lg:leading-14 uppercase font-bold"
-    >
+    <h2 class="m-0 text-3xl leading-11 lg:text-5xl lg:leading-14 uppercase font-bold">
       {solutionsTitle}
     </h2>
     <img
@@ -84,37 +82,33 @@ const processed = await Promise.all(
   </div>
 
   {/* Desktop grid (lg+) */}
-  <div
-    class="hidden lg:grid grid-cols-3 gap-5 mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 text-left py-10"
-  >
-    {
-      solutions.map((s, i) => (
-        <a href={s.url} class="solution-tile relative block">
-          <picture>
-            <source
-              media="(min-width: 75em)"
-              srcset={processed[i].largeDesktop.src}
-            />
-            <img
-              src={processed[i].desktop.src}
-              alt={s.thumbnailAlt}
-              class="w-full"
-            />
-          </picture>
-          <img
-            src={processed[i].icon.src}
-            alt=""
-            class="absolute w-[40%] z-5 top-[15%] left-[30%]"
+  <div class="hidden lg:grid grid-cols-3 gap-5 mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 text-left py-10">
+    {solutions.map((s, i) => (
+      <a href={s.url} class="solution-tile relative block">
+        <picture>
+          <source
+            media="(min-width: 75em)"
+            srcset={processed[i].largeDesktop.src}
           />
-          <div class="solution-overlay absolute inset-0 z-10 bg-dark/50 flex flex-col items-center justify-center opacity-0 invisible transition-opacity duration-400 hover:opacity-100 hover:visible">
-            <img src={processed[i].icon.src} alt="" class="h-25 w-25" />
-            <h3 class="uppercase text-white text-center text-2xl font-bold">
-              {s.navigationText}
-            </h3>
-          </div>
-        </a>
-      ))
-    }
+          <img
+            src={processed[i].desktop.src}
+            alt={s.thumbnailAlt}
+            class="w-full"
+          />
+        </picture>
+        <img
+          src={processed[i].icon.src}
+          alt=""
+          class="absolute w-[40%] z-5 top-[15%] left-[30%]"
+        />
+        <div class="solution-overlay absolute inset-0 z-10 bg-dark/50 flex flex-col items-center justify-center opacity-0 invisible transition-opacity duration-400 hover:opacity-100 hover:visible">
+          <img src={processed[i].icon.src} alt="" class="h-25 w-25" />
+          <h3 class="uppercase text-white text-center text-2xl font-bold">
+            {s.navigationText}
+          </h3>
+        </div>
+      </a>
+    ))}
   </div>
 </section>
 

@@ -36,15 +36,13 @@ const { culture, urls, seo, mainClass = "" } = Astro.props;
     <link rel="icon" href="/favicon-32x32.png" type="image/png" />
     <link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous" />
     <meta name="theme-color" content="#92C256" />
-    {
-      [48, 72, 96, 144, 192, 256, 384, 512].map((size) => (
-        <link
-          rel="apple-touch-icon"
-          sizes={`${size}x${size}`}
-          href={`/icons/icon-${size}x${size}.png`}
-        />
-      ))
-    }
+    {[48, 72, 96, 144, 192, 256, 384, 512].map((size) => (
+      <link
+        rel="apple-touch-icon"
+        sizes={`${size}x${size}`}
+        href={`/icons/icon-${size}x${size}.png`}
+      />
+    ))}
     <slot name="head" />
     <ClientRouter />
   </head>

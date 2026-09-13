@@ -58,46 +58,34 @@ const img = row.image
   <div class="mx-auto p-0 md:max-w-180 lg:max-w-240 xl:max-w-285">
     <div class:list={["flex flex-wrap", imageRight && "md:flex-row-reverse"]}>
       <div class="w-full md:w-1/2">
-        {
-          img && (
-            <picture>
-              <source media="(min-width: 75em)" srcset={img.desktop.src} />
-              <source media="(min-width: 62em)" srcset={img.tablet.src} />
-              <source media="(min-width: 48em)" srcset={img.tablet.src} />
-              <source media="(min-width: 34em)" srcset={img.medium.src} />
-              <img class="w-full" src={img.small.src} alt={row.altText || ""} />
-            </picture>
-          )
-        }
-        {
-          row.videoId && (
-            <Video videoId={row.videoId} altText={row.altText || "Video"} />
-          )
-        }
+        {img && (
+          <picture>
+            <source media="(min-width: 75em)" srcset={img.desktop.src} />
+            <source media="(min-width: 62em)" srcset={img.tablet.src} />
+            <source media="(min-width: 48em)" srcset={img.tablet.src} />
+            <source media="(min-width: 34em)" srcset={img.medium.src} />
+            <img class="w-full" src={img.small.src} alt={row.altText || ""} />
+          </picture>
+        )}
+        {row.videoId && (
+          <Video videoId={row.videoId} altText={row.altText || "Video"} />
+        )}
       </div>
       <div class="w-full md:w-1/2">
-        <div
-          class="flex flex-col justify-center items-center h-full px-4 py-4 text-center"
-        >
-          {
-            row.aboveTitle && (
-              <h3 class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light m-0">
-                {row.aboveTitle}
-              </h3>
-            )
-          }
-          <h2
-            class="uppercase text-3xl leading-9 lg:text-5xl lg:leading-12 font-bold mb-2"
-          >
+        <div class="flex flex-col justify-center items-center h-full px-4 py-4 text-center">
+          {row.aboveTitle && (
+            <h3 class="text-sm lg:text-2xl lg:leading-10 font-thin lg:font-light m-0">
+              {row.aboveTitle}
+            </h3>
+          )}
+          <h2 class="uppercase text-3xl leading-9 lg:text-5xl lg:leading-12 font-bold mb-2">
             {row.title}
           </h2>
           <img src={underlineWhite.src} alt="" class="block mb-8 w-6" />
           {row.lead && <div class="cms-content" set:html={row.lead} />}
-          {
-            linkHref && row.linkText && (
-              <ButtonCnc href={linkHref}>{row.linkText}</ButtonCnc>
-            )
-          }
+          {linkHref && row.linkText && (
+            <ButtonCnc href={linkHref}>{row.linkText}</ButtonCnc>
+          )}
         </div>
       </div>
     </div>

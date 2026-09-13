@@ -54,15 +54,13 @@ const processedIcon = icon ? await getImage(getImageParams(icon)) : null;
       <source media="(min-width: 34em)" srcset={tabletPortrait.src} />
       <img src={mobile.src} alt={thumbnailAlt} class="w-full lg:h-50" />
     </picture>
-    {
-      processedIcon && (
-        <img
-          src={processedIcon.src}
-          alt=""
-          class="absolute z-5 top-1/2 left-1/4 w-1/2 -translate-y-1/2 md:left-1/2 md:size-38 md:-translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-        />
-      )
-    }
+    {processedIcon && (
+      <img
+        src={processedIcon.src}
+        alt=""
+        class="absolute z-5 top-1/2 left-1/4 w-1/2 -translate-y-1/2 md:left-1/2 md:size-38 md:-translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+      />
+    )}
   </div>
   <div
     class:list={[

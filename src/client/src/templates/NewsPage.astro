@@ -80,46 +80,40 @@ const nextNews = siblingPages.find(
     lead={(newsPage as any).lead}
   />
   <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
-    {
-      blocks.map((block: any) => {
-        switch (block.kind) {
-          case "newsText":
-            return <NewsTextBlock content={block.content} />;
-          case "newsImage":
-            return (
-              <NewsImageBlock
-                image={block.image}
-                altText={block.altText}
-                caption={block.caption}
-                isFullWidth={block.isFullWidth}
-              />
-            );
-          case "newsVideo":
-            return <NewsVideoBlock videoId={block.videoId} />;
-          default:
-            return null;
-        }
-      })
-    }
+    {blocks.map((block: any) => {
+      switch (block.kind) {
+        case "newsText":
+          return <NewsTextBlock content={block.content} />;
+        case "newsImage":
+          return (
+            <NewsImageBlock
+              image={block.image}
+              altText={block.altText}
+              caption={block.caption}
+              isFullWidth={block.isFullWidth}
+            />
+          );
+        case "newsVideo":
+          return <NewsVideoBlock videoId={block.videoId} />;
+        default:
+          return null;
+      }
+    })}
   </div>
   <div
     id="news-detail-navigation"
     class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 flex justify-between items-center my-16"
   >
-    {
-      previousNews ? (
-        <a href={(previousNews as any).url}>
-          {(news as any).previousNewsLinkText}
-        </a>
-      ) : (
-        <span>&nbsp;</span>
-      )
-    }
-    {
-      nextNews && (
-        <a href={(nextNews as any).url}>{(news as any).nextNewsLinkText}</a>
-      )
-    }
+    {previousNews ? (
+      <a href={(previousNews as any).url}>
+        {(news as any).previousNewsLinkText}
+      </a>
+    ) : (
+      <span>&nbsp;</span>
+    )}
+    {nextNews && (
+      <a href={(nextNews as any).url}>{(news as any).nextNewsLinkText}</a>
+    )}
   </div>
 </BaseLayout>
 

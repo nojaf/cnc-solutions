@@ -14,21 +14,17 @@ const { label, href, items, alignRight = false } = Astro.props;
   class:list={["relative group hidden lg:block", !alignRight && "mr-1 xl:mr-4"]}
 >
   <div class="flex items-center">
-    {
-      href ? (
-        <a
-          href={href}
-          class="text-dark text-base p-2 no-underline hover:text-primary"
-        >
-          {label}
-        </a>
-      ) : (
-        <span class="text-dark text-base p-2 cursor-pointer">{label}</span>
-      )
-    }
-    <span
-      class="ml-2 border-l-8 border-r-8 border-t-12 border-l-transparent border-r-transparent border-t-primary cursor-pointer"
-    ></span>
+    {href ? (
+      <a
+        href={href}
+        class="text-dark text-base p-2 no-underline hover:text-primary"
+      >
+        {label}
+      </a>
+    ) : (
+      <span class="text-dark text-base p-2 cursor-pointer">{label}</span>
+    )}
+    <span class="ml-2 border-l-8 border-r-8 border-t-12 border-l-transparent border-r-transparent border-t-primary cursor-pointer"></span>
   </div>
   <div
     class:list={[
@@ -36,60 +32,50 @@ const { label, href, items, alignRight = false } = Astro.props;
       alignRight ? "right-0 min-w-16" : "left-0 min-w-40",
     ]}
   >
-    {
-      items.map((item) => (
-        <a
-          href={item.url}
-          class="block py-1 px-6 text-base text-dark no-underline hover:text-primary hover:bg-gray-50"
-        >
-          {item.text}
-        </a>
-      ))
-    }
+    {items.map((item) => (
+      <a
+        href={item.url}
+        class="block py-1 px-6 text-base text-dark no-underline hover:text-primary hover:bg-gray-50"
+      >
+        {item.text}
+      </a>
+    ))}
   </div>
 </li>
 
 <!-- Mobile: click-toggle submenu -->
 <li class="border-b border-white lg:hidden">
   <div class="flex items-center justify-center">
-    {
-      href ? (
-        <a
-          href={href}
-          class="uppercase font-semibold text-white text-xl leading-10 no-underline py-1"
-        >
-          {label}
-        </a>
-      ) : (
-        <span class="uppercase font-semibold text-white text-xl leading-10 py-1">
-          {label}
-        </span>
-      )
-    }
+    {href ? (
+      <a
+        href={href}
+        class="uppercase font-semibold text-white text-xl leading-10 no-underline py-1"
+      >
+        {label}
+      </a>
+    ) : (
+      <span class="uppercase font-semibold text-white text-xl leading-10 py-1">
+        {label}
+      </span>
+    )}
     <button
       class="mobile-submenu-toggle ml-2 bg-transparent border-none p-1 cursor-pointer"
       aria-label="Toggle submenu"
       aria-expanded="false"
     >
-      <span
-        class="inline-block border-l-8 border-r-8 border-t-12 border-l-transparent border-r-transparent border-t-white transition-transform duration-300 motion-reduce:transition-none"
-      ></span>
+      <span class="inline-block border-l-8 border-r-8 border-t-12 border-l-transparent border-r-transparent border-t-white transition-transform duration-300 motion-reduce:transition-none"></span>
     </button>
   </div>
-  <div
-    class="mobile-submenu grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none"
-  >
+  <div class="mobile-submenu grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none">
     <div class="min-h-0 overflow-hidden">
-      {
-        items.map((item) => (
-          <a
-            href={item.url}
-            class="block py-1 px-6 text-base text-dark no-underline"
-          >
-            {item.text}
-          </a>
-        ))
-      }
+      {items.map((item) => (
+        <a
+          href={item.url}
+          class="block py-1 px-6 text-base text-dark no-underline"
+        >
+          {item.text}
+        </a>
+      ))}
     </div>
   </div>
 </li>

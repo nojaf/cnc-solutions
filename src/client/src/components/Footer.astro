@@ -45,9 +45,7 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
 ---
 
 <footer class="bg-dark text-white py-6">
-  <div
-    class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 lg:pb-21 xl:max-w-285"
-  >
+  <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 lg:pb-21 xl:max-w-285">
     <div class="flex flex-wrap -mx-4">
       <div class="w-1/2 lg:w-1/4 px-4">
         <a
@@ -59,18 +57,16 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           </h4>
         </a>
         <ul class="list-none p-0 mt-0 mb-4">
-          {
-            solutions.map((s) => (
-              <li class="mt-4 leading-7">
-                <a
-                  href={s.url}
-                  class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
-                >
-                  {navText(s)}
-                </a>
-              </li>
-            ))
-          }
+          {solutions.map((s) => (
+            <li class="mt-4 leading-7">
+              <a
+                href={s.url}
+                class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
+              >
+                {navText(s)}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
       <div class="w-1/2 lg:w-1/4 px-4">
@@ -83,18 +79,16 @@ const contactPage = pageInCulture(culture, contactItems[0].data);
           </h4>
         </a>
         <ul class="list-none p-0 mt-0 mb-4">
-          {
-            products.map((p) => (
-              <li class="mt-4 leading-7">
-                <a
-                  href={p.url}
-                  class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
-                >
-                  {navText(p)}
-                </a>
-              </li>
-            ))
-          }
+          {products.map((p) => (
+            <li class="mt-4 leading-7">
+              <a
+                href={p.url}
+                class="text-white text-xs leading-6 no-underline hover:text-primary hover:underline"
+              >
+                {navText(p)}
+              </a>
+            </li>
+          ))}
         </ul>
         <a
           href={casesPage.url}

@@ -44,9 +44,7 @@ const shadow = "shadow-[0_5px_10px_rgba(0,0,0,0.16)]";
 const cornerBase = "absolute right-0 bottom-0 w-0 h-0 border-t-0 border-r-0";
 ---
 
-<div
-  class="product m-auto w-full max-w-79.5 md:w-auto md:max-w-none lg:w-75 xl:w-88"
->
+<div class="product m-auto w-full max-w-79.5 md:w-auto md:max-w-none lg:w-75 xl:w-88">
   <a href={href} class:list={["header block no-underline", shadow]}>
     <picture>
       <source media="(min-width: 75em)" srcset={largeDesktop.src} />
@@ -62,9 +60,7 @@ const cornerBase = "absolute right-0 bottom-0 w-0 h-0 border-t-0 border-r-0";
       {title}
     </h2>
   </a>
-  <div
-    class="content relative mx-0.75 border border-primary p-5 lg:px-10 lg:py-8 md:min-h-75 lg:min-h-88"
-  >
+  <div class="content relative mx-0.75 border border-primary p-5 lg:px-10 lg:py-8 md:min-h-75 lg:min-h-88">
     <h3 class="text-lg lg:text-22 leading-5.5 font-medium mt-0 mb-2">
       {typeLabel}
     </h3>
@@ -82,8 +78,7 @@ const cornerBase = "absolute right-0 bottom-0 w-0 h-0 border-t-0 border-r-0";
         cornerBase,
         "border-b-20 border-l-20 border-transparent border-b-primary",
       ]}
-    >
-    </div>
+    ></div>
   </div>
   <a
     href={href}
@@ -94,9 +89,8 @@ const cornerBase = "absolute right-0 bottom-0 w-0 h-0 border-t-0 border-r-0";
       class:list={[
         cornerBase,
         "border-b-12 border-l-12 border-transparent border-b-primary",
-      ]}></span>
-    <span
-      class="inner-corner absolute -right-0.75 -bottom-0.75 z-2 w-0 h-0 border-t-0 border-r-0 border-b-15 border-l-15 border-transparent border-b-white"
+      ]}
     ></span>
+    <span class="inner-corner absolute -right-0.75 -bottom-0.75 z-2 w-0 h-0 border-t-0 border-r-0 border-b-15 border-l-15 border-transparent border-b-white"></span>
   </a>
 </div>
