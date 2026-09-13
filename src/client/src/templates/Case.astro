@@ -13,6 +13,7 @@ import type { Culture } from "../lib/umbraco";
 import {
   pageInCulture,
   getImageParams,
+  lightboxCrop,
   getTree,
   getNodeById,
 } from "../lib/umbraco";
@@ -67,6 +68,7 @@ const caseRows = await Promise.all(
               phone: await src(slide.image.mobile),
               tablet: await src(slide.image.tablet),
               desktop: await src(slide.image.desktop),
+              full: await src(await lightboxCrop(slide.image.desktop)),
             })),
         );
     const linkUrl = row.linkUrl

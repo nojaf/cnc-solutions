@@ -273,3 +273,43 @@ export function collectPdfUrls(root: UmbracoNode): string[] {
   }
   return [...urls];
 }
+
+/** Width of the carousel lightbox rendition. */
+const LIGHTBOX_WIDTH = 1600;
+
+/**
+ * Same CMS crop, rendered at `LIGHTBOX_WIDTH` for the carousel lightbox. The
+ * backend resizes on the fly, so only the `width` and `height` query params
+ * change; `height` keeps the crop's aspect ratio. Returns `src` unchanged when
+ * it carries no dimensions.
+ *
+ * Rendering an 8000px source takes the backend up to half a minute the first
+ * time, and it answers 500 when Astro's image step fires dozens of such
+ * requests at once. Fetching here, page by page while rendering, warms the
+ * backend cache so the image step gets fast 200s later.
+ */
+export async function lightboxCrop(src: string): Promise<string> {
+  let url: URL;
+  try {
+    url = new URL(src);
+  } catch {
+    return src;
+  }
+  const w = Number(url.searchParams.get("width"));
+  const h = Number(url.searchParams.get("height"));
+  if (!w || !h) return src;
+  url.searchParams.set("width", String(LIGHTBOX_WIDTH));
+  url.searchParams.set("height", String(Math.round((h / w) * LIGHTBOX_WIDTH)));
+  const large = url.toString();
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const res = await fetch(large);
+      await res.arrayBuffer();
+      if (res.ok) break;
+    } catch {
+      // Network trouble; retry below, and let the image step report it if it persists.
+    }
+    await new Promise((r) => setTimeout(r, 2000 * attempt));
+  }
+  return large;
+}

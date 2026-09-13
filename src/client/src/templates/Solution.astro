@@ -9,7 +9,7 @@ import Video from "../components/Video.astro";
 import underlineDark from "../assets/underline-dark.png";
 import underlineWhite from "../assets/underline-white.png";
 import type { Culture } from "../lib/umbraco";
-import { pageInCulture, getImageParams } from "../lib/umbraco";
+import { pageInCulture, getImageParams, lightboxCrop } from "../lib/umbraco";
 
 interface Props {
   culture: Culture;
@@ -60,8 +60,9 @@ for (const b of blocks) {
     b.umbracoId,
     await Promise.all(
       b.slides.map(async (s: any) => {
-        const src = async (key: string) =>
-          (await getImage(getImageParams(s.image[key]))).src;
+        const srcOf = async (url: string) =>
+          (await getImage(getImageParams(url))).src;
+        const src = (key: string) => srcOf(s.image[key]);
         return {
           altText: s.altText ?? "",
           phone: await src("mobile-portrait"),
@@ -69,6 +70,7 @@ for (const b of blocks) {
           tablet: await src("tablet"),
           desktop: await src("desktop"),
           largeDesktop: await src("large-desktop"),
+          full: await srcOf(await lightboxCrop(s.image["large-desktop"])),
         };
       }),
     ),

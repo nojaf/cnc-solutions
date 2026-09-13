@@ -9,6 +9,8 @@ export interface Slide {
   tablet?: string;
   desktop?: string;
   largeDesktop?: string;
+  /** Large rendition for the lightbox. Falls back to `desktop`. */
+  full?: string;
   imgClass?: string;
   overlay?: {
     icon: string;
@@ -21,7 +23,7 @@ interface Props {
   theme?: "dark" | "light";
   slides: Slide[];
   showIndicators?: boolean;
-  /** Open the desktop crop in a modal gallery instead of following `href`. */
+  /** Open the `full` (or desktop) crop in a modal gallery instead of following `href`. */
   lightbox?: boolean;
 }
 
@@ -44,7 +46,7 @@ const arrow = "w-0 h-0 border-y-10 border-transparent";
     <div class="carousel-track flex transition-transform duration-600 ease-in-out">
       {slides.map((s) => (
         <a
-          href={lightbox ? (s.desktop ?? s.phone) : s.href}
+          href={lightbox ? (s.full ?? s.desktop ?? s.phone) : s.href}
           class:list={[
             "carousel-slide block w-full shrink-0 relative",
             lightbox && "cursor-zoom-in",
@@ -190,7 +192,7 @@ const arrow = "w-0 h-0 border-y-10 border-transparent";
     restart();
   }
 
-  // Replaces ekko-lightbox: the desktop crop in a modal gallery.
+  // Replaces ekko-lightbox: the full-size crop in a modal gallery.
   function openLightbox(slides: HTMLAnchorElement[], start: number) {
     let index = start;
     const dialog = document.createElement("dialog");
@@ -198,8 +200,8 @@ const arrow = "w-0 h-0 border-y-10 border-transparent";
       "m-auto max-w-[90vw] p-0 bg-transparent backdrop:bg-black/70 outline-none";
     dialog.innerHTML = `
       <img class="block max-h-[90vh] max-w-full" />
-      <button class="lightbox-prev absolute inset-y-0 left-0 w-1/4 cursor-pointer" aria-label="Previous"></button>
-      <button class="lightbox-next absolute inset-y-0 right-0 w-1/4 cursor-pointer" aria-label="Next"></button>
+      <button class="lightbox-prev absolute inset-y-0 left-0 w-1/4 cursor-pointer outline-none" aria-label="Previous"></button>
+      <button class="lightbox-next absolute inset-y-0 right-0 w-1/4 cursor-pointer outline-none" aria-label="Next"></button>
     `;
     const img = dialog.querySelector("img")!;
     function render() {
