@@ -32,16 +32,26 @@ export interface UmbracoTree {
 // The promise is cached, not the result: every collection loader calls this
 // at the same time during content sync, and a result cache would fetch once
 // per collection.
-let cachedTree: Promise<UmbracoTree> | null = null;
+//
+// The cache hangs off globalThis because this module is evaluated twice. Astro
+// loads astro.config.mjs in its own module graph, which is where the
+// umbraco-signalr integration runs, and the content loaders run in the dev
+// server's SSR graph. A module-level variable gives each graph its own copy,
+// so the integration would clear a cache no loader ever reads and a publish
+// would resync the same stale tree.
+declare global {
+  var __cncUmbracoTree: Promise<UmbracoTree> | null | undefined;
+}
+
+async function fetchTree(): Promise<UmbracoTree> {
+  const response = await fetch(`${API_BASE}/graph/tree`);
+  const tree: UmbracoTree = await response.json();
+  await replaceMissingMedia(tree.root);
+  return tree;
+}
 
 export function getTree(): Promise<UmbracoTree> {
-  cachedTree ??= (async () => {
-    const response = await fetch(`${API_BASE}/graph/tree`);
-    const tree: UmbracoTree = await response.json();
-    await replaceMissingMedia(tree.root);
-    return tree;
-  })();
-  return cachedTree;
+  return (globalThis.__cncUmbracoTree ??= fetchTree());
 }
 
 // --- Missing media ---
@@ -97,7 +107,7 @@ async function replaceMissingMedia(root: UmbracoNode): Promise<void> {
 }
 
 export function clearTreeCache(): void {
-  cachedTree = null;
+  globalThis.__cncUmbracoTree = null;
 }
 
 // --- Tree traversal ---
