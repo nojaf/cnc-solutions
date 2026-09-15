@@ -1,11 +1,16 @@
 vscode:
   extensions:
-    - syler.sass-indented@1.8.15:OWaLl5oCHRK7fCfvhwK3og==
+    - astro-build.astro-vscode
+    - bradlc.vscode-tailwindcss
+    - esbenp.prettier-vscode
 tasks:
-  - name: Start Gatsby
-    command: ./start.sh
+  - name: Start Astro
+    before: bash .devcontainer/install-bun.sh
+    command: |
+      export PATH="$HOME/.bun/bin:$PATH"
+      ./start.sh
 ports:
-  - name: Gatsy Dev Server
+  - name: Astro Dev Server
     description: The development server
-    port: 8000
+    port: 4321
     onOpen: open-browser
