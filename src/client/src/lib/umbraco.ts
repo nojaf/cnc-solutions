@@ -58,21 +58,40 @@ export function getTree(): Promise<UmbracoTree> {
 
 const MEDIA_URL = /^https?:\/\/[^/]+\/media\//;
 export const MISSING_MEDIA = "/media-missing.svg";
+export const BACKEND_ORIGIN = new URL(API_BASE).origin;
 
-function mediaValues(root: UmbracoNode): Array<[Record<string, any>, string]> {
-  const found: Array<[Record<string, any>, string]> = [];
+/** An `<img>` in rich text; group 1 is its root-relative, HTML-encoded URL. */
+export const RICH_TEXT_MEDIA = /<img\b[^>]*?\ssrc="(\/media\/[^"]+)"/gi;
+
+type ValueRef = [Record<string, any>, string];
+
+function mediaValues(root: UmbracoNode): {
+  urls: ValueRef[];
+  richText: ValueRef[];
+} {
+  const urls: ValueRef[] = [];
+  const richText: ValueRef[] = [];
   const walk = (holder: Record<string, any>) => {
     for (const [key, value] of Object.entries(holder)) {
-      if (typeof value === "string" && MEDIA_URL.test(value)) {
-        found.push([holder, key]);
+      if (typeof value === "string") {
+        if (MEDIA_URL.test(value)) urls.push([holder, key]);
+        else if (value.search(RICH_TEXT_MEDIA) !== -1)
+          richText.push([holder, key]);
       } else if (value && typeof value === "object") {
         walk(value);
       }
     }
   };
   for (const node of flattenTree(root)) walk(node.properties);
-  return found;
+  return { urls, richText };
 }
+
+/** The backend URL for a root-relative, HTML-encoded rich-text image path. */
+export const richTextMediaUrl = (path: string) =>
+  BACKEND_ORIGIN + path.replaceAll("&amp;", "&");
+
+/** The address to check for a root-relative URL found in rich text. */
+const richTextFile = (path: string) => richTextMediaUrl(path).split("?")[0];
 
 /**
  * A media file deleted from Umbraco would fail `getImage()` and stop the whole
@@ -80,8 +99,15 @@ function mediaValues(root: UmbracoNode): Array<[Record<string, any>, string]> {
  * references to a 404 at a local placeholder instead, with a warning.
  */
 async function replaceMissingMedia(root: UmbracoNode): Promise<void> {
-  const refs = mediaValues(root);
-  const files = [...new Set(refs.map(([h, k]) => h[k].split("?")[0]))];
+  const { urls: refs, richText } = mediaValues(root);
+  const files = [
+    ...new Set([
+      ...refs.map(([h, k]) => h[k].split("?")[0]),
+      ...richText.flatMap(([h, k]) =>
+        [...h[k].matchAll(RICH_TEXT_MEDIA)].map((m) => richTextFile(m[1])),
+      ),
+    ]),
+  ];
   const missing = new Set<string>();
   let next = 0;
   await Promise.all(
@@ -100,6 +126,15 @@ async function replaceMissingMedia(root: UmbracoNode): Promise<void> {
   if (missing.size === 0) return;
   for (const [holder, key] of refs) {
     if (missing.has(holder[key].split("?")[0])) holder[key] = MISSING_MEDIA;
+  }
+  for (const [holder, key] of richText) {
+    holder[key] = holder[key].replace(
+      RICH_TEXT_MEDIA,
+      (tag: string, path: string) =>
+        missing.has(richTextFile(path))
+          ? tag.replace(path, MISSING_MEDIA)
+          : tag,
+    );
   }
   console.warn(
     `[umbraco] ${missing.size} media file(s) return 404 and were replaced by ${MISSING_MEDIA}:\n  ${[...missing].join("\n  ")}`,
@@ -200,7 +235,12 @@ export function getImageParams(src: string): {
     const w = url.searchParams.get("width");
     const h = url.searchParams.get("height");
     if (w && h) {
-      return { src, width: Number(w), height: Number(h) };
+      // Rich text can carry a fractional size (`height=281.25`).
+      return {
+        src,
+        width: Math.round(Number(w)),
+        height: Math.round(Number(h)),
+      };
     }
   } catch {
     // not a valid URL, fall through

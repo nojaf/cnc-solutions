@@ -6,6 +6,7 @@ import { getImage } from "astro:assets";
 import underlineWhite from "../assets/underline-white.png";
 import Video from "./Video.astro";
 import ButtonCnc from "./ButtonCnc.astro";
+import CmsContent from "./CmsContent.astro";
 
 interface Props {
   page: Record<string, any>;
@@ -82,7 +83,7 @@ const img = row.image
             {row.title}
           </h2>
           <img src={underlineWhite.src} alt="" class="block mb-8 w-6" />
-          {row.lead && <div class="cms-content" set:html={row.lead} />}
+          {row.lead && <CmsContent html={row.lead} />}
           {linkHref && row.linkText && (
             <ButtonCnc href={linkHref}>{row.linkText}</ButtonCnc>
           )}

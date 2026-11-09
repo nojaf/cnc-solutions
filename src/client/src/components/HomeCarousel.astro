@@ -5,6 +5,7 @@ import underlineDark from "../assets/underline-dark.png";
 import underlineWhite from "../assets/underline-white.png";
 import ButtonCnc from "./ButtonCnc.astro";
 import Carousel from "./Carousel.astro";
+import CmsContent from "./CmsContent.astro";
 
 interface SlideData {
   href: string;
@@ -83,7 +84,7 @@ const carouselSlides = await Promise.all(
             {title}
           </h2>
           <img src={underline.src} alt="" class="block mx-auto mb-7 h-1 w-6" />
-          {lead && <div class="cms-content text-left" set:html={lead} />}
+          {lead && <CmsContent class="text-left" html={lead} />}
           {linkHref && linkText && (
             <div class="hidden lg:block text-left mt-5">
               <ButtonCnc href={linkHref}>{linkText}</ButtonCnc>

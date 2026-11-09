@@ -1,5 +1,6 @@
 ---
 import underlineWhite from "../assets/underline-white.png";
+import CmsContent from "./CmsContent.astro";
 
 interface Props {
   aboveTitle?: string | null;
@@ -35,10 +36,10 @@ const { aboveTitle, title, lead, lowercase = true } = Astro.props;
           class="intro-underline block mx-auto w-6 mb-8 opacity-0 transition-opacity duration-600 ease-in"
         />
         {lead && (
-          <div
+          <CmsContent
             id="lead"
-            class="cms-content text-left lg:w-1/2 lg:mx-auto lg:mb-14"
-            set:html={lead}
+            class="text-left lg:w-1/2 lg:mx-auto lg:mb-14"
+            html={lead}
           />
         )}
       </div>

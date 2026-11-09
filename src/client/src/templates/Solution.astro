@@ -4,6 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import PageIntroduction from "../components/PageIntroduction.astro";
 import Carousel from "../components/Carousel.astro";
+import CmsContent from "../components/CmsContent.astro";
 import { getImage } from "astro:assets";
 import Video from "../components/Video.astro";
 import underlineDark from "../assets/underline-dark.png";
@@ -149,7 +150,7 @@ const rows = rowNumbers.map((n) => {
                   class="block mx-auto mb-8 w-6 lg:mx-0"
                 />
                 {block.lead && (
-                  <div class="cms-content text-left" set:html={block.lead} />
+                  <CmsContent class="text-left" html={block.lead} />
                 )}
               </div>
             ),

@@ -1,0 +1,29 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { getImage } from "astro:assets";
+import {
+  RICH_TEXT_MEDIA,
+  getImageParams,
+  richTextMediaUrl,
+} from "../lib/umbraco";
+
+interface Props extends HTMLAttributes<"div"> {
+  html: string;
+}
+
+const { html, class: className, ...attrs } = Astro.props;
+
+// TinyMCE stores a picked image as a root-relative URL, which only resolves on
+// the backend. Build it into the site like every other CMS image.
+let processed = html;
+const paths = new Set([...html.matchAll(RICH_TEXT_MEDIA)].map((m) => m[1]));
+for (const path of paths) {
+  const image = await getImage(getImageParams(richTextMediaUrl(path)));
+  processed = processed.replaceAll(
+    `"${path}"`,
+    `"${image.src.replaceAll("&", "&amp;")}"`,
+  );
+}
+---
+
+<div class:list={["cms-content", className]} {...attrs} set:html={processed} />
