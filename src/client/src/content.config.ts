@@ -498,6 +498,14 @@ export const collections = {
         aboveTitle: localizedString,
         title: localizedString,
         lead: localizedString,
+        groupPhoto: z
+          .object({
+            nl: headerResponsiveImage.nullable(),
+            en: headerResponsiveImage.nullable(),
+            fr: headerResponsiveImage.nullable(),
+          })
+          .optional(),
+        groupPhotoAlt: localizedOptionalString.optional(),
         navigationText: localizedOptionalString.optional(),
         seoMetaDescription: localizedOptionalString.optional(),
         seoMetaKeywords: z

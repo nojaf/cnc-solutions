@@ -87,6 +87,11 @@ body {
   @apply mt-0 mb-4 pl-10;
 }
 
+/* Tailwind's reset makes images block, which ignores the editor's text-align. */
+.cms-content img {
+  @apply inline-block;
+}
+
 .cms-content ul {
   @apply list-disc;
 }

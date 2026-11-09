@@ -31,6 +31,17 @@ const members = allMembers
 const processedPhotos = await Promise.all(
   members.map(async (m: any) => getImage(getImageParams(m.photo.main))),
 );
+
+const photoSrc = async (url: string) =>
+  (await getImage(getImageParams(url))).src;
+const groupPhoto = team.groupPhoto
+  ? {
+      mobile: await photoSrc(team.groupPhoto.mobile),
+      tablet: await photoSrc(team.groupPhoto.tablet),
+      desktop: await photoSrc(team.groupPhoto.desktop),
+      largeDesktop: await photoSrc(team.groupPhoto["large-desktop"]),
+    }
+  : null;
 ---
 
 <BaseLayout culture={culture} urls={urls} seo={seo} mainClass="pb-12">
@@ -40,6 +51,22 @@ const processedPhotos = await Promise.all(
     title={team.title}
     lead={team.lead}
   />
+  {groupPhoto && (
+    <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285">
+      {/* The widths follow the outer edges of the member grid's first row. */}
+      <picture>
+        <source media="(min-width: 75em)" srcset={groupPhoto.largeDesktop} />
+        <source media="(min-width: 62em)" srcset={groupPhoto.desktop} />
+        <source media="(min-width: 48em)" srcset={groupPhoto.tablet} />
+        <img
+          id="group-photo"
+          src={groupPhoto.mobile}
+          alt={team.groupPhotoAlt ?? ""}
+          class="block mx-auto my-8 w-4/5 sm:w-2/3 md:w-full lg:mt-0 lg:mb-14 lg:w-192.5 xl:w-255.5"
+        />
+      </picture>
+    </div>
+  )}
   <div class="mx-auto px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285 flex flex-col md:flex-row md:flex-wrap md:justify-around gap-10 whitespace-nowrap">
     {members.map((m: any, i: number) => (
       <div class="text-center md:mb-10 md:basis-[calc(50%-20px)] md:max-w-[calc(50%-20px)] lg:basis-[calc(33%-20px)] lg:max-w-[calc(33%-20px)] xl:basis-[calc(25%-20px)] xl:max-w-[calc(25%-20px)]">

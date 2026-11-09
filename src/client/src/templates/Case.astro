@@ -7,6 +7,7 @@ import PageIntroduction from "../components/PageIntroduction.astro";
 import Carousel from "../components/Carousel.astro";
 import Video from "../components/Video.astro";
 import ButtonCnc from "../components/ButtonCnc.astro";
+import CmsContent from "../components/CmsContent.astro";
 import BottomEdge from "../components/BottomEdge.astro";
 import underlineWhite from "../assets/underline-white.png";
 import type { Culture } from "../lib/umbraco";
@@ -177,7 +178,7 @@ const rows = [...caseRows, ...quoteRows].sort(
                   alt=""
                   class="block mx-auto mb-8 w-6"
                 />
-                {row.lead && <div class="cms-content" set:html={row.lead} />}
+                {row.lead && <CmsContent html={row.lead} />}
                 {row.link && (
                   <div class="link-container pt-4 px-2 pb-5 text-center sm:w-4/5 sm:mx-auto">
                     <ButtonCnc href={row.link.url}>{row.link.text}</ButtonCnc>

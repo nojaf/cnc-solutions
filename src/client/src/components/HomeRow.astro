@@ -7,6 +7,7 @@ import underlineDark from "../assets/underline-dark.png";
 import underlineWhite from "../assets/underline-white.png";
 import Video from "./Video.astro";
 import ButtonCnc from "./ButtonCnc.astro";
+import CmsContent from "./CmsContent.astro";
 
 interface Props {
   row: Record<string, any>;
@@ -96,9 +97,7 @@ const img = row.image
             {row.title}
           </h2>
           <img src={underline.src} alt="" class="block mx-auto mb-7 h-1 w-6" />
-          {row.lead && (
-            <div class="cms-content text-left" set:html={row.lead} />
-          )}
+          {row.lead && <CmsContent class="text-left" html={row.lead} />}
           {linkHref && row.linkText && (
             <div class="text-center lg:text-left mt-5">
               <ButtonCnc href={linkHref}>{row.linkText}</ButtonCnc>

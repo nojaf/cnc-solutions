@@ -272,13 +272,17 @@ A media file deleted from Umbraco makes `getImage()` throw during image generati
 
 Global typography styles (`font-size`, `line-height`, `margin`) for `p`, `ul li`, and `ol li` are scoped under the `.cms-content` class in `global.css`. This prevents them from clashing with Tailwind utility classes.
 
-**Rule:** Any dynamic HTML from Umbraco rendered via `set:html` must be wrapped in a container with `class="cms-content"`:
+**Rule:** Any dynamic HTML from Umbraco must be rendered with `CmsContent.astro`, not with a bare `set:html`. It adds the `cms-content` class and passes other attributes through:
 
 ```astro
-{content && <div class="cms-content" set:html={content} />}
+{content && <CmsContent class="text-left" html={content} />}
 ```
 
 Without `.cms-content`, paragraphs and list items inside CMS content will lack proper font sizing and spacing. Conversely, keeping these styles global would override Tailwind utilities like `m-0` or `text-xs` on regular elements.
+
+TinyMCE stores a picked image as a root-relative URL (`/media/x/y.jpg?width=500&amp;height=281.25`), which resolves against our site and 404s. `CmsContent` makes each one absolute and runs it through `getImage()`, so rich-text images are built into the site like every other CMS image. `getTree()` includes them in its missing-media check.
+
+A rich-text image has one URL and no per-breakpoint crops, and `CmsContent` does not know the layout around it. It shows at the size the editor set, capped at the column. An image that has to be larger or line up with the page gets its own Image Cropper field, handled in the template like the other picker images. The team page's `groupPhoto` is the example: an 80vw rich-text version was tried first and could not line up with the member grid.
 
 ## Theme Reference
 
